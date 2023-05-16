@@ -1,0 +1,7 @@
+{
+  "css.lint.unknownAtRules": "ignore",
+  "emmet.includeLanguages": {
+    "typescriptreact": "xml",
+    "javascriptreact": "xml",
+  }
+}
