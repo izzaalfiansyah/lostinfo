@@ -15,7 +15,7 @@ class Base64 implements ValidationRule
     public function validate(string $attribute, mixed $value, Closure $fail): void
     {
         if (!str_contains($value, ';base64,')) {
-            $fail("The $attribute is not valid.");
+            $fail("The $attribute is not valid base64.");
         }
     }
 }
