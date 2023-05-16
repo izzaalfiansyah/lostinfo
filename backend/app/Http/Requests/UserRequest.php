@@ -2,6 +2,8 @@
 
 namespace App\Http\Requests;
 
+use App\Rules\Base64;
+use Illuminate\Validation\Rules\Password;
 
 class UserRequest extends FormRequest
 {
@@ -13,13 +15,15 @@ class UserRequest extends FormRequest
      */
     public function rules(): array
     {
+        $id = $this->segment(1);
+
         return [
             'username' => 'required|max:255',
-            'password' => 'required|max:255|min:8',
+            'password' => [$id ? 'nullable' : 'required', Password::min(8)],
             'alamat' => 'required',
             'email' => 'required|email',
             'telepon' => 'required|numeric',
-            'foto' => 'nullable',
+            'foto' => ['nullable', new Base64],
             'role' => 'required|in:1,2',
             'status' => 'required|in:1,0',
         ];

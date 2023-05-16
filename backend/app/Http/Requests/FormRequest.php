@@ -3,6 +3,8 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest as BaseFormRequest;
+use Illuminate\Http\Exceptions\HttpResponseException;
+use Illuminate\Support\Facades\Response;
 
 class FormRequest extends BaseFormRequest
 {
@@ -12,5 +14,14 @@ class FormRequest extends BaseFormRequest
     public function authorize(): bool
     {
         return true;
+    }
+
+    public function failedValidation($validator)
+    {
+        $response = Response::json([
+            'data' => $validator->errors(),
+            'message' => $validator->errors()->all(),
+        ]);
+        throw new HttpResponseException($response, 400);
     }
 }
