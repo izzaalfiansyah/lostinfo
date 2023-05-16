@@ -1,4 +1,4 @@
-import { component$, Slot } from "@builder.io/qwik";
+import { $, component$, Slot, useSignal } from "@builder.io/qwik";
 import { Link } from "@builder.io/qwik-city";
 import {
   AccountIcon,
@@ -49,10 +49,28 @@ export default component$(() => {
     },
   ];
 
+  const showSidebar = useSignal<boolean>(true);
+
+  const toggleSidebar = $(() => {
+    showSidebar.value = !showSidebar.value;
+  });
+
   return (
     <div class="bg-gray-100 min-h-screen text-gray-700">
-      <div class="z-5 bg-black bg-opacity-25 fixed top-0 left-0 right-0 bottom-0 lg:hidden"></div>
-      <div class="fixed top-0 bottom-0 left-0 w-80 bg-white z-5 p-10 px-8 flex flex-col justify-between">
+      <div
+        class={[
+          "z-5 bg-black bg-opacity-25 fixed top-0 left-0 right-0 bottom-0 lg:hidden",
+          showSidebar.value ? "" : "hidden",
+        ]}
+        preventdefault:click
+        onClick$={toggleSidebar}
+      ></div>
+      <div
+        class={[
+          "fixed top-0 bottom-0 left-0 w-80 bg-white z-5 p-10 px-8 flex flex-col justify-between transform transition",
+          showSidebar.value ? "" : "-translate-x-full",
+        ]}
+      >
         <div>
           <div class="text-4xl font-extrabold">
             LostInfo<span class="text-green-500">.</span>
@@ -113,7 +131,7 @@ export default component$(() => {
           <div class="flex-1 flex justify-between items-center">
             <div class="flex-1"></div>
             <div class="flex-1 items-center flex justify-end space-x-4 border-l-2">
-              <div>Hello, Superadmin</div>
+              <div class="lg:block hidden">Hello, Superadmin</div>
               <div class="rounded-full w-12 h-12 bg-gray-200"></div>
             </div>
           </div>
