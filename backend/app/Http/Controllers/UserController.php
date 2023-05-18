@@ -6,6 +6,7 @@ use App\Http\Requests\UserRequest;
 use App\Http\Resources\UserResource;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
@@ -20,6 +21,12 @@ class UserController extends Controller
     {
         $data = $req->validated();
 
+        $data['password'] = Hash::make($req->password);
+
+        if ($req->foto) {
+            $data['foto'] = $this->uploadBase64($req->foto, 'user', 'png');
+        }
+
         $item = User::create($data);
 
         return new UserResource($item);
@@ -30,6 +37,16 @@ class UserController extends Controller
         $data = $req->validated();
 
         $item = User::find($id);
+
+        if ($req->password) {
+            $data['password'] = Hash::make($req->password);
+        }
+
+        if ($req->foto) {
+            $data['foto'] = $this->uploadBase64($req->foto, 'user', 'png');
+            @unlink(public_path('/assets/user/' . $item->foto));
+        }
+
         $item?->update($data);
 
         return new UserResource($item);
@@ -38,6 +55,9 @@ class UserController extends Controller
     public function destroy($id)
     {
         $item = User::find($id);
+
+        @unlink(public_path('/assets/user/' . $item->foto));
+
         $item?->delete();
 
         return new UserResource($item);

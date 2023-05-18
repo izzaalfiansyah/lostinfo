@@ -13,9 +13,12 @@ class Controller extends BaseController
 
     public function uploadBase64($encode, $path, $extension)
     {
+        @mkdir(public_path('/assets'));
+        @mkdir(public_path('/assets/' . $path));
+
         $file = explode(';base64,', $encode)[1];
         $filename = Random::generate(20) . '.' . $extension;
-        $filepath = $path . '/' . $filename;
+        $filepath = '/assets/' . $path . '/' . $filename;
 
         file_put_contents(public_path($filepath), base64_decode($file));
         return $filepath;
