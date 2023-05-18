@@ -6,7 +6,9 @@ use App\Http\Requests\UserRequest;
 use App\Http\Resources\UserResource;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator;
 
 class UserController extends Controller
 {
@@ -61,5 +63,40 @@ class UserController extends Controller
         $item?->delete();
 
         return new UserResource($item);
+    }
+
+    public function login(Request $req)
+    {
+        $schema = Validator::make($req->all(), [
+            'username' => 'required',
+            'password' => 'required',
+        ]);
+
+        if ($schema->fails()) {
+            return Response([
+                'data' => $schema->errors(),
+                'message' => $schema->errors()->all(),
+            ], 400);
+        }
+
+        $items = User::where('username', $req->username)->get();
+
+        if (count($items) > 0) {
+            foreach ($items as $key => $item) {
+                if (Hash::check($req->password, $item->password)) {
+                    return new UserResource($item);
+                }
+            }
+
+            return Response([
+                'data' => [],
+                'message' => ['password salah'],
+            ]);
+        } else {
+            return Response([
+                'data' => [],
+                'message' => ['username tidak ditemukan'],
+            ], 400);
+        }
     }
 }
