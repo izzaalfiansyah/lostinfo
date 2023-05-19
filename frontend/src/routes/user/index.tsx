@@ -22,50 +22,47 @@ export default component$(() => {
       <Title
         title="Data User"
         subtitle="Menjelajahi dan menganalisis data pengguna"
-      ></Title>
+      >
+        <button
+          q:slot="action"
+          class="px-5 p-2 text-white bg-purple-600 rounded shadow-sm mt-4 lg:mt-0"
+        >
+          Tambah
+        </button>
+      </Title>
       <div class="bg-white rounded-lg shadow-sm p-5">
         <div class="overflow-x-auto">
-          <table class="w-full border-collapse whitespace-nowrap">
+          <table class="t-table">
             <thead>
               <tr>
-                <th class="font-normal text-sm px-3 p-2 text-left text-gray-400">
+                {/* <th>
                   <input
                     type="checkbox"
                     class="text-purple-600 transition rounded border-gray-300 focus:ring-purple-300"
                   />
-                </th>
-                <th class="font-normal text-sm px-3 p-2 text-left text-gray-400">
-                  Nama
-                </th>
-                <th class="font-normal text-sm px-3 p-2 text-left text-gray-400">
-                  Alamat
-                </th>
-                <th class="font-normal text-sm px-3 p-2 text-left text-gray-400">
-                  Telepon
-                </th>
-                <th class="font-normal text-sm px-3 p-2 text-left text-gray-400">
-                  Email
-                </th>
-                <th class="font-normal text-sm px-3 p-2 text-left text-gray-400">
-                  Opsi
-                </th>
+                </th> */}
+                <th>Nama</th>
+                <th>Alamat</th>
+                <th>Telepon</th>
+                <th>Email</th>
+                <th>Opsi</th>
               </tr>
             </thead>
             <tbody>
               {user.value.map((item) => (
                 <tr key={item.id}>
-                  <td class="px-3 p-2">
+                  {/* <td class="px-3 p-2 lg:table-cell block">
                     <input
                       type="checkbox"
                       class="text-purple-600 transition rounded border-gray-300 focus:ring-purple-300"
                       value={item.id}
                     />
-                  </td>
-                  <td class="px-3 p-2">{item.nama}</td>
-                  <td class="px-3 p-2">{item.alamat}</td>
-                  <td class="px-3 p-2">{item.telepon}</td>
-                  <td class="px-3 p-2">{item.email}</td>
-                  <td class="px-3 p-2">
+                  </td> */}
+                  <td>{item.nama}</td>
+                  <td>{item.alamat}</td>
+                  <td>{item.telepon}</td>
+                  <td>{item.email}</td>
+                  <td>
                     <button class="mr-3">
                       <EditIcon class="w-4 h-4 text-purple-600" />
                     </button>
