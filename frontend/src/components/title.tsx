@@ -9,7 +9,7 @@ export default component$<Props>((props) => {
   return (
     <div class="py-3 mb-3">
       <div class="text-xl font-bold">{props.title}</div>
-      <p>{props.subtitle}</p>
+      <p class="text-sm">{props.subtitle}</p>
     </div>
   );
 });

@@ -1,5 +1,5 @@
 import { $, component$, Slot, useSignal } from "@builder.io/qwik";
-import { Link } from "@builder.io/qwik-city";
+import { Link, useLocation } from "@builder.io/qwik-city";
 import {
   AccountIcon,
   ArchiveIcon,
@@ -13,6 +13,7 @@ import {
 } from "~/components/icons";
 
 export default component$(() => {
+  const location = useLocation();
   const menus: Array<{
     icon: any;
     title: string;
@@ -26,27 +27,27 @@ export default component$(() => {
     {
       icon: UsersIcon,
       title: "Data User",
-      path: "/user",
+      path: "/user/",
     },
     {
       icon: ArchiveXIcon,
       title: "Data Barang Hilang",
-      path: "/barang-hilang",
+      path: "/barang-hilang/",
     },
     {
       icon: ArchiveIcon,
       title: "Data Barang Temuan",
-      path: "/barang-temuan",
+      path: "/barang-temuan/",
     },
     {
       icon: StackIcon,
       title: "Testimoni",
-      path: "/testimoni",
+      path: "/testimoni/",
     },
     {
       icon: AccountIcon,
       title: "Akun",
-      path: "/akun",
+      path: "/akun/",
     },
   ];
 
@@ -86,17 +87,18 @@ export default component$(() => {
                   <Link
                     href={item.path}
                     class={[
-                      "p-2 px-3 block rounded flex items-center",
-                      item.path == "/"
+                      "p-2 px-3 block rounded flex items-center transition",
+                      item.path == location.url.pathname
                         ? "text-purple-600 mb-1 bg-purple-200"
                         : "",
                     ]}
+                    onClick$={toggleSidebar}
                   >
                     <item.icon class="w-5 h-5 mr-3" />
                     {item.title}
                   </Link>
-                  {item.path == "/" && (
-                    <div class="h-full w-1 bg-purple-500 rounded-r absolute top-0 left-0 bottom-0"></div>
+                  {item.path == location.url.pathname && (
+                    <div class="h-full w-1 bg-purple-500 rounded-r absolute top-0 left-0 bottom-0 transform origin-left transition duration-1000"></div>
                   )}
                 </li>
               ))}
@@ -129,7 +131,7 @@ export default component$(() => {
           </button>
           <input
             type="text"
-            class="bg-white rounded p-2.5 px-4 outline-none flex-1"
+            class="bg-white rounded p-2.5 px-4 outline-none flex-1 border-gray-200 transition focus:ring-purple-300 focus:ring-2"
             placeholder="Cari Sesuatu..."
           />
           <div class="flex-1 flex justify-between items-center">

@@ -49,11 +49,5 @@ export default component$(() => {
 });
 
 export const head: DocumentHead = {
-  title: "LostInfo - Platform Informasi Pencarian dan Pelaporan Barang Hilang",
-  meta: [
-    {
-      name: "description",
-      content: "LostInfo - Platform Informasi dan Pelaporan Barang Hilang",
-    },
-  ],
+  title: "Dashboard",
 };
