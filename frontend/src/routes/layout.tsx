@@ -130,7 +130,7 @@ export default component$(() => {
           <input
             type="text"
             class="bg-white rounded p-2.5 px-4 outline-none flex-1"
-            placeholder="Cari..."
+            placeholder="Cari Sesuatu..."
           />
           <div class="flex-1 flex justify-between items-center">
             <div class="flex-1"></div>
