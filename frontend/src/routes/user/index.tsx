@@ -1,9 +1,22 @@
-import { component$ } from "@builder.io/qwik";
+import { $, component$, useSignal, useTask$ } from "@builder.io/qwik";
 import { type DocumentHead } from "@builder.io/qwik-city";
 import { DeleteIcon, EditIcon } from "~/components/icons";
 import Title from "~/components/title";
+import type User from "~/interfaces/user";
+import http from "~/libs/http";
 
 export default component$(() => {
+  const user = useSignal<User[]>([]);
+
+  const get = $(async () => {
+    const res = await http.get("/user");
+    user.value = res.data.data;
+  });
+
+  useTask$(async () => {
+    await get();
+  });
+
   return (
     <>
       <Title
@@ -39,26 +52,29 @@ export default component$(() => {
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td class="px-3 p-2">
-                  <input
-                    type="checkbox"
-                    class="text-purple-600 transition rounded border-gray-300 focus:ring-purple-300"
-                  />
-                </td>
-                <td class="px-3 p-2">Muhammad Izza Alfiansyah</td>
-                <td class="px-3 p-2">Jember</td>
-                <td class="px-3 p-2">081231921351</td>
-                <td class="px-3 p-2">iansyah724@gmail.com</td>
-                <td class="px-3 p-2">
-                  <button class="mr-3">
-                    <EditIcon class="w-4 h-4 text-purple-600" />
-                  </button>
-                  <button>
-                    <DeleteIcon class="w-4 h-4 text-red-600" />
-                  </button>
-                </td>
-              </tr>
+              {user.value.map((item) => (
+                <tr key={item.id}>
+                  <td class="px-3 p-2">
+                    <input
+                      type="checkbox"
+                      class="text-purple-600 transition rounded border-gray-300 focus:ring-purple-300"
+                      value={item.id}
+                    />
+                  </td>
+                  <td class="px-3 p-2">{item.nama}</td>
+                  <td class="px-3 p-2">{item.alamat}</td>
+                  <td class="px-3 p-2">{item.telepon}</td>
+                  <td class="px-3 p-2">{item.email}</td>
+                  <td class="px-3 p-2">
+                    <button class="mr-3">
+                      <EditIcon class="w-4 h-4 text-purple-600" />
+                    </button>
+                    <button>
+                      <DeleteIcon class="w-4 h-4 text-red-600" />
+                    </button>
+                  </td>
+                </tr>
+              ))}
             </tbody>
           </table>
         </div>
