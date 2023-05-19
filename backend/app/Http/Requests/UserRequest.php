@@ -20,6 +20,7 @@ class UserRequest extends FormRequest
         return [
             'username' => 'required|max:255',
             'password' => [$id ? 'nullable' : 'required', Password::min(8)],
+            'nama' => 'required|max:255',
             'alamat' => 'required',
             'email' => 'required|email',
             'telepon' => 'required|numeric',

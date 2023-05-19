@@ -16,9 +16,10 @@ class UserSeeder extends Seeder
         \App\Models\User::create([
             'username' => 'superadmin',
             'password' => Hash::make('superadmin'),
+            'nama' => "Muhammad Izza alfiansyah",
             'alamat' => 'Jember',
             'email' => 'superadmin@admin.com',
-            'telepon' => '000000000000',
+            'telepon' => '081231921351',
             'role' => '1',
             'status' => '1',
         ]);
