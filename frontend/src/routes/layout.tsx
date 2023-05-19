@@ -74,7 +74,7 @@ export default component$(() => {
       >
         <div>
           <div class="text-4xl font-extrabold">
-            LostInfo<span class="text-green-500">.</span>
+            LostInfo<span class="text-purple-500">.</span>
           </div>
           <div class="text-sm text-gray-300">
             Platform Informasi Barang Hilang
@@ -88,7 +88,7 @@ export default component$(() => {
                     class={[
                       "p-2 px-3 block rounded flex items-center",
                       item.path == "/"
-                        ? "text-green-600 mb-1 bg-green-200"
+                        ? "text-purple-600 mb-1 bg-purple-200"
                         : "",
                     ]}
                   >
@@ -96,7 +96,7 @@ export default component$(() => {
                     {item.title}
                   </Link>
                   {item.path == "/" && (
-                    <div class="h-full w-1 bg-green-500 rounded-r absolute top-0 left-0 bottom-0"></div>
+                    <div class="h-full w-1 bg-purple-500 rounded-r absolute top-0 left-0 bottom-0"></div>
                   )}
                 </li>
               ))}

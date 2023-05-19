@@ -12,8 +12,8 @@ export default component$(() => {
       />
       <div class="grid lg:grid-cols-3 grid-cols-1 gap-3 mb-3">
         <div class="bg-white rounded-lg shadow-sm flex items-center p-5 px-10">
-          <div class="rounded-full bg-green-200 h-20 w-20 flex items-center justify-center mr-5">
-            <UsersIcon class="w-12 h-12 text-green-500" />
+          <div class="rounded-full bg-purple-200 h-20 w-20 flex items-center justify-center mr-6">
+            <UsersIcon class="w-12 h-12 text-purple-500" />
           </div>
           <div>
             <div class="text-4xl font-semibold">75</div>
@@ -21,8 +21,8 @@ export default component$(() => {
           </div>
         </div>
         <div class="bg-white rounded-lg shadow-sm flex items-center p-5 px-10">
-          <div class="rounded-full bg-green-200 h-20 w-20 flex items-center justify-center mr-5">
-            <ArchiveIcon class="w-12 h-12 text-green-500" />
+          <div class="rounded-full bg-purple-200 h-20 w-20 flex items-center justify-center mr-6">
+            <ArchiveIcon class="w-12 h-12 text-purple-500" />
           </div>
           <div>
             <div class="text-4xl font-semibold">357</div>
@@ -30,8 +30,8 @@ export default component$(() => {
           </div>
         </div>
         <div class="bg-white rounded-lg shadow-sm flex items-center p-5 px-10">
-          <div class="rounded-full bg-green-200 h-20 w-20 flex items-center justify-center mr-5">
-            <ArchiveXIcon class="w-12 h-12 text-green-500" />
+          <div class="rounded-full bg-purple-200 h-20 w-20 flex items-center justify-center mr-6">
+            <ArchiveXIcon class="w-12 h-12 text-purple-500" />
           </div>
           <div>
             <div class="text-4xl font-semibold">65</div>
