@@ -7,6 +7,7 @@ import {
   HomeIcon,
   LogoutIcon,
   LoveIcon,
+  MenuIcon,
   StackIcon,
   UsersIcon,
 } from "~/components/icons";
@@ -49,7 +50,7 @@ export default component$(() => {
     },
   ];
 
-  const showSidebar = useSignal<boolean>(true);
+  const showSidebar = useSignal<boolean>(false);
 
   const toggleSidebar = $(() => {
     showSidebar.value = !showSidebar.value;
@@ -67,7 +68,7 @@ export default component$(() => {
       ></div>
       <div
         class={[
-          "fixed top-0 bottom-0 left-0 w-80 bg-white z-5 p-10 px-8 flex flex-col justify-between transform transition",
+          "fixed top-0 bottom-0 left-0 w-80 bg-white z-5 p-10 px-8 flex flex-col justify-between transform transition lg:translate-x-0",
           showSidebar.value ? "" : "-translate-x-full",
         ]}
       >
@@ -123,6 +124,9 @@ export default component$(() => {
       </div>
       <div class="lg:ml-80 p-5">
         <div class="flex justify-between mb-5 items-center">
+          <button class="lg:hidden mr-4" onClick$={toggleSidebar}>
+            <MenuIcon class="w-6 h-6" />
+          </button>
           <input
             type="text"
             class="bg-white rounded p-2.5 px-4 outline-none flex-1"
