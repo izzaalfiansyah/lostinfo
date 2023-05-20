@@ -19,6 +19,7 @@ export default component$(() => {
   const isEdit = useSignal(false);
   const modal = useStore({
     save: false,
+    delete: false,
   });
   const req = useStore<User>({});
   const notif = useContext(NotifContext);
@@ -44,17 +45,24 @@ export default component$(() => {
   const save = $(async () => {
     if (isEdit.value) {
       await http.put("/user/" + req.id, req);
-      notif.show("data berhasil diedit", "bg-purple-500");
+      notif.show("data berhasil diedit");
     } else {
       await http.post("/user", req);
-      notif.show("data berhasil disimpan", "bg-purple-500");
+      notif.show("data berhasil disimpan");
     }
 
     modal.save = false;
     get();
   });
 
-  const edit = $((item: User) => {
+  const destroy = $(async () => {
+    await http.delete("/user/" + req.id);
+    notif.show("data berhasil dihapus");
+    modal.delete = false;
+    get();
+  });
+
+  const show = $((item: User, action: "edit" | "delete") => {
     req.id = item.id;
     req.username = item.username;
     req.password = "";
@@ -65,8 +73,13 @@ export default component$(() => {
     req.foto = "";
     req.role = item.role;
     req.status = item.status;
-    isEdit.value = true;
-    modal.save = true;
+
+    if (action == "edit") {
+      isEdit.value = true;
+      modal.save = true;
+    } else {
+      modal.delete = true;
+    }
   });
 
   useTask$(async () => {
@@ -125,10 +138,10 @@ export default component$(() => {
                   <td>{item.telepon}</td>
                   <td>{item.email}</td>
                   <td>
-                    <button class="mr-3" onClick$={() => edit(item)}>
+                    <button class="mr-3" onClick$={() => show(item, "edit")}>
                       <EditIcon class="w-4 h-4 text-purple-600" />
                     </button>
-                    <button>
+                    <button onClick$={() => show(item, "delete")}>
                       <DeleteIcon class="w-4 h-4 text-red-600" />
                     </button>
                   </td>
@@ -267,6 +280,26 @@ export default component$(() => {
               class="px-4 py-2 bg-purple-600 rounded shadow-sm text-white"
             >
               Simpan
+            </button>
+          </div>
+        </form>
+      </Modal>
+      <Modal show={modal.delete} onClose$={() => (modal.delete = false)}>
+        <form
+          preventdefault:submit
+          onSubmit$={destroy}
+          class="max-w-full w-[500px]"
+        >
+          <div class="font-semibold mb-5">Hapus Pengguna</div>
+          <p>
+            Anda yakin menghapus pengguna? Data akan dihapus secara permanen!
+          </p>
+          <div class="mt-8 flex justify-end">
+            <button
+              type="submit"
+              class="bg-red-500 text-white py-2 px-4 rounded shadow-sm"
+            >
+              Hapus
             </button>
           </div>
         </form>

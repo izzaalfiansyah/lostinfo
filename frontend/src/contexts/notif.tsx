@@ -1,7 +1,7 @@
 import { type QRL, component$, createContextId } from "@builder.io/qwik";
 
 export const NotifContext = createContextId<{
-  show: QRL<(message: string, color: string) => any>;
+  show: QRL<(message: string, color?: string) => any>;
 }>("alert-context");
 
 export default component$<{
