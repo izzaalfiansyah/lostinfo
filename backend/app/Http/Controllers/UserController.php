@@ -42,11 +42,15 @@ class UserController extends Controller
 
         if ($req->password) {
             $data['password'] = Hash::make($req->password);
+        } else {
+            unset($data['password']);
         }
 
         if ($req->foto) {
             $data['foto'] = $this->uploadBase64($req->foto, 'user', 'png');
             @unlink(public_path('/assets/user/' . $item->foto));
+        } else {
+            unset($data['foto']);
         }
 
         $item?->update($data);

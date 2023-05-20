@@ -24,6 +24,7 @@ export default component$(() => {
   const notif = useContext(NotifContext);
 
   const nullable = $(() => {
+    req.id = "";
     req.username = "";
     req.password = "";
     req.nama = "";
@@ -42,15 +43,19 @@ export default component$(() => {
 
   const save = $(async () => {
     if (isEdit.value) {
+      await http.put("/user/" + req.id, req);
       notif.show("data berhasil diedit", "bg-purple-500");
     } else {
       await http.post("/user", req);
+      notif.show("data berhasil disimpan", "bg-purple-500");
     }
+
     modal.save = false;
     get();
   });
 
   const edit = $((item: User) => {
+    req.id = item.id;
     req.username = item.username;
     req.password = "";
     req.nama = item.nama;
@@ -243,7 +248,7 @@ export default component$(() => {
                   type="password"
                   class="t-input"
                   placeholder="Masukkan Password"
-                  required
+                  required={!isEdit.value}
                   value={req.password}
                   onChange$={(e) => (req.password = e.target.value)}
                 />
