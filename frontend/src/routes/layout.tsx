@@ -97,9 +97,14 @@ export default component$(() => {
                     <item.icon class="w-5 h-5 mr-3" />
                     {item.title}
                   </Link>
-                  {item.path == location.url.pathname && (
-                    <div class="h-full w-1 bg-purple-500 rounded-r absolute top-0 left-0 bottom-0 transform origin-left transition duration-1000"></div>
-                  )}
+                  <div
+                    class={[
+                      "h-full w-1 bg-purple-500 rounded-r absolute top-0 left-0 bottom-0 transform origin-left transition",
+                      item.path == location.url.pathname
+                        ? "scale-100"
+                        : "scale-0",
+                    ]}
+                  ></div>
                 </li>
               ))}
               <li class="mb-1 relative px-8">
@@ -131,7 +136,7 @@ export default component$(() => {
           </button>
           <input
             type="text"
-            class="bg-white rounded p-2.5 px-4 outline-none flex-1 border-gray-200 transition focus:ring-purple-300 focus:ring-2"
+            class="bg-white rounded p-2.5 px-4 outline-none flex-1 border-gray-200 transition focus:ring-purple-300 focus:ring-2 mr-5"
             placeholder="Cari Sesuatu..."
           />
           <div class="flex-1 flex justify-between items-center">

@@ -43,3 +43,7 @@ body {
 .t-table > tbody > tr > * {
   @apply px-3 p-2 lg:table-cell block;
 }
+
+.t-input {
+  @apply w-full rounded shadow-sm focus:ring-2 focus:ring-purple-300 border-gray-300 transition;
+}
