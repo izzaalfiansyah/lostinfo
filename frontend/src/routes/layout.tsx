@@ -1,4 +1,11 @@
-import { $, component$, Slot, useSignal } from "@builder.io/qwik";
+import {
+  $,
+  component$,
+  Slot,
+  useContextProvider,
+  useSignal,
+  useStore,
+} from "@builder.io/qwik";
 import { Link, useLocation } from "@builder.io/qwik-city";
 import {
   AccountIcon,
@@ -11,6 +18,7 @@ import {
   StackIcon,
   UsersIcon,
 } from "~/components/icons";
+import Notif, { NotifContext } from "~/contexts/notif";
 
 export default component$(() => {
   const location = useLocation();
@@ -57,8 +65,27 @@ export default component$(() => {
     showSidebar.value = !showSidebar.value;
   });
 
+  const notif = useStore({
+    show: false,
+    message: "",
+    color: "bg-purple-500",
+  });
+
+  useContextProvider(NotifContext, {
+    show: $((message: string, color: string = "bg-purple-500") => {
+      notif.show = true;
+      notif.message = message;
+      notif.color = color;
+
+      setTimeout(() => {
+        notif.show = false;
+      }, 3000);
+    }),
+  });
+
   return (
-    <div class="bg-gray-100 min-h-screen text-gray-700">
+    <div class="bg-gray-100 min-h-screen text-gray-700 overflow-x-hidden">
+      <Notif {...notif} />
       <div
         class={[
           "z-5 bg-black bg-opacity-25 fixed top-0 left-0 right-0 bottom-0 lg:hidden",

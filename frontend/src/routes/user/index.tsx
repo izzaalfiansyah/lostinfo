@@ -1,8 +1,16 @@
-import { $, component$, useSignal, useStore, useTask$ } from "@builder.io/qwik";
+import {
+  $,
+  component$,
+  useContext,
+  useSignal,
+  useStore,
+  useTask$,
+} from "@builder.io/qwik";
 import { type DocumentHead } from "@builder.io/qwik-city";
 import { DeleteIcon, EditIcon } from "~/components/icons";
 import Modal from "~/components/modal";
 import Title from "~/components/title";
+import { NotifContext } from "~/contexts/notif";
 import type User from "~/interfaces/user";
 import http from "~/libs/http";
 
@@ -13,6 +21,7 @@ export default component$(() => {
     save: false,
   });
   const req = useStore<User>({});
+  const notif = useContext(NotifContext);
 
   const nullable = $(() => {
     req.username = "";
@@ -33,13 +42,12 @@ export default component$(() => {
 
   const save = $(async () => {
     if (isEdit.value) {
-      //
+      notif.show("data berhasil diedit", "bg-purple-500");
     } else {
       await http.post("/user", req);
-      modal.save = false;
-      alert("data berhasil ditambah");
-      get();
     }
+    modal.save = false;
+    get();
   });
 
   const edit = $((item: User) => {
