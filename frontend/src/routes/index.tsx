@@ -1,14 +1,19 @@
-import { component$ } from "@builder.io/qwik";
+import { component$, useContext } from "@builder.io/qwik";
 import { type DocumentHead } from "@builder.io/qwik-city";
 import { ArchiveIcon, ArchiveXIcon, UsersIcon } from "~/components/icons";
 import Title from "~/components/title";
+import { AuthContext } from "~/contexts/auth";
 
 export default component$(() => {
+  const auth = useContext(AuthContext);
+
   return (
     <>
       <Title
         title="Dashboard"
-        subtitle="Halo Superadmin, Selamat datang di Aplikasi LostInfo"
+        subtitle={`Halo ${
+          (auth.value as any)?.nama
+        }, Selamat datang di Aplikasi LostInfo`}
       />
       <div class="grid lg:grid-cols-3 grid-cols-1 gap-3 mb-3">
         <div class="bg-white rounded-lg shadow-sm flex items-center p-5 px-10">
