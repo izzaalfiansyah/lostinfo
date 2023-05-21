@@ -25,7 +25,7 @@ export default component$(() => {
     color: "bg-purple-500",
   });
 
-  const auth = useSignal<User>();
+  const auth = useSignal<User | undefined | 0>();
 
   useContextProvider(AuthContext, auth);
 
@@ -44,11 +44,15 @@ export default component$(() => {
   useVisibleTask$(({ track }) => {
     track(() => auth.value);
 
+    if (auth.value == 0) {
+      localStorage.removeItem("auth");
+    }
+
     const authStorage = localStorage.getItem("auth");
+    isLoading.value = true;
 
     if (authStorage && !auth.value) {
       const authUser = JSON.parse(authStorage);
-      console.log(authUser);
       auth.value = authUser;
       nav("/");
     }
@@ -58,7 +62,7 @@ export default component$(() => {
     }
 
     if (location.url.pathname == "/") {
-      if (auth.value) {
+      if (!auth.value) {
         nav("/login");
       }
     }
