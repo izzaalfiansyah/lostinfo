@@ -1,5 +1,5 @@
 import { $, component$, useContext, useStore } from "@builder.io/qwik";
-import { Link, useNavigate } from "@builder.io/qwik-city";
+import { DocumentHead, Link, useNavigate } from "@builder.io/qwik-city";
 import { AuthContext } from "~/contexts/auth";
 import { NotifContext } from "~/contexts/notif";
 import type User from "~/interfaces/user";
@@ -82,3 +82,7 @@ export default component$(() => {
     </form>
   );
 });
+
+export const head: DocumentHead = {
+  title: "Login",
+};

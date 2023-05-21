@@ -41,9 +41,24 @@ export default component$(() => {
     }),
   });
 
-  useVisibleTask$(() => {
+  useVisibleTask$(({ track }) => {
+    track(() => auth.value);
+
+    const authStorage = localStorage.getItem("auth");
+
+    if (authStorage && !auth.value) {
+      const authUser = JSON.parse(authStorage);
+      console.log(authUser);
+      auth.value = authUser;
+      nav("/");
+    }
+
+    if (auth.value) {
+      localStorage.setItem("auth", JSON.stringify(auth.value));
+    }
+
     if (location.url.pathname == "/") {
-      if (!auth.value) {
+      if (auth.value) {
         nav("/login");
       }
     }
