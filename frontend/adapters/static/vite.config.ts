@@ -12,7 +12,7 @@ export default extendConfig(baseConfig, () => {
     },
     plugins: [
       staticAdapter({
-        origin: "http://localhost",
+        origin: "http://localhost:5000",
       }),
     ],
   };
