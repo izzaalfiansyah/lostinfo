@@ -1,0 +1,43 @@
+version: "1.0"
+services:
+  db:
+    image: mysql:8.0
+    container_name: lostinfo-db
+    environment:
+      MYSQL_DATABASE: lostinfo
+      MYSQL_ROOT_PASSWORD: lostinfo
+      MYSQL_PASSWORD: lostinfo
+      MYSQL_USER: lostinfo
+    ports:
+      - "3306:3306"
+    networks:
+      - lostinfo
+  backend:
+    build:
+      context: ./backend/
+      dockerfile: Dockerfile
+    image: lostinfo-backend
+    container_name: lostinfo-backend
+    working_dir: /var/www/html
+    volumes:
+      - ./backend:/var/www/html
+    networks:
+      - lostinfo
+    ports:
+      - "8000:8000"
+  frontend:
+    build:
+      context: ./frontend/
+      dockerfile: Dockerfile
+    image: lostinfo-frontend
+    container_name: lostinfo-frontend
+    working_dir: /var/www/html
+    volumes:
+      - ./frontend/dist:/var/www/html
+    networks:
+      - lostinfo
+    ports:
+      - "5000:5000"
+networks:
+  lostinfo:
+    driver: bridge
