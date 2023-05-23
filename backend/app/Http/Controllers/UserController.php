@@ -95,7 +95,7 @@ class UserController extends Controller
             return Response([
                 'data' => [],
                 'message' => ['password salah'],
-            ]);
+            ], 400);
         } else {
             return Response([
                 'data' => [],
