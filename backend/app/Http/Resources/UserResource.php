@@ -22,7 +22,7 @@ class UserResource extends JsonResource
             'email' => $this->email,
             'telepon' => $this->telepon,
             'foto' => $this->foto,
-            'foto' => asset($this->foto ?: 'assets/user/default.png'),
+            'foto_url' => asset($this->foto ?: 'assets/user/default.png'),
             'role' => $this->role,
             'role_detail' => [1 => 'Admin', 2 => 'User'][(int) $this->role],
             'status' => $this->status,

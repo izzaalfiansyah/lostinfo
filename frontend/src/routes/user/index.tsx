@@ -72,8 +72,11 @@ export default component$(() => {
     req.email = item.email;
     req.telepon = item.telepon;
     req.foto = "";
+    req.foto_url = item.foto_url;
     req.role = item.role;
     req.status = item.status;
+
+    console.log(req.foto_url);
 
     if (action == "edit") {
       isEdit.value = true;
@@ -215,22 +218,6 @@ export default component$(() => {
                   onChange$={(e) => (req.telepon = e.target.value)}
                 />
               </div>
-            </div>
-            <div class="flex-1">
-              <div class="mb-2">
-                <label for="">Foto</label>
-                <input
-                  type="file"
-                  class="w-full"
-                  placeholder="Masukkan Foto"
-                  onChange$={handleFotoChange}
-                />
-                {isEdit.value && (
-                  <div class="text-xs">
-                    Kosongkan jika tidak ingin mengganti foto
-                  </div>
-                )}
-              </div>
               <div class="mb-2">
                 <label for="">Role</label>
                 <select
@@ -256,6 +243,33 @@ export default component$(() => {
                   <option value="1">Aktif</option>
                   <option value="0">Nonaktif</option>
                 </select>
+              </div>
+            </div>
+            <div class="flex-1">
+              <div class="mb-2">
+                <label for="">Foto</label>
+                <input
+                  type="file"
+                  class="w-full"
+                  placeholder="Masukkan Foto"
+                  onChange$={handleFotoChange}
+                />
+                {isEdit.value && (
+                  <div class="text-xs">
+                    Kosongkan jika tidak ingin mengganti foto
+                  </div>
+                )}
+              </div>
+              <div class="mb-2">
+                <div class="bg-gray-50 rounded p-4 flex items-center justify-center">
+                  <img
+                    src={req.foto_url}
+                    alt=""
+                    height={80}
+                    width={80}
+                    class="object-cover w-40 h-40"
+                  />
+                </div>
               </div>
               <div class="mb-2">
                 <label for="">Username</label>
