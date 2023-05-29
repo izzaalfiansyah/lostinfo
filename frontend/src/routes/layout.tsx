@@ -54,7 +54,12 @@ export default component$(() => {
     if (authStorage && !auth.value) {
       const authUser = JSON.parse(authStorage);
       auth.value = authUser;
-      nav("/");
+      if (
+        location.url.pathname == "/login/" ||
+        location.url.pathname == "/register/"
+      ) {
+        nav("/");
+      }
     }
 
     if (auth.value) {
