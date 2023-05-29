@@ -12,6 +12,7 @@ import Modal from "~/components/modal";
 import Title from "~/components/title";
 import { NotifContext } from "~/contexts/notif";
 import type User from "~/interfaces/user";
+import fileReader from "~/libs/file-reader";
 import http from "~/libs/http";
 
 export default component$(() => {
@@ -80,6 +81,13 @@ export default component$(() => {
     } else {
       modal.delete = true;
     }
+  });
+
+  const handleFotoChange = $(async (e: any) => {
+    const file = e.target.files[0];
+    const value = await fileReader(file);
+    req.foto = value;
+    req.foto_url = value;
   });
 
   useTask$(async () => {
@@ -211,7 +219,12 @@ export default component$(() => {
             <div class="flex-1">
               <div class="mb-2">
                 <label for="">Foto</label>
-                <input type="file" class="w-full" placeholder="Masukkan Foto" />
+                <input
+                  type="file"
+                  class="w-full"
+                  placeholder="Masukkan Foto"
+                  onChange$={handleFotoChange}
+                />
                 {isEdit.value && (
                   <div class="text-xs">
                     Kosongkan jika tidak ingin mengganti foto
