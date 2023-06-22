@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\BarangHilangController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -20,3 +21,4 @@ Route::get('/', function () {
 
 Route::post('/login', [UserController::class, 'login']);
 Route::apiResource('/user', UserController::class);
+Route::apiResource('/barang/hilang', BarangHilangController::class);

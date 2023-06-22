@@ -48,7 +48,7 @@ class UserController extends Controller
 
         if ($req->foto) {
             $data['foto'] = $this->uploadBase64($req->foto, 'user', 'png');
-            @unlink(public_path('/assets/user/' . $item->foto));
+            @unlink(public_path($item->foto));
         } else {
             unset($data['foto']);
         }
@@ -62,7 +62,7 @@ class UserController extends Controller
     {
         $item = User::find($id);
 
-        @unlink(public_path('/assets/user/' . $item->foto));
+        @unlink(public_path($item->foto));
 
         $item?->delete();
 

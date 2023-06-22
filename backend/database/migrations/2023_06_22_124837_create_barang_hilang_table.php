@@ -15,12 +15,12 @@ return new class extends Migration
             $table->id();
             $table->bigInteger('user_id')->unsigned();
             $table->string('nama');
-            $table->text('deskripsi');
+            $table->text('deskripsi')->nullable();
             $table->string('tempat_hilang')->coment('kemungkinan');
             $table->string('maps')->nullable();
             $table->string('foto')->nullable();
             $table->integer('hadiah');
-            $table->enum('ditemukan', [0, 1])->comment('0: belum, 1: sudah');
+            $table->enum('ditemukan', [0, 1])->default('0')->comment('0: belum, 1: sudah');
             $table->timestamps();
         });
     }

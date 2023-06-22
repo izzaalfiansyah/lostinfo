@@ -23,8 +23,6 @@ class BarangHilang extends Model
     ];
 
     public $cast = [
-        'user_id' => 'integer',
-        'foto' => 'object',
-        'hadiah' => 'integer'
+        'maps' => 'object',
     ];
 }
