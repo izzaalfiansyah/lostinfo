@@ -47,7 +47,7 @@ class BarangHilangController extends Controller
         $data = $req->validated();
 
         if ($req->foto) {
-            $data['foto'] = $this->uploadBase64($req->foto, 'foto', 'jpg');
+            $data['foto'] = $this->uploadBase64($req->foto, 'barang-hilang', 'jpg');
         }
 
         $item = BarangHilang::create($data);
@@ -61,7 +61,7 @@ class BarangHilangController extends Controller
         $data = $req->validated();
 
         if ($req->foto) {
-            $data['foto'] = $this->uploadBase64($req->foto, 'foto', 'jpg');
+            $data['foto'] = $this->uploadBase64($req->foto, 'barang-hilang', 'jpg');
             @unlink(public_path($item->foto));
         } else {
             unset($data['foto']);
