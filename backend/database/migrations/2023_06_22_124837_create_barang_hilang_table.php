@@ -17,8 +17,8 @@ return new class extends Migration
             $table->string('nama');
             $table->text('deskripsi')->nullable();
             $table->string('tempat_hilang')->coment('kemungkinan');
-            $table->string('maps')->nullable();
-            $table->string('foto')->nullable();
+            $table->text('maps')->nullable();
+            $table->text('foto')->nullable();
             $table->integer('hadiah');
             $table->enum('ditemukan', [0, 1])->default('0')->comment('0: belum, 1: sudah');
 
