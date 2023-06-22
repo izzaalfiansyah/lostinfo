@@ -22,7 +22,7 @@ class BarangHilang extends Model
         'ditemukan',
     ];
 
-    public $cast = [
+    public $casts = [
         'maps' => 'object',
     ];
 }

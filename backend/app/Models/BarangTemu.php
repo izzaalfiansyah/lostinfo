@@ -21,7 +21,7 @@ class BarangTemu extends Model
         'dikembalikan',
     ];
 
-    public $cast = [
+    public $casts = [
         'maps' => 'object',
     ];
 }
