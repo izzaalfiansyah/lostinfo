@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\BarangHilangController;
 use App\Http\Controllers\BarangTemuController;
+use App\Http\Controllers\ChatController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -24,3 +25,4 @@ Route::post('/login', [UserController::class, 'login']);
 Route::apiResource('/user', UserController::class);
 Route::apiResource('/barang/hilang', BarangHilangController::class);
 Route::apiResource('/barang/temu', BarangTemuController::class);
+Route::apiResource('/chat', ChatController::class);
