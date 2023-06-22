@@ -11,16 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('barang_hilang', function (Blueprint $table) {
+        Schema::create('barang_temu', function (Blueprint $table) {
             $table->id();
             $table->bigInteger('user_id')->unsigned();
             $table->string('nama');
             $table->text('deskripsi')->nullable();
-            $table->string('tempat_hilang')->coment('kemungkinan');
+            $table->string('tempat_temu');
             $table->string('maps')->nullable();
             $table->string('foto')->nullable();
-            $table->integer('hadiah');
-            $table->enum('ditemukan', [0, 1])->default('0')->comment('0: belum, 1: sudah');
+            $table->enum('dikembalikan', [0, 1])->default('0')->comment('0: belum, 1: sudah');
 
             $table->foreign('user_id')->on('user')->references('id');
             $table->timestamps();
@@ -32,6 +31,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('barang_hilang');
+        Schema::dropIfExists('barang_temu');
     }
 };
