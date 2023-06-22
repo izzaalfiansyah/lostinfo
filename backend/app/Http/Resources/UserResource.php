@@ -23,9 +23,9 @@ class UserResource extends JsonResource
             'telepon' => $this->telepon,
             'foto' => $this->foto,
             'foto_url' => asset($this->foto ?: 'assets/user_default.png'),
-            'role' => $this->role,
+            'role' => (int) $this->role,
             'role_detail' => [1 => 'Admin', 2 => 'User'][(int) $this->role],
-            'status' => $this->status,
+            'status' => (int) $this->status,
             'status_detail' => ['Nonaktif', 'Aktif'][(int) $this->status],
         ];
     }
