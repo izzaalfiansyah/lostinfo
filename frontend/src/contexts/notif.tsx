@@ -13,7 +13,7 @@ export default component$<{
     <div class={["fixed bottom-5 left-5 right-5 z-40 flex justify-center"]}>
       <div
         class={[
-          "rounded-lg text-white p-4 px-5 max-w-full w-[800px] transform transition",
+          "rounded-lg text-white p-4 px-5 max-w-full w-[800px] transform transition duration-500",
           props.color,
           props.show ? "translate-y-0" : "translate-y-[100px]",
         ]}

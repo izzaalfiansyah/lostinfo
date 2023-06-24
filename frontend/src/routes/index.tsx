@@ -1,11 +1,44 @@
-import { component$, useContext } from "@builder.io/qwik";
+import {
+  $,
+  component$,
+  useContext,
+  useStore,
+  useTask$,
+} from "@builder.io/qwik";
 import { type DocumentHead } from "@builder.io/qwik-city";
 import { ArchiveIcon, ArchiveXIcon, UsersIcon } from "~/components/icons";
 import Title from "~/components/title";
 import { AuthContext } from "~/contexts/auth";
+import { NotifContext } from "~/contexts/notif";
+import http from "~/libs/http";
 
 export default component$(() => {
   const auth = useContext(AuthContext);
+  const total = useStore({
+    user: 0,
+    barangHilang: 0,
+    barangTemu: 0,
+  });
+
+  const notif = useContext(NotifContext);
+
+  const getData = $(async () => {
+    try {
+      const user = await http.get("/user");
+      const barangHilang = await http.get("/barang/hilang");
+      const barangTemu = await http.get("/barang/temu");
+
+      total.user = user.data.data.length;
+      total.barangHilang = barangHilang.data.data.length;
+      total.barangTemu = barangTemu.data.data.length;
+    } catch (e: any) {
+      notif.show(e.response.data.message, "bg-red-500");
+    }
+  });
+
+  useTask$(async () => {
+    await getData();
+  });
 
   return (
     <>
@@ -21,7 +54,9 @@ export default component$(() => {
             <UsersIcon class="w-12 h-12 text-purple-500" />
           </div>
           <div>
-            <div class="text-4xl font-semibold">75</div>
+            <div class="text-4xl font-semibold">
+              {total.user.toLocaleString("id-ID")}
+            </div>
             <div>Pengguna</div>
           </div>
         </div>
@@ -30,7 +65,9 @@ export default component$(() => {
             <ArchiveIcon class="w-12 h-12 text-purple-500" />
           </div>
           <div>
-            <div class="text-4xl font-semibold">357</div>
+            <div class="text-4xl font-semibold">
+              {total.barangTemu.toLocaleString("id-ID")}
+            </div>
             <div>Barang Temu</div>
           </div>
         </div>
@@ -39,7 +76,9 @@ export default component$(() => {
             <ArchiveXIcon class="w-12 h-12 text-purple-500" />
           </div>
           <div>
-            <div class="text-4xl font-semibold">65</div>
+            <div class="text-4xl font-semibold">
+              {total.barangHilang.toLocaleString("id-ID")}
+            </div>
             <div>Barang Hilang</div>
           </div>
         </div>

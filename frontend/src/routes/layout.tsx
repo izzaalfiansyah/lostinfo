@@ -74,7 +74,7 @@ export default component$(() => {
 
     setTimeout(() => {
       isLoading.value = false;
-    }, 1500);
+    }, 800);
   });
 
   return (
