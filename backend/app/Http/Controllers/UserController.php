@@ -12,9 +12,27 @@ use Illuminate\Support\Facades\Validator;
 
 class UserController extends Controller
 {
-    public function index()
+    public function index(Request $req)
     {
-        $items = User::all();
+        $builder = new User();
+
+        if ($role = $req->role) {
+            $builder = $builder->where('role', $role);
+        }
+
+        if ($status = $req->status) {
+            $builder = $builder->where('status', $status);
+        }
+
+        if ($search = $req->search) {
+            $builder = $builder->where(function ($query) use ($search) {
+                return $query->where('username', 'like', "%$search%")
+                    ->orWhere('nama', 'like', "%$search%")
+                    ->orWhere('email', 'like', "%$search%");
+            });
+        }
+
+        $items = $builder->paginate(10);
 
         return UserResource::collection($items);
     }
