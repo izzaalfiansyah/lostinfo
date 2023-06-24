@@ -16,7 +16,7 @@ class ChatDetailRequest extends FormRequest
     {
         return [
             'chat_id' => 'required|integer',
-            'pesan' => 'nullable',
+            'pesan' => 'required',
             'maps' => 'nullable',
             'maps.lat' => 'required_with|maps',
             'maps.lng' => 'required_with|maps',
