@@ -19,7 +19,7 @@ class ChatController extends Controller
 
         $items = $builder->get();
 
-        return new ChatResource($items);
+        return ChatResource::collection($items);
     }
 
     public function store(ChatRequest $req)
