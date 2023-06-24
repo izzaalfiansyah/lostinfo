@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Models\ChatDetail;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -21,6 +22,7 @@ class ChatResource extends JsonResource
             'user_2_id' => $this->user_2_id,
             'user_1' => new UserResource(User::find($this->user_1_id)),
             'user_2' => new UserResource(User::find($this->user_2_id)),
+            'terbaru' => new ChatDetailResource(ChatDetail::where('chat_id', $this->id)->last()),
         ];
     }
 }
