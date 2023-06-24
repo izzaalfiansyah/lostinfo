@@ -18,8 +18,10 @@ return new class extends Migration
             $table->text('maps')->nullable();
             $table->text('foto')->nullable();
             $table->enum('pengirim', ['1', '2']);
-            $table->enum('dibaca', [0, 1])->comment('0: belum, 1: sudah');
+            $table->enum('dibaca', [0, 1])->comment('0: belum, 1: sudah')->default('0');
             $table->timestamps();
+
+            $table->foreign('chat_id')->on('chat')->references('id');
         });
     }
 
