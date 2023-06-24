@@ -26,5 +26,5 @@ Route::post('/login', [UserController::class, 'login']);
 Route::apiResource('/user', UserController::class);
 Route::apiResource('/barang/hilang', BarangHilangController::class);
 Route::apiResource('/barang/temu', BarangTemuController::class);
+Route::apiResource('/chat/detail', ChatDetailController::class)->only(['index', 'store', 'destroy']);
 Route::apiResource('/chat', ChatController::class);
-Route::apiResource('/chat-detail', ChatDetailController::class)->only(['index', 'store', 'destroy']);
