@@ -39,28 +39,40 @@ export default component$(() => {
   });
 
   const get = $(async () => {
-    const res = await http.get("/user");
-    items.value = res.data.data;
+    try {
+      const res = await http.get("/user");
+      items.value = res.data.data;
+    } catch (e: any) {
+      notif.show(e.response.data.message, "bg-red-500");
+    }
   });
 
   const save = $(async () => {
-    if (isEdit.value) {
-      await http.put("/user/" + req.id, req);
-      notif.show("data berhasil diedit");
-    } else {
-      await http.post("/user", req);
-      notif.show("data berhasil disimpan");
-    }
+    try {
+      if (isEdit.value) {
+        await http.put("/user/" + req.id, req);
+        notif.show("data berhasil diedit");
+      } else {
+        await http.post("/user", req);
+        notif.show("data berhasil disimpan");
+      }
 
-    modal.save = false;
-    get();
+      modal.save = false;
+      get();
+    } catch (e: any) {
+      notif.show(e.response.data.message, "bg-red-500");
+    }
   });
 
   const destroy = $(async () => {
-    await http.delete("/user/" + req.id);
-    notif.show("data berhasil dihapus");
-    modal.delete = false;
-    get();
+    try {
+      await http.delete("/user/" + req.id);
+      notif.show("data berhasil dihapus");
+      modal.delete = false;
+      get();
+    } catch (e: any) {
+      notif.show(e.response.data.message, "bg-red-500");
+    }
   });
 
   const show = $((item: User, action: "edit" | "delete") => {
