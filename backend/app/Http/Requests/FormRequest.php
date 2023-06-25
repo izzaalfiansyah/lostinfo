@@ -20,7 +20,7 @@ class FormRequest extends BaseFormRequest
     {
         $response = Response::json([
             'data' => $validator->errors(),
-            'message' => $validator->errors()->all(),
+            'message' => $validator->errors()->first(),
         ], 400);
         throw new HttpResponseException($response);
     }
