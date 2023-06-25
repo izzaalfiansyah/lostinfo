@@ -9,6 +9,7 @@ import {
 import { type DocumentHead } from "@builder.io/qwik-city";
 import { DeleteIcon, EditIcon } from "~/components/icons";
 import Modal from "~/components/modal";
+import Pagination from "~/components/pagination";
 import Title from "~/components/title";
 import { NotifContext } from "~/contexts/notif";
 import type User from "~/interfaces/user";
@@ -21,6 +22,11 @@ export default component$(() => {
   const modal = useStore({
     save: false,
     delete: false,
+  });
+  const filter = useStore({
+    total: 0,
+    page: 1,
+    search: "",
   });
   const req = useStore<User>({});
   const notif = useContext(NotifContext);
@@ -40,8 +46,11 @@ export default component$(() => {
 
   const get = $(async () => {
     try {
-      const res = await http.get("/user");
+      const res = await http.get("/user", {
+        params: filter,
+      });
       items.value = res.data.data;
+      filter.total = res.data.meta.total;
     } catch (e: any) {
       notif.show(e.response.data.message, "bg-red-500");
     }
@@ -88,8 +97,6 @@ export default component$(() => {
     req.role = item.role;
     req.status = item.status;
 
-    console.log(req.foto_url);
-
     if (action == "edit") {
       isEdit.value = true;
       modal.save = true;
@@ -105,7 +112,9 @@ export default component$(() => {
     req.foto_url = value;
   });
 
-  useTask$(async () => {
+  useTask$(async ({ track }) => {
+    track(() => filter.page && filter.search);
+
     nullable();
     await get();
   });
@@ -128,6 +137,15 @@ export default component$(() => {
           Tambah
         </button>
       </Title>
+      <div class="mb-3">
+        <input
+          type="text"
+          class="rounded-lg outline-none bg-white border-gray-200 transition focus:ring-purple-300 w-full"
+          placeholder="Cari..."
+          value={filter.search}
+          onChange$={(e) => (filter.search = e.target.value)}
+        />
+      </div>
       <div class="bg-white rounded-lg shadow-sm p-5">
         <div class="overflow-x-auto">
           <table class="t-table">
@@ -173,6 +191,7 @@ export default component$(() => {
             </tbody>
           </table>
         </div>
+        <Pagination data={items.value.length} filter={filter as any} />
       </div>
       <Modal show={modal.save} onClose$={() => (modal.save = false)}>
         <form

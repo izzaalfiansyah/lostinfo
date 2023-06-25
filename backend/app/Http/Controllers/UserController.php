@@ -32,7 +32,7 @@ class UserController extends Controller
             });
         }
 
-        $items = $builder->paginate(10);
+        $items = $builder->paginate($req->limit ?: 10);
 
         return UserResource::collection($items);
     }
