@@ -1,5 +1,5 @@
 import { $, component$, useContext, useStore } from "@builder.io/qwik";
-import { DocumentHead, Link, useNavigate } from "@builder.io/qwik-city";
+import { type DocumentHead, Link, useNavigate } from "@builder.io/qwik-city";
 import { AuthContext } from "~/contexts/auth";
 import { NotifContext } from "~/contexts/notif";
 import type User from "~/interfaces/user";
