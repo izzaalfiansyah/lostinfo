@@ -16,7 +16,7 @@ class BarangHilangResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'id' => $this->id,
+            'id' => (int) $this->id,
             'user_id' => (int) $this->user_id,
             'user' => new UserResource(User::find($this->user_id)),
             'nama' => $this->nama,

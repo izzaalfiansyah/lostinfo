@@ -97,7 +97,7 @@ class UserController extends Controller
         if ($schema->fails()) {
             return Response([
                 'data' => $schema->errors(),
-                'message' => $schema->errors()->all(),
+                'message' => $schema->errors()->first(),
             ], 400);
         }
 
@@ -112,12 +112,12 @@ class UserController extends Controller
 
             return Response([
                 'data' => [],
-                'message' => ['password salah'],
+                'message' => 'password salah',
             ], 400);
         } else {
             return Response([
                 'data' => [],
-                'message' => ['username tidak ditemukan'],
+                'message' => 'username tidak ditemukan',
             ], 400);
         }
     }

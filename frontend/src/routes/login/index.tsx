@@ -31,7 +31,7 @@ export default component$(() => {
       nullable();
       notif.show("berhasil login");
     } catch (e: any) {
-      notif.show(e.response.data.message[0], "bg-red-500");
+      notif.show(e.response.data.message, "bg-red-500");
     }
   });
 
