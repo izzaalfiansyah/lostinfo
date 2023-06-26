@@ -30,7 +30,7 @@ class BarangHilangController extends Controller
             });
         }
 
-        $items = $builder->paginate($req->limit ?: 10);
+        $items = $builder->orderBy('created_at', 'desc')->paginate($req->limit ?: 10);
 
         return BarangHilangResource::collection($items);
     }

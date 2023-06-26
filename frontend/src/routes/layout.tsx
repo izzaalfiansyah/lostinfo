@@ -17,7 +17,7 @@ import Auth from "~/layouts/auth";
 export default component$(() => {
   const location = useLocation();
   const nav = useNavigate();
-  const isLoading = useSignal<boolean>(false);
+  const isLoading = useSignal<boolean>(true);
 
   const notif = useStore({
     show: false,
@@ -49,7 +49,7 @@ export default component$(() => {
     }
 
     const authStorage = localStorage.getItem("auth");
-    // isLoading.value = true;
+    isLoading.value = true;
 
     if (authStorage && !auth.value) {
       const authUser = JSON.parse(authStorage);
