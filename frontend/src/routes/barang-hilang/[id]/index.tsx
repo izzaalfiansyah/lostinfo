@@ -1,9 +1,49 @@
-import { component$ } from "@builder.io/qwik";
-import { DocumentHead } from "@builder.io/qwik-city";
+import { $, component$, useSignal, useStore, useTask$ } from "@builder.io/qwik";
+import { useLocation, type DocumentHead } from "@builder.io/qwik-city";
 import Img from "~/components/img";
 import Title from "~/components/title";
+import type BarangHilang from "~/interfaces/barang-hilang";
+import type User from "~/interfaces/user";
+import fileReader from "~/libs/file-reader";
+import http from "~/libs/http";
 
 export default component$(() => {
+  const location = useLocation();
+
+  const user = useSignal<User[]>([]);
+  const req = useStore<BarangHilang>({});
+
+  const getUser = $(async () => {
+    const res = await http.get("/user");
+    user.value = res.data.data;
+  });
+
+  const get = $(async () => {
+    const res = await http.get("/barang/hilang/" + location.params.id);
+    const item = res.data.data as BarangHilang;
+    req.id = item.id;
+    req.deskripsi = item.deskripsi;
+    req.ditemukan = item.ditemukan;
+    req.foto_url = item.foto_url;
+    req.hadiah = item.hadiah;
+    req.maps = item.maps;
+    req.nama = item.nama;
+    req.tempat_hilang = item.tempat_hilang;
+    req.user_id = item.user_id;
+  });
+
+  const handleFotoChange = $(async (e: any) => {
+    const file = e.target.files[0];
+    const value = await fileReader(file);
+    req.foto = value;
+    req.foto_url = value;
+  });
+
+  useTask$(async () => {
+    await getUser();
+    await get();
+  });
+
   return (
     <>
       <Title
@@ -15,7 +55,13 @@ export default component$(() => {
           <div>
             <div class="mb-2">
               <label for="">Nama</label>
-              <input type="text" class="t-input" placeholder="Masukkan Nama" />
+              <input
+                type="text"
+                class="t-input"
+                placeholder="Masukkan Nama"
+                value={req.nama}
+                onChange$={(e) => (req.nama = e.target.value)}
+              />
             </div>
             <div class="mb-2">
               <label for="">Deskripsi</label>
@@ -23,6 +69,8 @@ export default component$(() => {
                 rows={3}
                 class="t-input"
                 placeholder="Masukkan Deskripsi"
+                value={req.deskripsi}
+                onChange$={(e) => (req.deskripsi = e.target.value)}
               ></textarea>
             </div>
             <div class="mb-2">
@@ -31,6 +79,8 @@ export default component$(() => {
                 type="text"
                 class="t-input"
                 placeholder="Masukkan Tempat Hilang"
+                value={req.tempat_hilang}
+                onChange$={(e) => (req.tempat_hilang = e.target.value)}
               />
               <div class="text-xs text-gray-400">
                 Perkiraan tempat hilang atau tempat terakhir melihat barang
@@ -43,12 +93,33 @@ export default component$(() => {
           </div>
           <div>
             <div class="mb-3">
+              <label for="">Pemilik</label>
+              <select
+                required
+                class="t-input"
+                value={req.user_id}
+                onChange$={(e) => (req.user_id = parseInt(e.target.value))}
+              >
+                <option value="">Pilih Pemilik</option>
+                {user.value.map((item) => (
+                  <option value={item.id} key={item.id}>
+                    {item.nama}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div class="mb-3">
               <label for="">Foto</label>
-              <input type="file" title="Pilih Foto" class="w-full" />
+              <input
+                type="file"
+                title="Pilih Foto"
+                class="w-full"
+                onChange$={handleFotoChange}
+              />
             </div>
             <div class="mb-2">
               <div class="bg-gray-100 rounded-lg flex items-center justify-center p-5">
-                <Img src="" alt="Foto Barang" class="w-24 h-24" />
+                <Img src={req.foto_url} alt="Foto Barang" class="w-24 h-24" />
               </div>
             </div>
             <div class="mb-2">
@@ -59,11 +130,17 @@ export default component$(() => {
                 id=""
                 class="t-input"
                 placeholder="Masukkan Hadiah"
+                value={req.hadiah}
+                onChange$={(e) => (req.hadiah = parseInt(e.target.value))}
               />
             </div>
             <div class="mb-2">
               <label for="">Ditemukan</label>
-              <select class="t-input">
+              <select
+                class="t-input"
+                value={req.ditemukan}
+                onChange$={(e) => (req.ditemukan = parseInt(e.target.value))}
+              >
                 <option value="">Pilih status</option>
                 <option value="0">Belum</option>
                 <option value="1">Sudah</option>

@@ -17,7 +17,7 @@ export default component$((props: Props) => {
       <img
         src={src}
         alt={alt}
-        class="w-full h-full object-cover transition transform hover:scale-110"
+        class="w-full h-full object-cover transition hover:scale-110"
         {...(other as any)}
       />
     </a>
