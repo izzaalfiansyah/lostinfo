@@ -18,7 +18,7 @@ class BarangHilangRequest extends FormRequest
             'maps.lng' => 'required_with:maps',
             'foto' => ['nullable', new Base64()],
             'hadiah' => 'required',
-            'ditemukan' => 'nullable|in:1,0',
+            'ditemukan' => 'nullable|string|in:1,0',
         ];
     }
 }

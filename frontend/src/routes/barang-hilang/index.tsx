@@ -47,6 +47,7 @@ export default component$(() => {
       await http.delete("/barang/hilang/" + deleteData.id);
       notif.show("data berhasil dihapus");
       modal.delete = false;
+      await get();
     } catch (e: any) {
       notif.show(e.response.data.message, "bg-red-500");
     }

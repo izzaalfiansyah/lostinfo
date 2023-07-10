@@ -6,7 +6,7 @@ import {
   useStore,
   useVisibleTask$,
 } from "@builder.io/qwik";
-import { useLocation, type DocumentHead, Link } from "@builder.io/qwik-city";
+import { type DocumentHead, Link } from "@builder.io/qwik-city";
 import Img from "~/components/img";
 import Title from "~/components/title";
 import { NotifContext } from "~/contexts/notif";
@@ -16,8 +16,6 @@ import fileReader from "~/libs/file-reader";
 import http from "~/libs/http";
 
 export default component$(() => {
-  const location = useLocation();
-
   const user = useSignal<User[]>([]);
   const req = useStore<BarangHilang>({});
   const notif = useContext(NotifContext);
@@ -27,24 +25,9 @@ export default component$(() => {
     user.value = res.data.data;
   });
 
-  const get = $(async () => {
-    const res = await http.get("/barang/hilang/" + location.params.id);
-    const item = res.data.data as BarangHilang;
-    req.id = item.id;
-    req.deskripsi = item.deskripsi;
-    req.ditemukan = item.ditemukan;
-    req.foto_url = item.foto_url;
-    req.hadiah = item.hadiah;
-    req.maps = item.maps;
-    req.nama = item.nama;
-    req.tempat_hilang = item.tempat_hilang;
-    req.user_id = item.user_id;
-  });
-
   const save = $(async () => {
     try {
-      const res = await http.put("/barang/hilang/" + location.params.id, req);
-      console.log(res.data);
+      await http.post("/barang/hilang", req);
       notif.show("data berhasil disimpan");
     } catch (e: any) {
       notif.show(e.response.data.message, "bg-red-500");
@@ -60,14 +43,13 @@ export default component$(() => {
 
   useVisibleTask$(async () => {
     await getUser();
-    await get();
   });
 
   return (
     <>
       <Title
-        title="Detail Barang Hilang"
-        subtitle="Informasi lanjutan mengenai barang hilang"
+        title="Tambah Barang Hilang"
+        subtitle="Menambahkan data barang hilang"
       ></Title>
       <form
         onSubmit$={save}
@@ -143,7 +125,7 @@ export default component$(() => {
             </div>
             <div class="mb-2">
               <div class="bg-gray-100 rounded-lg flex items-center justify-center p-5">
-                <Img src={req.foto_url} alt="Foto Barang" class="w-24 h-24" />
+                <Img src={req.foto_url} alt="" class="w-24 h-24" />
               </div>
             </div>
             <div class="mb-2">
@@ -157,18 +139,6 @@ export default component$(() => {
                 value={req.hadiah}
                 onChange$={(e) => (req.hadiah = parseInt(e.target.value))}
               />
-            </div>
-            <div class="mb-2">
-              <label for="">Ditemukan</label>
-              <select
-                class="t-input"
-                value={req.ditemukan}
-                onChange$={(e) => (req.ditemukan = e.target.value)}
-              >
-                <option value="">Pilih status</option>
-                <option value="0">Belum</option>
-                <option value="1">Sudah</option>
-              </select>
             </div>
           </div>
         </div>
@@ -192,5 +162,5 @@ export default component$(() => {
 });
 
 export const head: DocumentHead = {
-  title: "Detail Barang",
+  title: "Tambah Barang",
 };
