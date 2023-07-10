@@ -1,6 +1,7 @@
 import { type PropFunction, Slot, component$, $ } from "@builder.io/qwik";
 
 interface Props {
+  title?: any;
   show: boolean;
   onClose$?: PropFunction;
 }
@@ -19,6 +20,7 @@ export default component$<Props>((props) => {
             onClick$={handleClick}
           ></div>
           <div class="bg-white rounded-lg shadow-sm p-5 max-w-full relative max-h-full overflow-y-auto">
+            {props.title && <div class="font-semibold mb-5">{props.title}</div>}
             <Slot />
           </div>
         </div>

@@ -7,7 +7,9 @@ import {
   useVisibleTask$,
 } from "@builder.io/qwik";
 import { Link, type DocumentHead } from "@builder.io/qwik-city";
+import { DeleteIcon } from "~/components/icons";
 import Img from "~/components/img";
+import Modal, { ModalFooter, ModalTitle } from "~/components/modal";
 import Pagination from "~/components/pagination";
 import Title from "~/components/title";
 import { NotifContext } from "~/contexts/notif";
@@ -22,12 +24,28 @@ export default component$(() => {
     search: "",
   });
   const notif = useContext(NotifContext);
+  const deleteData = useStore({
+    id: "",
+    nama: "",
+  });
+  const modal = useStore({
+    delete: false,
+  });
 
   const get = $(async () => {
     try {
       const res = await http.get("/barang/hilang");
       items.value = res.data.data;
       filter.total = res.data.meta.total;
+    } catch (e: any) {
+      notif.show(e.response.data.message, "bg-red-500");
+    }
+  });
+
+  const destroy = $(async () => {
+    try {
+      await http.delete("/barang/hilang/" + deleteData.id);
+      notif.show("data berhasil dihapus");
     } catch (e: any) {
       notif.show(e.response.data.message, "bg-red-500");
     }
@@ -72,19 +90,48 @@ export default component$(() => {
             <div class="grow truncate">
               <div class="font-semibold truncate">{item.nama}</div>
               <div class="text-gray-500 text-sm">@{item.user?.username}</div>
-              <div class="mt-4">
+              <div
+                class="mt-4 flex items-center"
+                onClick$={() => {
+                  modal.delete = true;
+                }}
+              >
                 <Link
                   href={"/barang-hilang/" + item.id}
                   class="text-sm text-purple-500 border inline-block border-purple-500 hover:text-white hover:bg-purple-500 transition rounded-full px-3 p-1"
                 >
                   Detail Barang
                 </Link>
+                <button
+                  type="button"
+                  class="border border-red-500 rounded-full text-red-500 px-3 p-1.5 ml-1 outline-none hover:bg-red-500 hover:text-white transition"
+                  onClick$={() => {
+                    modal.delete = true;
+                    deleteData.id = item.id as any;
+                    deleteData.nama = item.nama as any;
+                  }}
+                >
+                  <DeleteIcon class="w-4 h-4" />
+                </button>
               </div>
             </div>
           </div>
         ))}
       </div>
       <Pagination data={items.value.length} filter={filter as any} />
+      <Modal show={modal.delete} onClose$={() => (modal.delete = false)}>
+        <form onSubmit$={destroy} preventdefault:submit>
+          <ModalTitle>Hapus Barang Hilang</ModalTitle>
+          <p>
+            Anda yakin menghapus barang <strong>{deleteData.nama}</strong>?
+          </p>
+          <ModalFooter>
+            <button class="bg-red-500 text-white px-4 p-2 rounded">
+              Hapus
+            </button>
+          </ModalFooter>
+        </form>
+      </Modal>
     </>
   );
 });

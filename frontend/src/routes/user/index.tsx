@@ -194,15 +194,17 @@ export default component$(() => {
         </div>
         <Pagination data={items.value.length} filter={filter as any} />
       </div>
-      <Modal show={modal.save} onClose$={() => (modal.save = false)}>
+      <Modal
+        show={modal.save}
+        onClose$={() => (modal.save = false)}
+        title={(isEdit.value ? "Edit" : "Tambah") + " Pengguna"}
+      >
         <form
           preventdefault:submit
           onSubmit$={save}
           class="w-[800px] max-w-full"
         >
-          <div class="font-semibold mb-5">
-            {isEdit.value ? "Edit" : "Tambah"} Pengguna
-          </div>
+          <div class="font-semibold mb-5"></div>
           <div class="flex lg:flex-row justify-between flex-col gap-3">
             <div class="flex-1">
               <div class="mb-2">
@@ -341,13 +343,16 @@ export default component$(() => {
           </div>
         </form>
       </Modal>
-      <Modal show={modal.delete} onClose$={() => (modal.delete = false)}>
+      <Modal
+        show={modal.delete}
+        onClose$={() => (modal.delete = false)}
+        title="Hapus Pengguna"
+      >
         <form
           preventdefault:submit
           onSubmit$={destroy}
           class="max-w-full w-[500px]"
         >
-          <div class="font-semibold mb-5">Hapus Pengguna</div>
           <p>
             Anda yakin menghapus pengguna? Data akan dihapus secara permanen!
           </p>
