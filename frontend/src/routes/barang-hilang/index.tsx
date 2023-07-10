@@ -4,7 +4,7 @@ import {
   useContext,
   useSignal,
   useStore,
-  useTask$,
+  useVisibleTask$,
 } from "@builder.io/qwik";
 import { Link, type DocumentHead } from "@builder.io/qwik-city";
 import Img from "~/components/img";
@@ -33,7 +33,7 @@ export default component$(() => {
     }
   });
 
-  useTask$(async ({ track }) => {
+  useVisibleTask$(async ({ track }) => {
     track(() => filter.page && filter.search);
 
     await get();

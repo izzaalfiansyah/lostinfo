@@ -1,4 +1,10 @@
-import { $, component$, useSignal, useStore, useTask$ } from "@builder.io/qwik";
+import {
+  $,
+  component$,
+  useSignal,
+  useStore,
+  useVisibleTask$,
+} from "@builder.io/qwik";
 import { useLocation, type DocumentHead } from "@builder.io/qwik-city";
 import Img from "~/components/img";
 import Title from "~/components/title";
@@ -39,7 +45,7 @@ export default component$(() => {
     req.foto_url = value;
   });
 
-  useTask$(async () => {
+  useVisibleTask$(async () => {
     await getUser();
     await get();
   });

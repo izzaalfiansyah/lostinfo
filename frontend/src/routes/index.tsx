@@ -3,7 +3,7 @@ import {
   component$,
   useContext,
   useStore,
-  useTask$,
+  useVisibleTask$,
 } from "@builder.io/qwik";
 import { type DocumentHead } from "@builder.io/qwik-city";
 import { ArchiveIcon, ArchiveXIcon, UsersIcon } from "~/components/icons";
@@ -36,7 +36,7 @@ export default component$(() => {
     }
   });
 
-  useTask$(async () => {
+  useVisibleTask$(async () => {
     await getData();
   });
 

@@ -4,7 +4,7 @@ import {
   useContext,
   useSignal,
   useStore,
-  useTask$,
+  useVisibleTask$,
 } from "@builder.io/qwik";
 import { type DocumentHead } from "@builder.io/qwik-city";
 import { DeleteIcon, EditIcon } from "~/components/icons";
@@ -112,7 +112,7 @@ export default component$(() => {
     req.foto_url = value;
   });
 
-  useTask$(async ({ track }) => {
+  useVisibleTask$(async ({ track }) => {
     track(() => filter.page && filter.search);
 
     nullable();
