@@ -1,13 +1,15 @@
 import {
   $,
   component$,
+  useContext,
   useSignal,
   useStore,
   useVisibleTask$,
 } from "@builder.io/qwik";
-import { useLocation, type DocumentHead } from "@builder.io/qwik-city";
+import { useLocation, type DocumentHead, Link } from "@builder.io/qwik-city";
 import Img from "~/components/img";
 import Title from "~/components/title";
+import { NotifContext } from "~/contexts/notif";
 import type BarangHilang from "~/interfaces/barang-hilang";
 import type User from "~/interfaces/user";
 import fileReader from "~/libs/file-reader";
@@ -18,6 +20,7 @@ export default component$(() => {
 
   const user = useSignal<User[]>([]);
   const req = useStore<BarangHilang>({});
+  const notif = useContext(NotifContext);
 
   const getUser = $(async () => {
     const res = await http.get("/user");
@@ -38,6 +41,15 @@ export default component$(() => {
     req.user_id = item.user_id;
   });
 
+  const save = $(async () => {
+    try {
+      await http.put("/barang/hilang/" + location.params.id, req);
+      notif.show("data berhasil disimpan");
+    } catch (e: any) {
+      notif.show(e.response.data.message, "bg-red-500");
+    }
+  });
+
   const handleFotoChange = $(async (e: any) => {
     const file = e.target.files[0];
     const value = await fileReader(file);
@@ -56,7 +68,11 @@ export default component$(() => {
         title="Detail Barang Hilang"
         subtitle="Informasi lanjutan mengenai barang hilang"
       ></Title>
-      <div class="bg-white rounded-lg shadow-sm p-5">
+      <form
+        onSubmit$={save}
+        preventdefault:submit
+        class="bg-white rounded-lg shadow-sm p-5"
+      >
         <div class="grid lg:grid-cols-2 grid-cols-1 gap-5">
           <div>
             <div class="mb-2">
@@ -121,6 +137,7 @@ export default component$(() => {
                 title="Pilih Foto"
                 class="w-full"
                 onChange$={handleFotoChange}
+                accept="image/*"
               />
             </div>
             <div class="mb-2">
@@ -161,14 +178,14 @@ export default component$(() => {
           >
             Simpan Data
           </button>
-          <button
-            type="button"
+          <Link
+            href="/barang-hilang"
             class="button px-4 p-2 bg-gray-400 text-white rounded shadow-sm"
           >
             Kembali
-          </button>
+          </Link>
         </div>
-      </div>
+      </form>
     </>
   );
 });

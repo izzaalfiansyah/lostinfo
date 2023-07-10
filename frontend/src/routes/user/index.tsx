@@ -8,6 +8,7 @@ import {
 } from "@builder.io/qwik";
 import { type DocumentHead } from "@builder.io/qwik-city";
 import { DeleteIcon, EditIcon } from "~/components/icons";
+import Img from "~/components/img";
 import Modal from "~/components/modal";
 import Pagination from "~/components/pagination";
 import Title from "~/components/title";
@@ -293,12 +294,10 @@ export default component$(() => {
               </div>
               <div class="mb-2">
                 <div class="bg-gray-50 rounded p-4 flex items-center justify-center">
-                  <img
+                  <Img
                     src={req.foto_url}
                     alt=""
-                    height={80}
-                    width={80}
-                    class="object-cover w-40 h-40"
+                    class="object-cover w-40 h-40 !rounded"
                   />
                 </div>
               </div>
