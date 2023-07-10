@@ -9,7 +9,7 @@ import {
 import { Link, type DocumentHead } from "@builder.io/qwik-city";
 import { DeleteIcon } from "~/components/icons";
 import Img from "~/components/img";
-import Modal, { ModalFooter, ModalTitle } from "~/components/modal";
+import Modal from "~/components/modal";
 import Pagination from "~/components/pagination";
 import Title from "~/components/title";
 import { NotifContext } from "~/contexts/notif";
@@ -46,6 +46,7 @@ export default component$(() => {
     try {
       await http.delete("/barang/hilang/" + deleteData.id);
       notif.show("data berhasil dihapus");
+      modal.delete = false;
     } catch (e: any) {
       notif.show(e.response.data.message, "bg-red-500");
     }
@@ -63,13 +64,13 @@ export default component$(() => {
         title="Data Barang Hilang"
         subtitle="Menjelajahi dan menganalisis data barang hilang"
       >
-        <button
+        <Link
           q:slot="action"
           class="px-5 p-2 text-white bg-purple-600 rounded shadow-sm mt-4 lg:mt-0"
-          onClick$={() => {}}
+          href="/barang-hilang/create"
         >
           Tambah
-        </button>
+        </Link>
       </Title>
       <div class="mb-3">
         <input
@@ -90,12 +91,7 @@ export default component$(() => {
             <div class="grow truncate">
               <div class="font-semibold truncate">{item.nama}</div>
               <div class="text-gray-500 text-sm">@{item.user?.username}</div>
-              <div
-                class="mt-4 flex items-center"
-                onClick$={() => {
-                  modal.delete = true;
-                }}
-              >
+              <div class="mt-4 flex items-center">
                 <Link
                   href={"/barang-hilang/" + item.id}
                   class="text-sm text-purple-500 border inline-block border-purple-500 hover:text-white hover:bg-purple-500 transition rounded-full px-3 p-1"
@@ -119,17 +115,24 @@ export default component$(() => {
         ))}
       </div>
       <Pagination data={items.value.length} filter={filter as any} />
-      <Modal show={modal.delete} onClose$={() => (modal.delete = false)}>
-        <form onSubmit$={destroy} preventdefault:submit>
-          <ModalTitle>Hapus Barang Hilang</ModalTitle>
+      <Modal
+        show={modal.delete}
+        onClose$={() => (modal.delete = false)}
+        title="Hapus Barang Hilang"
+      >
+        <form
+          onSubmit$={destroy}
+          preventdefault:submit
+          class="max-w-full w-[500px]"
+        >
           <p>
             Anda yakin menghapus barang <strong>{deleteData.nama}</strong>?
           </p>
-          <ModalFooter>
+          <div class="mt-8 justify-end flex">
             <button class="bg-red-500 text-white px-4 p-2 rounded">
               Hapus
             </button>
-          </ModalFooter>
+          </div>
         </form>
       </Modal>
     </>
