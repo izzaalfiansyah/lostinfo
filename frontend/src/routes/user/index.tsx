@@ -296,11 +296,15 @@ export default component$(() => {
               </div>
               <div class="mb-2">
                 <div class="bg-gray-50 rounded p-4 flex items-center justify-center">
-                  <Img
-                    src={req.foto_url}
-                    alt=""
-                    class="object-cover w-40 h-40 !rounded"
-                  />
+                  {req.foto_url ? (
+                    <Img
+                      src={req.foto_url}
+                      alt=""
+                      class="object-cover w-40 h-40 !rounded"
+                    />
+                  ) : (
+                    <div class="h-40"></div>
+                  )}
                 </div>
               </div>
               <div class="mb-2">

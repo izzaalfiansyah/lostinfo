@@ -125,7 +125,11 @@ export default component$(() => {
             </div>
             <div class="mb-2">
               <div class="bg-gray-100 rounded-lg flex items-center justify-center p-5">
-                <Img src={req.foto_url} alt="" class="w-24 h-24" />
+                {req.foto_url ? (
+                  <Img src={req.foto_url} alt="" class="w-24 h-24" />
+                ) : (
+                  <div class="h-24"></div>
+                )}
               </div>
             </div>
             <div class="mb-2">
