@@ -1,10 +1,8 @@
-import { component$ } from "@builder.io/qwik";
-
 interface IconProps {
   class: string;
 }
 
-export const HomeIcon = component$<IconProps>((props) => {
+export const HomeIcon = function (props: IconProps) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -21,9 +19,9 @@ export const HomeIcon = component$<IconProps>((props) => {
       />
     </svg>
   );
-});
+};
 
-export const UsersIcon = component$<IconProps>((props) => {
+export const UsersIcon = function (props: IconProps) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -40,9 +38,9 @@ export const UsersIcon = component$<IconProps>((props) => {
       />
     </svg>
   );
-});
+};
 
-export const AccountIcon = component$<IconProps>((props) => {
+export const AccountIcon = function (props: IconProps) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -59,9 +57,9 @@ export const AccountIcon = component$<IconProps>((props) => {
       />
     </svg>
   );
-});
+};
 
-export const ArchiveXIcon = component$<IconProps>((props) => {
+export const ArchiveXIcon = function (props: IconProps) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -78,9 +76,9 @@ export const ArchiveXIcon = component$<IconProps>((props) => {
       />
     </svg>
   );
-});
+};
 
-export const ArchiveIcon = component$<IconProps>((props) => {
+export const ArchiveIcon = function (props: IconProps) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -97,9 +95,9 @@ export const ArchiveIcon = component$<IconProps>((props) => {
       />
     </svg>
   );
-});
+};
 
-export const StackIcon = component$<IconProps>((props) => {
+export const StackIcon = function (props: IconProps) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -116,9 +114,9 @@ export const StackIcon = component$<IconProps>((props) => {
       />
     </svg>
   );
-});
+};
 
-export const LogoutIcon = component$<IconProps>((props) => {
+export const LogoutIcon = function (props: IconProps) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -135,9 +133,9 @@ export const LogoutIcon = component$<IconProps>((props) => {
       />
     </svg>
   );
-});
+};
 
-export const LoveIcon = component$<IconProps>((props) => {
+export const LoveIcon = function (props: IconProps) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -148,9 +146,9 @@ export const LoveIcon = component$<IconProps>((props) => {
       <path d="M11.645 20.91l-.007-.003-.022-.012a15.247 15.247 0 01-.383-.218 25.18 25.18 0 01-4.244-3.17C4.688 15.36 2.25 12.174 2.25 8.25 2.25 5.322 4.714 3 7.688 3A5.5 5.5 0 0112 5.052 5.5 5.5 0 0116.313 3c2.973 0 5.437 2.322 5.437 5.25 0 3.925-2.438 7.111-4.739 9.256a25.175 25.175 0 01-4.244 3.17 15.247 15.247 0 01-.383.219l-.022.012-.007.004-.003.001a.752.752 0 01-.704 0l-.003-.001z" />
     </svg>
   );
-});
+};
 
-export const MenuIcon = component$<IconProps>((props) => {
+export const MenuIcon = function (props: IconProps) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -167,9 +165,9 @@ export const MenuIcon = component$<IconProps>((props) => {
       />
     </svg>
   );
-});
+};
 
-export const EditIcon = component$<IconProps>((props) => {
+export const EditIcon = function (props: IconProps) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -186,9 +184,9 @@ export const EditIcon = component$<IconProps>((props) => {
       />
     </svg>
   );
-});
+};
 
-export const DeleteIcon = component$<IconProps>((props) => {
+export const DeleteIcon = function (props: IconProps) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -205,9 +203,9 @@ export const DeleteIcon = component$<IconProps>((props) => {
       />
     </svg>
   );
-});
+};
 
-export const ChevronLeftIcon = component$<IconProps>((props) => {
+export const ChevronLeftIcon = function (props: IconProps) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -224,9 +222,9 @@ export const ChevronLeftIcon = component$<IconProps>((props) => {
       />
     </svg>
   );
-});
+};
 
-export const ChevronRightIcon = component$<IconProps>((props) => {
+export const ChevronRightIcon = function (props: IconProps) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -243,4 +241,4 @@ export const ChevronRightIcon = component$<IconProps>((props) => {
       />
     </svg>
   );
-});
+};

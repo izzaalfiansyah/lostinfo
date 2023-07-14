@@ -1,32 +1,41 @@
-import { component$ } from "@builder.io/qwik";
+// @refresh reload
+import { Suspense } from "solid-js";
 import {
-  QwikCityProvider,
-  RouterOutlet,
-  ServiceWorkerRegister,
-} from "@builder.io/qwik-city";
-import { RouterHead } from "./components/router-head/router-head";
+  useLocation,
+  A,
+  Body,
+  ErrorBoundary,
+  FileRoutes,
+  Head,
+  Html,
+  Meta,
+  Routes,
+  Scripts,
+  Title,
+} from "solid-start";
+import "./root.css";
+import Layouts from "./layouts";
 
-import "./global.css";
-
-export default component$(() => {
-  /**
-   * The root of a QwikCity site always start with the <QwikCityProvider> component,
-   * immediately followed by the document's <head> and <body>.
-   *
-   * Dont remove the `<head>` and `<body>` elements.
-   */
-
+export default function Root() {
   return (
-    <QwikCityProvider>
-      <head>
-        <meta charSet="utf-8" />
-        <link rel="manifest" href="/manifest.json" />
-        <RouterHead />
-      </head>
-      <body lang="en">
-        <RouterOutlet />
-        <ServiceWorkerRegister />
-      </body>
-    </QwikCityProvider>
+    <Html lang="en">
+      <Head>
+        <Title>LostInfo</Title>
+        <Meta charset="utf-8" />
+        <Meta name="viewport" content="width=device-width, initial-scale=1" />
+      </Head>
+      <Body>
+        <Suspense>
+          <ErrorBoundary>
+            <Layouts>
+              <Routes>
+                <FileRoutes />
+              </Routes>
+            </Layouts>
+          </ErrorBoundary>
+        </Suspense>
+        <Scripts />
+      </Body>
+    </Html>
   );
-});
+}

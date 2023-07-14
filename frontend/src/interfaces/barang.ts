@@ -2,7 +2,7 @@ import type User from "./user";
 
 interface Barang {
   id?: number;
-  user_id?: number;
+  user_id?: number | string;
   user?: User;
   nama?: string;
   deskripsi?: string;

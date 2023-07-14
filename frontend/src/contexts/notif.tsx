@@ -1,29 +1,50 @@
-import { type QRL, component$, createContextId } from "@builder.io/qwik";
+import { JSX, createContext, createSignal, useContext } from "solid-js";
 
-export const NotifContext = createContextId<{
-  show: QRL<(message: string, color?: string) => any>;
-}>("alert-context");
+interface Props {
+  children: JSX.Element;
+}
 
-export default component$<{
-  show: boolean;
-  message: string;
-  color: string;
-}>((props) => {
+const NotifContext = createContext();
+
+export default function NotifProvider(props: Props) {
+  const [show, setShow] = createSignal<boolean>(false);
+  const [color, setColor] = createSignal<string>("");
+  const [message, setMessage] = createSignal<string>("");
+
+  const value = {
+    show: (message: string, success: boolean = true) => {
+      setShow(true);
+      setColor(success ? "bg-green-500" : "bg-red-500");
+      setMessage(message);
+
+      setTimeout(() => {
+        setMessage(""), setShow(false);
+      }, 3000);
+    },
+  };
+
   return (
-    <div
-      class={[
-        "fixed bottom-5 left-5 right-5 z-[50] flex justify-center transform transition duration-500",
-        props.show ? "translate-y-0" : "translate-y-[100px]",
-      ]}
-    >
+    <NotifContext.Provider value={value}>
+      {props.children}
       <div
-        class={[
-          "rounded-lg text-white p-4 px-5 max-w-full w-[800px]",
-          props.color,
-        ]}
+        class="fixed bottom-5 left-5 right-5 z-[50] flex justify-center transform transition duration-500"
+        classList={{
+          "translate-y-0": show(),
+          "translate-y-[100px]": !show(),
+        }}
       >
-        {props.message}
+        <div
+          class={`rounded-lg text-white p-4 px-5 max-w-full w-[800px] ${color()}`}
+        >
+          {message()}
+        </div>
       </div>
-    </div>
+    </NotifContext.Provider>
   );
-});
+}
+
+export function useNotif() {
+  return useContext<{
+    show: (message: string, success?: boolean) => void;
+  }>(NotifContext as any);
+}

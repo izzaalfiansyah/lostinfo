@@ -1,42 +1,39 @@
-import {
-  $,
-  component$,
-  useContext,
-  useStore,
-  useVisibleTask$,
-} from "@builder.io/qwik";
-import { type DocumentHead } from "@builder.io/qwik-city";
+import { onMount } from "solid-js";
+import { createStore } from "solid-js/store";
 import { ArchiveIcon, ArchiveXIcon, UsersIcon } from "~/components/icons";
 import Title from "~/components/title";
-import { AuthContext } from "~/contexts/auth";
-import { NotifContext } from "~/contexts/notif";
+import { useAuth } from "~/contexts/auth";
+import { useNotif } from "~/contexts/notif";
 import http from "~/libs/http";
 
-export default component$(() => {
-  const auth = useContext(AuthContext);
-  const total = useStore({
+import "./user";
+import "./barang-hilang";
+
+export default function () {
+  const [total, setTotal] = createStore({
     user: 0,
     barangHilang: 0,
     barangTemu: 0,
   });
 
-  const notif = useContext(NotifContext);
+  const [auth] = useAuth();
+  const notif = useNotif();
 
-  const getData = $(async () => {
+  const getData = async () => {
     try {
       const user = await http.get("/user");
       const barangHilang = await http.get("/barang/hilang");
       const barangTemu = await http.get("/barang/temu");
 
-      total.user = user.data.data.length;
-      total.barangHilang = barangHilang.data.data.length;
-      total.barangTemu = barangTemu.data.data.length;
+      setTotal("user", user.data.data.length);
+      setTotal("barangHilang", barangHilang.data.data.length);
+      setTotal("barangTemu", barangTemu.data.data.length);
     } catch (e: any) {
-      notif.show(e.response.data.message, "bg-red-500");
+      notif.show(e.response.data.message, false);
     }
-  });
+  };
 
-  useVisibleTask$(async () => {
+  onMount(async () => {
     await getData();
   });
 
@@ -44,9 +41,7 @@ export default component$(() => {
     <>
       <Title
         title="Dashboard"
-        subtitle={`Halo ${
-          (auth.value as any)?.nama
-        }, Selamat datang di Aplikasi LostInfo`}
+        subtitle={`Halo ${auth()?.nama}, Selamat datang di Aplikasi LostInfo`}
       />
       <div class="grid lg:grid-cols-3 grid-cols-1 gap-3 mb-3">
         <div class="bg-white rounded-lg shadow-sm flex items-center p-5 px-10">
@@ -90,8 +85,4 @@ export default component$(() => {
       </div>
     </>
   );
-});
-
-export const head: DocumentHead = {
-  title: "Dashboard",
-};
+}

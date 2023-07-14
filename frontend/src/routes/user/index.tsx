@@ -1,65 +1,60 @@
-import {
-  $,
-  component$,
-  useContext,
-  useSignal,
-  useStore,
-  useVisibleTask$,
-} from "@builder.io/qwik";
-import { type DocumentHead } from "@builder.io/qwik-city";
+import { Show, createEffect, createSignal, onMount } from "solid-js";
+import { createStore } from "solid-js/store";
 import { DeleteIcon, EditIcon } from "~/components/icons";
 import Img from "~/components/img";
+import Input from "~/components/input";
 import Modal from "~/components/modal";
 import Pagination from "~/components/pagination";
+import Select from "~/components/select";
+import Table from "~/components/table";
+import Textarea from "~/components/textarea";
 import Title from "~/components/title";
-import { NotifContext } from "~/contexts/notif";
-import type User from "~/interfaces/user";
+import { useNotif } from "~/contexts/notif";
+import User from "~/interfaces/user";
 import fileReader from "~/libs/file-reader";
 import http from "~/libs/http";
 
-export default component$(() => {
-  const items = useSignal<User[]>([]);
-  const isEdit = useSignal(false);
-  const modal = useStore({
+export default function () {
+  const [items, setItems] = createSignal<User[]>([]);
+  const [req, setReq] = createStore<User>({});
+  const [isEdit, setIsEdit] = createSignal<boolean>(false);
+  const [modal, setModal] = createStore({
     save: false,
     delete: false,
   });
-  const filter = useStore({
-    total: 0,
+  const [filter, setFilter] = createStore({
+    pageTotal: 0,
+    recordTotal: 0,
+    limit: 10,
     page: 1,
     search: "",
   });
-  const req = useStore<User>({});
-  const notif = useContext(NotifContext);
 
-  const nullable = $(() => {
-    req.id = "";
-    req.username = "";
-    req.password = "";
-    req.nama = "";
-    req.alamat = "";
-    req.email = "";
-    req.telepon = "";
-    req.foto = "";
-    req.role = "";
-    req.status = "";
-  });
+  const notif = useNotif();
 
-  const get = $(async () => {
+  const nullable = () => {
+    setReq({});
+  };
+
+  const get = async () => {
     try {
-      const res = await http.get("/user", {
+      const { data } = await http.get("/user", {
         params: filter,
       });
-      items.value = res.data.data;
-      filter.total = res.data.meta.total;
-    } catch (e: any) {
-      notif.show(e.response.data.message, "bg-red-500");
-    }
-  });
 
-  const save = $(async () => {
+      const totalPage = Math.ceil(data.meta.total / filter.limit);
+      setFilter("recordTotal", data.meta.total);
+      setFilter("pageTotal", totalPage);
+      setItems(data.data);
+    } catch (e: any) {
+      notif.show(e.response.data.message, false);
+    }
+  };
+
+  const save = async (e: SubmitEvent) => {
+    e.preventDefault();
     try {
-      if (isEdit.value) {
+      if (isEdit()) {
         await http.put("/user/" + req.id, req);
         notif.show("data berhasil diedit");
       } else {
@@ -67,56 +62,46 @@ export default component$(() => {
         notif.show("data berhasil disimpan");
       }
 
-      modal.save = false;
+      setModal("save", false);
       get();
     } catch (e: any) {
-      notif.show(e.response.data.message, "bg-red-500");
+      notif.show(e.response.data.message, false);
     }
-  });
+  };
 
-  const destroy = $(async () => {
+  const destroy = async (e: SubmitEvent) => {
+    e.preventDefault();
     try {
       await http.delete("/user/" + req.id);
       notif.show("data berhasil dihapus");
-      modal.delete = false;
+      setModal("delete", false);
       get();
     } catch (e: any) {
-      notif.show(e.response.data.message, "bg-red-500");
+      notif.show(e.response.data.message, false);
     }
-  });
+  };
 
-  const show = $((item: User, action: "edit" | "delete") => {
-    req.id = item.id;
-    req.username = item.username;
-    req.password = "";
-    req.nama = item.nama;
-    req.alamat = item.alamat;
-    req.email = item.email;
-    req.telepon = item.telepon;
-    req.foto = "";
-    req.foto_url = item.foto_url;
-    req.role = item.role;
-    req.status = item.status;
-
-    if (action == "edit") {
-      isEdit.value = true;
-      modal.save = true;
-    } else {
-      modal.delete = true;
-    }
-  });
-
-  const handleFotoChange = $(async (e: any) => {
+  const handleFotoChange = async (e: any) => {
     const file = e.target.files[0];
     const value = await fileReader(file);
-    req.foto = value;
-    req.foto_url = value;
+    setReq("foto", value);
+    setReq("foto_url", value);
+  };
+
+  createEffect((oldVal: any) => {
+    const val = {
+      page: filter.page,
+      search: filter.search,
+    };
+
+    if (oldVal) {
+      get();
+    }
+
+    return val;
   });
 
-  useVisibleTask$(async ({ track }) => {
-    track(() => filter.page && filter.search);
-
-    nullable();
+  onMount(async () => {
     await get();
   });
 
@@ -125,215 +110,172 @@ export default component$(() => {
       <Title
         title="Data User"
         subtitle="Menjelajahi dan menganalisis data pengguna"
-      >
-        <button
-          q:slot="action"
-          class="px-5 p-2 text-white bg-purple-600 rounded shadow-sm mt-4 lg:mt-0"
-          onClick$={() => {
-            nullable();
-            isEdit.value = false;
-            modal.save = true;
+        action={
+          <button
+            class="px-5 p-2 text-white bg-purple-600 rounded shadow-sm mt-4 lg:mt-0"
+            onClick={() => {
+              nullable();
+              setIsEdit(false);
+              setModal("save", true);
+            }}
+          >
+            Tambah
+          </button>
+        }
+      />
+
+      <div class="bg-white rounded-lg shadow-sm p-5">
+        <div class="mb-3">
+          <Input
+            placeholder="Cari..."
+            value={filter.search}
+            onChange={(e) => setFilter("search", e.currentTarget.value)}
+          />
+        </div>
+        <Table
+          heads={["Nama", "Alamat", "Telepon", "Email", "Opsi"]}
+          items={items().map((item) => [
+            item.nama,
+            item.alamat,
+            item.telepon,
+            item.email,
+            <>
+              <button
+                class="mr-3"
+                onClick={() => {
+                  setReq(item);
+                  setReq("foto", "");
+                  setReq("password", "");
+                  setIsEdit(true);
+                  setModal("save", true);
+                }}
+              >
+                <EditIcon class="w-4 h-4 text-purple-600" />
+              </button>
+              <button
+                onClick={() => {
+                  nullable();
+                  setReq(item);
+                  setModal("delete", true);
+                }}
+              >
+                <DeleteIcon class="w-4 h-4 text-red-600" />
+              </button>
+            </>,
+          ])}
+        />
+        <div class="mt-3"></div>
+        <Pagination
+          page={filter.page}
+          pageTotal={filter.pageTotal}
+          record={items().length}
+          recordTotal={filter.recordTotal}
+          onChange={(val) => {
+            setFilter("page", val);
           }}
-        >
-          Tambah
-        </button>
-      </Title>
-      <div class="mb-3">
-        <input
-          type="text"
-          class="rounded-lg outline-none bg-white border-gray-200 transition focus:ring-purple-300 w-full"
-          placeholder="Cari..."
-          value={filter.search}
-          onChange$={(e) => (filter.search = e.target.value)}
         />
       </div>
-      <div class="bg-white rounded-lg shadow-sm p-5">
-        <div class="overflow-x-auto">
-          <table class="t-table">
-            <thead>
-              <tr>
-                {/* <th>
-                  <input
-                    type="checkbox"
-                    class="text-purple-600 transition rounded border-gray-300 focus:ring-purple-300"
-                  />
-                </th> */}
-                <th>Nama</th>
-                <th>Alamat</th>
-                <th>Telepon</th>
-                <th>Email</th>
-                <th>Opsi</th>
-              </tr>
-            </thead>
-            <tbody>
-              {items.value.map((item) => (
-                <tr key={item.id}>
-                  {/* <td class="px-3 p-2 lg:table-cell block">
-                    <input
-                      type="checkbox"
-                      class="text-purple-600 transition rounded border-gray-300 focus:ring-purple-300"
-                      value={item.id}
-                    />
-                  </td> */}
-                  <td>{item.nama}</td>
-                  <td>{item.alamat}</td>
-                  <td>{item.telepon}</td>
-                  <td>{item.email}</td>
-                  <td>
-                    <button class="mr-3" onClick$={() => show(item, "edit")}>
-                      <EditIcon class="w-4 h-4 text-purple-600" />
-                    </button>
-                    <button onClick$={() => show(item, "delete")}>
-                      <DeleteIcon class="w-4 h-4 text-red-600" />
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-        <Pagination data={items.value.length} filter={filter as any} />
-      </div>
+
       <Modal
         show={modal.save}
-        onClose$={() => (modal.save = false)}
-        title={(isEdit.value ? "Edit" : "Tambah") + " Pengguna"}
+        onClose={() => setModal("save", false)}
+        title={(isEdit() ? "Edit" : "Tambah") + " Pengguna"}
       >
-        <form
-          preventdefault:submit
-          onSubmit$={save}
-          class="w-[800px] max-w-full"
-        >
+        <form onSubmit={save} class="w-[800px] max-w-full">
           <div class="font-semibold mb-5"></div>
           <div class="flex lg:flex-row justify-between flex-col gap-3">
             <div class="flex-1">
-              <div class="mb-2">
-                <label for="">Nama</label>
-                <input
-                  type="text"
-                  class="t-input"
-                  placeholder="Masukkan Nama"
-                  required
-                  maxLength={255}
-                  value={req.nama}
-                  onChange$={(e) => (req.nama = e.target.value)}
-                />
-              </div>
-              <div class="mb-2">
-                <label for="">Alamat</label>
-                <textarea
-                  rows={3}
-                  class="t-input resize-none"
-                  placeholder="Masukkan Alamat"
-                  required
-                  value={req.alamat}
-                  onChange$={(e) => (req.alamat = e.target.value)}
-                ></textarea>
-              </div>
-              <div class="mb-2">
-                <label for="">Email</label>
-                <input
-                  type="email"
-                  class="t-input"
-                  placeholder="Masukkan Email"
-                  required
-                  value={req.email}
-                  onChange$={(e) => (req.email = e.target.value)}
-                />
-              </div>
-              <div class="mb-2">
-                <label for="">Telepon</label>
-                <input
-                  type="tel"
-                  class="t-input"
-                  placeholder="Masukkan Telepon"
-                  required
-                  value={req.telepon}
-                  onChange$={(e) => (req.telepon = e.target.value)}
-                />
-              </div>
-              <div class="mb-2">
-                <label for="">Role</label>
-                <select
-                  value={req.role}
-                  class="t-input"
-                  onChange$={(e) => (req.role = e.target.value)}
-                  required
-                >
-                  <option value="">Pilih Role</option>
-                  <option value="1">Admin</option>
-                  <option value="2">Pengguna</option>
-                </select>
-              </div>
-              <div class="mb-2">
-                <label for="">Status</label>
-                <select
-                  value={req.status}
-                  class="t-input"
-                  onChange$={(e) => (req.status = e.target.value)}
-                  required
-                >
-                  <option value="">Pilih Status</option>
-                  <option value="1">Aktif</option>
-                  <option value="0">Nonaktif</option>
-                </select>
-              </div>
+              <Input
+                label="Nama"
+                placeholder="Masukkan Nama"
+                required
+                maxLength={255}
+                value={req.nama}
+                onChange={(e) => setReq("nama", e.currentTarget.value)}
+              />
+              <Textarea
+                label="Alamat"
+                placeholder="Masukkan Alamat"
+                required
+                rows={3}
+                value={req.alamat}
+                onChange={(e) => setReq("alamat", e.currentTarget.value)}
+              />
+              <Input
+                label="Email"
+                type="email"
+                placeholder="Masukkan Email"
+                required
+                value={req.email}
+                onChange={(e) => setReq("email", e.currentTarget.value)}
+              />
+              <Input
+                label="Telepon"
+                type="tel"
+                placeholder="Masukkan Telepon"
+                required
+                value={req.telepon}
+                onChange={(e) => setReq("telepon", e.currentTarget.value)}
+              />
+              <Select
+                label="Role"
+                value={req.role}
+                onChange={(e) => setReq("role", e.currentTarget.value)}
+              >
+                <option value="">Pilih Role</option>
+                <option value="1">Admin</option>
+                <option value="2">Pengguna</option>
+              </Select>
+              <Select
+                label="Status"
+                value={req.status}
+                onChange={(e) => setReq("status", e.currentTarget.value)}
+              >
+                <option value="">Pilih Status</option>
+                <option value="1">Aktif</option>
+                <option value="0">Nonaktif</option>
+              </Select>
             </div>
             <div class="flex-1">
-              <div class="mb-2">
-                <label for="">Foto</label>
-                <input
-                  type="file"
-                  class="w-full"
-                  placeholder="Masukkan Foto"
-                  onChange$={handleFotoChange}
-                />
-                {isEdit.value && (
-                  <div class="text-xs">
-                    Kosongkan jika tidak ingin mengganti foto
-                  </div>
-                )}
-              </div>
+              <Input
+                label="Foto"
+                type="file"
+                title="Pilih Foto"
+                required={!isEdit()}
+                onChange={handleFotoChange}
+                hint={
+                  isEdit() ? "Kosongkan jika tidak ingin mengganti foto" : ""
+                }
+              />
               <div class="mb-2">
                 <div class="bg-gray-50 rounded p-4 flex items-center justify-center">
-                  {req.foto_url ? (
-                    <Img
-                      src={req.foto_url}
-                      alt=""
-                      class="object-cover w-40 h-40 !rounded"
-                    />
-                  ) : (
-                    <div class="h-40"></div>
-                  )}
+                  <Img
+                    src={req.foto_url}
+                    alt="Foto User"
+                    class="object-cover w-40 h-40 !rounded"
+                  />
                 </div>
               </div>
-              <div class="mb-2">
-                <label for="">Username</label>
-                <input
-                  type="text"
-                  class="t-input"
-                  placeholder="Masukkan Username"
-                  required
-                  value={req.username}
-                  onChange$={(e) => (req.username = e.target.value)}
-                />
-              </div>
-              <div class="mb-2">
-                <label for="">Password</label>
-                <input
-                  type="password"
-                  class="t-input"
-                  placeholder="Masukkan Password"
-                  required={!isEdit.value}
-                  value={req.password}
-                  onChange$={(e) => (req.password = e.target.value)}
-                />
-                {isEdit.value && (
-                  <div class="text-xs">
-                    Kosongkan jika tidak ingin mengganti password
-                  </div>
-                )}
-              </div>
+              <Input
+                label="Username"
+                placeholder="Masukkan Username"
+                required
+                value={req.username}
+                onChange={(e) => setReq("username", e.currentTarget.value)}
+              />
+              <Input
+                label="Password"
+                type="password"
+                placeholder="Masukkan Password"
+                required={!isEdit()}
+                value={req.password}
+                onChange={(e) => setReq("password", e.currentTarget.value)}
+                hint={
+                  isEdit()
+                    ? "Kosongkan jika tidak ingin mengganti password"
+                    : ""
+                }
+              />
             </div>
           </div>
 
@@ -347,18 +289,16 @@ export default component$(() => {
           </div>
         </form>
       </Modal>
+
       <Modal
         show={modal.delete}
-        onClose$={() => (modal.delete = false)}
+        onClose={() => setModal("delete", false)}
         title="Hapus Pengguna"
       >
-        <form
-          preventdefault:submit
-          onSubmit$={destroy}
-          class="max-w-full w-[500px]"
-        >
+        <form onSubmit={destroy} class="max-w-full w-[500px]">
           <p>
-            Anda yakin menghapus pengguna? Data akan dihapus secara permanen!
+            Anda yakin menghapus <strong>{req.nama}</strong>? Data akan dihapus
+            secara permanen!
           </p>
           <div class="mt-8 flex justify-end">
             <button
@@ -372,8 +312,4 @@ export default component$(() => {
       </Modal>
     </>
   );
-});
-
-export const head: DocumentHead = {
-  title: "Data User",
-};
+}
