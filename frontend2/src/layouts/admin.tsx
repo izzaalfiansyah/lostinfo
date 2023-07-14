@@ -1,4 +1,4 @@
-import { For, JSX, createSignal } from "solid-js";
+import { For, JSX, createSignal, onMount } from "solid-js";
 import { A, useLocation, useNavigate } from "solid-start";
 import {
   AccountIcon,
@@ -12,6 +12,7 @@ import {
   UsersIcon,
 } from "~/components/icons";
 import Modal from "~/components/modal";
+import { useAuth } from "~/contexts/auth";
 
 interface Props extends JSX.HTMLAttributes<HTMLDivElement> {}
 
@@ -55,6 +56,7 @@ export default function (props: Props) {
 
   const nav = useNavigate();
   const loc = useLocation();
+  const [auth, authFn] = useAuth();
 
   const [modalLogout, setModalLogout] = createSignal<boolean>(false);
   const [showSidebar, setShowSidebar] = createSignal<boolean>(false);
@@ -64,8 +66,15 @@ export default function (props: Props) {
   };
 
   const logout = () => {
+    authFn.logout();
     nav("/login");
   };
+
+  onMount(() => {
+    if (!auth()) {
+      nav("/login");
+    }
+  });
 
   return (
     <>
@@ -73,14 +82,14 @@ export default function (props: Props) {
         <div
           class="z-5 bg-black bg-opacity-25 fixed top-0 left-0 right-0 bottom-0 lg:hidden"
           classList={{
-            hidden: showSidebar(),
+            hidden: !showSidebar(),
           }}
           onClick={toggleSidebar}
         ></div>
         <div
           class="fixed top-0 bottom-0 left-0 w-80 bg-white z-5 p-10 px-8 flex flex-col justify-between transform transition lg:translate-x-0"
           classList={{
-            "-translate-x-full": showSidebar(),
+            "-translate-x-full": !showSidebar(),
           }}
         >
           <div>
@@ -153,7 +162,7 @@ export default function (props: Props) {
             <div class="flex-1 flex justify-between items-center">
               <div class="flex-1"></div>
               <div class="flex-1 items-center flex justify-end space-x-4 border-l-2">
-                <div class="lg:block hidden">Hello, Auth</div>
+                <div class="lg:block hidden">Hello, {auth()?.username}</div>
                 <div class="rounded-full w-12 h-12 bg-gray-200"></div>
               </div>
             </div>
