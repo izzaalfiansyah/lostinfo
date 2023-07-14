@@ -28,6 +28,8 @@ class BarangHilangResource extends JsonResource
             'hadiah' => $this->hadiah,
             'ditemukan' => $this->ditemukan,
             'ditemukan_detail' => ['Belum', 'Sudah'][(int) $this->ditemukan],
+            'created_at' => $this->created_at,
+            'updated_at' => $this->updated_at,
         ];
     }
 }

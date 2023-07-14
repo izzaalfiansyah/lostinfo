@@ -1,6 +1,6 @@
-import { Accessor, For, Setter, Show, createSignal, onMount } from "solid-js";
+import { For, Show, createSignal, onMount } from "solid-js";
 import { SetStoreFunction, createStore } from "solid-js/store";
-import { A, useNavigate, useParams } from "solid-start";
+import { A, useNavigate } from "solid-start";
 import Img from "~/components/img";
 import Input from "~/components/input";
 import Map from "~/components/map";
@@ -8,14 +8,14 @@ import Select from "~/components/select";
 import Textarea from "~/components/textarea";
 import Title from "~/components/title";
 import { useNotif } from "~/contexts/notif";
-import BarangHilang from "~/interfaces/barang-hilang";
+import BarangTemu from "~/interfaces/barang-temu";
 import User from "~/interfaces/user";
 import fileReader from "~/libs/file-reader";
 import formatDate from "~/libs/format-date";
 import http from "~/libs/http";
 
 export default function () {
-  const [req, setReq] = createStore<BarangHilang>({});
+  const [req, setReq] = createStore<BarangTemu>({});
 
   const notif = useNotif();
   const nav = useNavigate();
@@ -23,9 +23,9 @@ export default function () {
   const save = async (e: SubmitEvent) => {
     e.preventDefault();
     try {
-      await http.post("/barang/hilang", req);
+      await http.post("/barang/temu", req);
       notif.show("data berhasil disimpan");
-      nav("/barang-hilang");
+      nav("/barang-temu");
     } catch (e: any) {
       notif.show(e.response.data.message, false);
     }
@@ -34,8 +34,8 @@ export default function () {
   return (
     <>
       <Title
-        title="Tambah Barang Hilang"
-        subtitle="Menambahkan data barang hilang"
+        title="Tambah Barang Temu"
+        subtitle="Menambahkan data barang temu"
       ></Title>
       <Save item={[req, setReq]} onSubmit={save}></Save>
     </>
@@ -43,7 +43,7 @@ export default function () {
 }
 
 interface SaveProps {
-  item: [BarangHilang, SetStoreFunction<BarangHilang>];
+  item: [BarangTemu, SetStoreFunction<BarangTemu>];
   onSubmit: (e: SubmitEvent) => void;
   onMount?: () => void;
 }
@@ -91,11 +91,11 @@ export function Save(props: SaveProps) {
             onChange={(e) => setReq("deskripsi", e.currentTarget.value)}
           />
           <Input
-            label="Tempat Hilang"
+            label="Tempat Temu"
             required
-            placeholder="Masukkan Tempat Hilang"
-            value={req.tempat_hilang}
-            onChange={(e) => setReq("tempat_hilang", e.currentTarget.value)}
+            placeholder="Masukkan Tempat Temu"
+            value={req.tempat_temu}
+            onChange={(e) => setReq("tempat_temu", e.currentTarget.value)}
           />
           <div class="mb-2">
             <label for="">Lokasi Maps</label>
@@ -117,11 +117,11 @@ export function Save(props: SaveProps) {
         </div>
         <div>
           <Select
-            label="Pemilik"
+            label="Penemu"
             value={req.user_id}
             onChange={(e) => setReq("user_id", e.currentTarget.value)}
           >
-            <option value="">Pilih Pemilik</option>
+            <option value="">Pilih Penemu</option>
             <For each={users()}>
               {(item) => <option value={item.id as any}>{item.nama}</option>}
             </For>
@@ -138,26 +138,18 @@ export function Save(props: SaveProps) {
               <Img src={req.foto_url} alt="Foto Barang" class="w-24 h-24" />
             </div>
           </div>
-          <Input
-            type="number"
-            label="Hadiah"
-            required
-            placeholder="Masukkan Hadiah"
-            value={req.hadiah}
-            onChange={(e) => setReq("hadiah", parseInt(e.currentTarget.value))}
-          />
           <Show when={req.id}>
             <Select
-              label="Ditemukan"
-              value={req.ditemukan}
-              onChange={(e) => setReq("ditemukan", e.currentTarget.value)}
+              label="Dikembalikan"
+              value={req.dikembalikan}
+              onChange={(e) => setReq("dikembalikan", e.currentTarget.value)}
             >
               <option value="">Pilih Status</option>
-              <option value={"1"}>Sudah Ditemukan</option>
-              <option value={"0"}>Belum Ditemukan</option>
+              <option value={"1"}>Sudah Dikembalikan</option>
+              <option value={"0"}>Belum Dikembalikan</option>
             </Select>
             <Input
-              label="Tanggal Hilang"
+              label="Tanggal Temu"
               value={formatDate(req.created_at as string)}
               disabled
             />
@@ -172,7 +164,7 @@ export function Save(props: SaveProps) {
           Simpan Data
         </button>
         <A
-          href="/barang-hilang"
+          href="/barang-temu"
           class="button px-4 p-2 bg-gray-400 text-white rounded shadow-sm"
         >
           Kembali

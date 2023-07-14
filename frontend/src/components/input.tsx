@@ -16,7 +16,7 @@ export default function (props: Props) {
       <input
         class="w-full"
         classList={{
-          "rounded focus:ring-2 focus:ring-purple-300 border-gray-200 transition py-1.5":
+          "rounded focus:ring-2 focus:ring-purple-300 border-gray-200 transition py-1.5 disabled:bg-gray-100":
             others.type != "file",
         }}
         {...others}

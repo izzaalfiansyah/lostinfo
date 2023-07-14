@@ -27,6 +27,8 @@ class BarangTemuResource extends JsonResource
             'foto_url' => asset($this->foto ?: '/assets/barang_default.jpg'),
             'dikembalikan' => (int) $this->dikembalikan,
             'dikembalikan_detail' => ['Belum', 'Sudah'][(int) $this->dikembalikan],
+            'created_at' => $this->created_at,
+            'updated_at' => $this->updated_at,
         ];
     }
 }

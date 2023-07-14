@@ -7,11 +7,13 @@ interface Barang {
   nama?: string;
   deskripsi?: string;
   maps?: {
-    lat?: string;
-    lng?: string;
+    lat?: string | string;
+    lng?: string | string;
   };
   foto?: string;
   foto_url?: string;
+  created_at?: string;
+  updated_at?: string;
 }
 
 export default Barang;

@@ -4,8 +4,10 @@ specifiers:
   '@solidjs/meta': ^0.28.2
   '@solidjs/router': ^0.8.2
   '@tailwindcss/forms': ^0.5.4
+  '@types/leaflet': ^1.9.3
   autoprefixer: ^10.4.13
   axios: ^1.4.0
+  leaflet: ^1.9.4
   postcss: ^8.4.21
   solid-js: ^1.7.2
   solid-start: ^0.2.26
@@ -19,7 +21,9 @@ dependencies:
   '@solidjs/meta': 0.28.5_solid-js@1.7.8
   '@solidjs/router': 0.8.2_solid-js@1.7.8
   '@tailwindcss/forms': 0.5.4_tailwindcss@3.3.3
+  '@types/leaflet': 1.9.3
   axios: 1.4.0
+  leaflet: 1.9.4
   solid-js: 1.7.8
   solid-start: 0.2.26_gjfgll37jjxv7ysqghgl7xhegm
   undici: 5.22.1
@@ -1703,6 +1707,16 @@ packages:
   /@types/estree/1.0.1:
     resolution: {integrity: sha512-LG4opVs2ANWZ1TJoKc937iMmNstM/d0ae1vNbnBvBhqCSezgVUOzcLCqbI5elV8Vy6WKwKjaqR+zO9VKirBBCA==}
 
+  /@types/geojson/7946.0.10:
+    resolution: {integrity: sha512-Nmh0K3iWQJzniTuPRcJn5hxXkfB1T1pgB89SBig5PlJQU5yocazeu4jATJlaA0GYFKWMqDdvYemoSnF2pXgLVA==}
+    dev: false
+
+  /@types/leaflet/1.9.3:
+    resolution: {integrity: sha512-Caa1lYOgKVqDkDZVWkto2Z5JtVo09spEaUt2S69LiugbBpoqQu92HYFMGUbYezZbnBkyOxMNPXHSgRrRY5UyIA==}
+    dependencies:
+      '@types/geojson': 7946.0.10
+    dev: false
+
   /@types/resolve/1.20.2:
     resolution: {integrity: sha512-60BCwRFOZCQhDncwQdxxeOEEkbc5dIMccYLwbxsS4TUNeVECQ/pBJ0j09mrHOl/JJvpRPGwO9SvE4nR2Nb/a4Q==}
 
@@ -2517,6 +2531,10 @@ packages:
       universalify: 2.0.0
     optionalDependencies:
       graceful-fs: 4.2.11
+
+  /leaflet/1.9.4:
+    resolution: {integrity: sha512-nxS1ynzJOmOlHp+iL3FyWqK89GtNL8U8rvlMOsQdTTssxZwCXh8N2NB3GDQOL+YR3XnWyZAxwQixURb+FA74PA==}
+    dev: false
 
   /lilconfig/2.1.0:
     resolution: {integrity: sha512-utWOt/GHzuUxnLKxB6dk81RoOeoNeHgbrXiuGk4yyF5qlRz+iIVWu56E2fqGHFrXz0QNUhLB/8nKqvRH66JKGQ==}

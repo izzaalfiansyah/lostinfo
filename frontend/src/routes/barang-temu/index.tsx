@@ -8,13 +8,13 @@ import Modal from "~/components/modal";
 import Pagination from "~/components/pagination";
 import Title from "~/components/title";
 import { useNotif } from "~/contexts/notif";
-import BarangHilang from "~/interfaces/barang-hilang";
+import BarangTemu from "~/interfaces/barang-temu";
 import formatDate from "~/libs/format-date";
 import http from "~/libs/http";
 
 export default function () {
-  const [req, setReq] = createStore<BarangHilang>({});
-  const [items, setItems] = createSignal<BarangHilang[]>([]);
+  const [req, setReq] = createStore<BarangTemu>({});
+  const [items, setItems] = createSignal<BarangTemu[]>([]);
   const [modal, setModal] = createStore({
     delete: false,
   });
@@ -30,7 +30,7 @@ export default function () {
 
   const get = async () => {
     try {
-      const { data } = await http.get("/barang/hilang", {
+      const { data } = await http.get("/barang/temu", {
         params: filter,
       });
 
@@ -46,7 +46,7 @@ export default function () {
   const destroy = async (e: SubmitEvent) => {
     e.preventDefault();
     try {
-      await http.delete("/barang/hilang/" + req.id);
+      await http.delete("/barang/temu/" + req.id);
       notif.show("data berhasil dihapus");
       setModal("delete", false);
       get();
@@ -73,11 +73,11 @@ export default function () {
   return (
     <>
       <Title
-        title="Data Barang Hilang"
-        subtitle="Menjelajahi dan menganalisis data barang hilang"
+        title="Data Barang Temu"
+        subtitle="Menjelajahi dan menganalisis data barang temu"
         action={
           <A
-            href="/barang-hilang/create"
+            href="/barang-temu/create"
             class="px-5 p-2 text-white bg-purple-600 rounded shadow-sm mt-4 lg:mt-0"
           >
             Tambah
@@ -96,19 +96,19 @@ export default function () {
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
         <For each={items()}>
           {(item) => (
-            <div class="bg-white rounded-lg shadow-sm flex items-center space-x-3 p-3">
+            <div class="bg-white rounded-lg shadow-sm flex items-center space-x-3 p-3 relative overflow-hidden">
               <Img src={item.foto_url} alt={item.nama} class="w-28 h-28" />
               <div class="grow truncate">
                 <div class="font-semibold truncate">{item.nama}</div>
                 <div class="text-gray-500 text-xs mt-1">
-                  @{item.user?.username}
+                  Oleh @{item.user?.username}
                 </div>
                 <div class="text-gray-500 text-xs">
                   {formatDate(item.created_at as string, true)}
                 </div>
                 <div class="mt-3 flex items-center">
                   <A
-                    href={"/barang-hilang/" + item.id}
+                    href={"/barang-temu/" + item.id}
                     class="text-sm text-purple-500 border inline-block border-purple-500 hover:text-white hover:bg-purple-500 transition rounded-full px-3 p-1"
                   >
                     <EditIcon class="w-4 h-4" />
@@ -145,7 +145,7 @@ export default function () {
       <Modal
         show={modal.delete}
         onClose={() => setModal("delete", false)}
-        title="Hapus Barang Hilang"
+        title="Hapus Barang Temu"
       >
         <form onSubmit={destroy} class="max-w-full w-[500px]">
           <p>

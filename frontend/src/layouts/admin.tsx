@@ -30,27 +30,27 @@ export default function (props: Props) {
     {
       icon: UsersIcon,
       title: "Data User",
-      path: "/user/",
+      path: "/user",
     },
     {
       icon: ArchiveXIcon,
       title: "Data Barang Hilang",
-      path: "/barang-hilang/",
+      path: "/barang-hilang",
     },
     {
       icon: ArchiveIcon,
-      title: "Data Barang Temuan",
-      path: "/barang-temuan/",
+      title: "Data Barang Temu",
+      path: "/barang-temu",
     },
     {
       icon: StackIcon,
       title: "Testimoni",
-      path: "/testimoni/",
+      path: "/testimoni",
     },
     {
       icon: AccountIcon,
       title: "Akun",
-      path: "/akun/",
+      path: "/akun",
     },
   ];
 
@@ -63,6 +63,16 @@ export default function (props: Props) {
 
   const toggleSidebar = () => {
     setShowSidebar(!showSidebar());
+  };
+
+  const checkActive = (path: string) => {
+    if (path == "/") {
+      if (path == "/" && loc.pathname == "/") {
+        return true;
+      }
+    } else {
+      return loc.pathname.includes(path);
+    }
   };
 
   const logout = () => {
@@ -108,8 +118,9 @@ export default function (props: Props) {
                         href={item.path}
                         class="p-2 px-3 block rounded flex items-center transition"
                         classList={{
-                          "text-purple-600 mb-1 bg-purple-200":
-                            item.path == loc.pathname,
+                          "text-purple-600 mb-1 bg-purple-200": checkActive(
+                            item.path
+                          ),
                         }}
                         onClick={toggleSidebar}
                       >
@@ -119,8 +130,8 @@ export default function (props: Props) {
                       <div
                         class="h-full w-1 bg-purple-500 rounded-r absolute top-0 left-0 bottom-0 transform origin-left transition"
                         classList={{
-                          "scale-100": item.path == loc.pathname,
-                          "scale-0": item.path != loc.pathname,
+                          "scale-100": checkActive(item.path),
+                          "scale-0": !checkActive(item.path),
                         }}
                       ></div>
                     </li>
