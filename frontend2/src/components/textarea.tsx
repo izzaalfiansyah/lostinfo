@@ -1,6 +1,6 @@
 import { JSX, Show, splitProps } from "solid-js";
 
-interface Props extends JSX.InputHTMLAttributes<HTMLInputElement> {
+interface Props extends JSX.TextareaHTMLAttributes<HTMLTextAreaElement> {
   label?: string;
   hint?: string;
 }
@@ -13,12 +13,8 @@ export default function (props: Props) {
       <Show when={local.label}>
         <label for="">{local.label}</label>
       </Show>
-      <input
-        class="w-full"
-        classList={{
-          "rounded focus:ring-2 focus:ring-purple-300 border-gray-200 transition py-1.5":
-            others.type != "file",
-        }}
+      <textarea
+        class="w-full rounded focus:ring-2 focus:ring-purple-300 border-gray-200 transition resize-none p-1.5 px-3"
         {...others}
       />
       <Show when={local.hint}>

@@ -19,31 +19,3 @@ body {
   padding: 0;
   line-height: inherit;
 }
-
-.t-table {
-  @apply w-full border-collapse whitespace-nowrap;
-}
-
-.t-table > thead {
-  @apply lg:table-header-group hidden;
-}
-
-.t-table > thead > tr > * {
-  @apply font-normal text-sm px-3 p-2 text-left text-gray-400;
-}
-
-.t-table > tbody {
-  @apply lg:table-row-group flex flex-col;
-}
-
-.t-table > tbody > tr {
-  @apply lg:table-row block border-t mt-3 pt-3 lg:border-none lg:mt-0 lg:pt-0;
-}
-
-.t-table > tbody > tr > * {
-  @apply px-3 p-2 lg:table-cell block;
-}
-
-.t-input {
-  @apply w-full rounded focus:ring-2 focus:ring-purple-300 border-gray-200 transition;
-}

@@ -1,12 +1,16 @@
-import { createEffect, createResource, createSignal, onMount } from "solid-js";
+import { Show, createEffect, createSignal, onMount } from "solid-js";
 import { createStore } from "solid-js/store";
 import { DeleteIcon, EditIcon } from "~/components/icons";
 import Input from "~/components/input";
 import Modal from "~/components/modal";
+import Pagination from "~/components/pagination";
+import Select from "~/components/select";
 import Table from "~/components/table";
+import Textarea from "~/components/textarea";
 import Title from "~/components/title";
 import { useNotif } from "~/contexts/notif";
 import User from "~/interfaces/user";
+import fileReader from "~/libs/file-reader";
 import http from "~/libs/http";
 
 export default function () {
@@ -18,7 +22,8 @@ export default function () {
     delete: false,
   });
   const [filter, setFilter] = createStore({
-    totalPage: 0,
+    pageTotal: 0,
+    recordTotal: 0,
     limit: 10,
     page: 1,
     search: "",
@@ -37,14 +42,34 @@ export default function () {
       });
 
       const totalPage = Math.ceil(data.meta.total / filter.limit);
-      setFilter("totalPage", totalPage);
+      setFilter("recordTotal", data.meta.total);
+      setFilter("pageTotal", totalPage);
       setItems(data.data);
     } catch (e: any) {
       notif.show(e.response.data.message, false);
     }
   };
 
-  const destroy = async () => {
+  const save = async (e: SubmitEvent) => {
+    e.preventDefault();
+    try {
+      if (isEdit()) {
+        await http.put("/user/" + req.id, req);
+        notif.show("data berhasil diedit");
+      } else {
+        await http.post("/user", req);
+        notif.show("data berhasil disimpan");
+      }
+
+      setModal("save", false);
+      get();
+    } catch (e: any) {
+      notif.show(e.response.data.message, false);
+    }
+  };
+
+  const destroy = async (e: SubmitEvent) => {
+    e.preventDefault();
     try {
       await http.delete("/user/" + req.id);
       notif.show("data berhasil dihapus");
@@ -55,9 +80,24 @@ export default function () {
     }
   };
 
-  createEffect(() => {
-    filter.search;
-    get();
+  const handleFotoChange = async (e: any) => {
+    const file = e.target.files[0];
+    const value = await fileReader(file);
+    setReq("foto", value);
+    setReq("foto_url", value);
+  };
+
+  createEffect((oldVal: any) => {
+    const val = {
+      page: filter.page,
+      search: filter.search,
+    };
+
+    if (oldVal) {
+      get();
+    }
+
+    return val;
   });
 
   onMount(async () => {
@@ -75,7 +115,7 @@ export default function () {
             onClick={() => {
               nullable();
               setIsEdit(false);
-              setModal("save", false);
+              setModal("save", true);
             }}
           >
             Tambah
@@ -93,8 +133,6 @@ export default function () {
 
       <div class="bg-white rounded-lg shadow-sm p-5">
         <Table
-          page={filter.page}
-          totalPage={filter.totalPage}
           heads={["Nama", "Alamat", "Telepon", "Email", "Opsi"]}
           items={items().map((item) => [
             item.nama,
@@ -114,6 +152,7 @@ export default function () {
               </button>
               <button
                 onClick={() => {
+                  nullable();
                   setReq(item);
                   setModal("delete", true);
                 }}
@@ -123,7 +162,133 @@ export default function () {
             </>,
           ])}
         />
+        <div class="mt-3"></div>
+        <Pagination
+          page={filter.page}
+          pageTotal={filter.pageTotal}
+          record={items().length}
+          recordTotal={filter.recordTotal}
+          onChange={(val) => {
+            setFilter("page", val);
+          }}
+        />
       </div>
+
+      <Modal
+        show={modal.save}
+        onClose={() => setModal("save", false)}
+        title={(isEdit() ? "Edit" : "Tambah") + " Pengguna"}
+      >
+        <form onSubmit={save} class="w-[800px] max-w-full">
+          <div class="font-semibold mb-5"></div>
+          <div class="flex lg:flex-row justify-between flex-col gap-3">
+            <div class="flex-1">
+              <Input
+                label="Nama"
+                placeholder="Masukkan Nama"
+                required
+                maxLength={255}
+                value={req.nama}
+                onChange={(e) => setReq("nama", e.currentTarget.value)}
+              />
+              <Textarea
+                label="Alamat"
+                placeholder="Masukkan Alamat"
+                required
+                rows={3}
+                value={req.alamat}
+                onChange={(e) => setReq("alamat", e.currentTarget.value)}
+              />
+              <Input
+                label="Email"
+                type="email"
+                placeholder="Masukkan Email"
+                required
+                value={req.email}
+                onChange={(e) => setReq("email", e.currentTarget.value)}
+              />
+              <Input
+                label="Telepon"
+                type="tel"
+                placeholder="Masukkan Telepon"
+                required
+                value={req.telepon}
+                onChange={(e) => setReq("telepon", e.currentTarget.value)}
+              />
+              <Select
+                label="Role"
+                value={req.role}
+                onChange={(e) => setReq("role", e.currentTarget.value)}
+              >
+                <option value="">Pilih Role</option>
+                <option value="1">Admin</option>
+                <option value="2">Pengguna</option>
+              </Select>
+              <Select
+                label="Status"
+                value={req.status}
+                onChange={(e) => setReq("status", e.currentTarget.value)}
+              >
+                <option value="">Pilih Status</option>
+                <option value="1">Aktif</option>
+                <option value="0">Nonaktif</option>
+              </Select>
+            </div>
+            <div class="flex-1">
+              <Input
+                label="Foto"
+                type="file"
+                title="Pilih Foto"
+                required={!isEdit()}
+                onChange={handleFotoChange}
+                hint={
+                  isEdit() ? "Kosongkan jika tidak ingin mengganti foto" : ""
+                }
+              />
+              <div class="mb-2">
+                <div class="bg-gray-50 rounded p-4 flex items-center justify-center">
+                  <Show when={req.foto_url} fallback={<div class="h-40"></div>}>
+                    <img
+                      src={req.foto_url}
+                      alt="Foto User"
+                      class="object-cover w-40 h-40 !rounded"
+                    />
+                  </Show>
+                </div>
+              </div>
+              <Input
+                label="Username"
+                placeholder="Masukkan Username"
+                required
+                value={req.username}
+                onChange={(e) => setReq("username", e.currentTarget.value)}
+              />
+              <Input
+                label="Password"
+                type="password"
+                placeholder="Masukkan Password"
+                required={!isEdit()}
+                value={req.password}
+                onChange={(e) => setReq("password", e.currentTarget.value)}
+                hint={
+                  isEdit()
+                    ? "Kosongkan jika tidak ingin mengganti password"
+                    : ""
+                }
+              />
+            </div>
+          </div>
+
+          <div class="mt-8 flex justify-end">
+            <button
+              type="submit"
+              class="px-4 py-2 bg-purple-600 rounded shadow-sm text-white"
+            >
+              Simpan
+            </button>
+          </div>
+        </form>
+      </Modal>
 
       <Modal
         show={modal.delete}

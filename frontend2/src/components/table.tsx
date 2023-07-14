@@ -1,7 +1,6 @@
 import { For, JSX, Show, splitProps } from "solid-js";
-import Pagination, { Props as PaginationProps } from "./pagination";
 
-interface Props extends PaginationProps {
+interface Props {
   heads?: JSX.Element[];
   items?: JSX.Element[][];
 }
@@ -11,7 +10,7 @@ export default function Table(props: Props) {
 
   return (
     <>
-      <div class="overflow-x-auto">
+      <div class="lg:overflow-x-auto">
         <table class="w-full border-collapse whitespace-nowrap">
           <thead class="lg:table-header-group hidden">
             <tr>
@@ -25,8 +24,8 @@ export default function Table(props: Props) {
             </tr>
           </thead>
           <tbody class="lg:table-row-group flex flex-col">
-            <Show when={!local.items}>
-              <tr class="lg:table-row block border-t mt-3 pt-3 lg:border-none lg:mt-0 lg:pt-0">
+            <Show when={!local.items?.length}>
+              <tr class="lg:table-row block border-t mt-3 pt-3 lg:border-none lg:mt-0 lg:pt-0 border-b border-gray-100">
                 <td
                   class="px-3 p-2 lg:table-cell block text-center text-gray-500"
                   colspan={local.heads?.length}
@@ -38,10 +37,10 @@ export default function Table(props: Props) {
 
             <For each={local.items}>
               {(items) => (
-                <tr class="lg:table-row block border-t mt-3 pt-3 lg:border-none lg:mt-0 lg:pt-0">
+                <tr class="lg:table-row block border-t mt-3 pt-3 lg:mt-0 lg:pt-0 border-b border-gray-100 transition hover:bg-gray-50">
                   <For each={items}>
                     {(item) => (
-                      <td class="px-3 p-2 lg:table-cell block">{item}</td>
+                      <td class="px-3 p-2.5 lg:table-cell block">{item}</td>
                     )}
                   </For>
                 </tr>
@@ -50,9 +49,6 @@ export default function Table(props: Props) {
           </tbody>
         </table>
       </div>
-      <Show when={other.page || other.totalPage || other.onChange}>
-        <Pagination {...other} />
-      </Show>
     </>
   );
 }
