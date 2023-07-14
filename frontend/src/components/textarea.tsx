@@ -13,7 +13,7 @@ export default function (props: Props) {
     <div class="mb-2">
       <InputLabel {...others}>{local.label}</InputLabel>
       <textarea
-        class="w-full rounded focus:ring-2 focus:ring-purple-300 border-gray-200 transition resize-none p-1.5 px-3"
+        class="w-full focus:ring-2 focus:ring-purple-300 border-gray-200 transition resize-none p-1.5 px-3"
         {...others}
       />
       <Show when={local.hint}>

@@ -2,6 +2,7 @@ import "leaflet/dist/leaflet.css";
 import L, { LatLng, LeafletMouseEvent } from "leaflet";
 import { createEffect, createSignal, onMount } from "solid-js";
 import { useNotif } from "~/contexts/notif";
+import axios from "axios";
 
 interface Props {
   value?: {
@@ -55,7 +56,6 @@ export default function (props: Props) {
   };
 
   const handleLocationFound = (e: any) => {
-    console.log(e.latlng);
     map().setView(e.latlng);
   };
 
@@ -71,14 +71,14 @@ export default function (props: Props) {
     makeMarker(e.latlng);
   };
 
-  createEffect((oldVal) => {
-    if (oldVal != props.value) {
-      if (props.value) {
+  createEffect((oldVal: any) => {
+    if (oldVal && props.value) {
+      if (oldVal.lat != props.value?.lat || oldVal.lng != props.value?.lng) {
         makeMarker(props.value as any);
       }
     }
 
-    return props.value;
+    return { ...props.value };
   });
 
   onMount(() => {
@@ -87,3 +87,30 @@ export default function (props: Props) {
 
   return <div id="map" class="h-64 bg-gray-100 rounded"></div>;
 }
+
+export const getAddressByLatLng = async (latlng: any) => {
+  const { data } = await axios.get(
+    "https://nominatim.openstreetmap.org/reverse.php?zoom=18&format=jsonv2",
+    {
+      params: {
+        lat: latlng.lat,
+        lng: latlng.lng,
+      },
+    }
+  );
+
+  return data;
+};
+
+export const getLatLngByAddress = async (address: string) => {
+  const { data } = await axios.get(
+    "https://nominatim.openstreetmap.org/search.php?format=jsonv2",
+    {
+      params: {
+        q: address,
+      },
+    }
+  );
+
+  return data;
+};

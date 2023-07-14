@@ -27,7 +27,7 @@ export default function NotifProvider(props: Props) {
     <NotifContext.Provider value={value}>
       {props.children}
       <div
-        class="fixed bottom-5 left-5 right-5 z-[50] flex justify-center transform transition duration-500"
+        class="fixed bottom-5 left-5 right-5 z-[100000] flex justify-center transform transition duration-500"
         classList={{
           "translate-y-0": show(),
           "translate-y-[100px]": !show(),

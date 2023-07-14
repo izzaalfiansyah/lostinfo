@@ -1,9 +1,10 @@
 import { For, Show, createSignal, onMount } from "solid-js";
 import { SetStoreFunction, createStore } from "solid-js/store";
 import { A, useNavigate } from "solid-start";
+import { SearchIcon } from "~/components/icons";
 import Img from "~/components/img";
 import Input from "~/components/input";
-import Map from "~/components/map";
+import Map, { getLatLngByAddress } from "~/components/map";
 import Select from "~/components/select";
 import Textarea from "~/components/textarea";
 import Title from "~/components/title";
@@ -52,6 +53,8 @@ export function Save(props: SaveProps) {
   const [users, setUsers] = createSignal<User[]>([]);
   const [req, setReq] = props.item;
 
+  const notif = useNotif();
+
   const getUser = async () => {
     const { data } = await http.get("/user");
     setUsers(data.data);
@@ -62,6 +65,18 @@ export function Save(props: SaveProps) {
     const value = await fileReader(file);
     setReq("foto", value);
     setReq("foto_url", value);
+  };
+
+  const handleCariTempat = async () => {
+    try {
+      const data = await getLatLngByAddress(req.tempat_temu as string);
+      setReq("maps", {
+        lat: data[0].lat,
+        lng: data[0].lon,
+      });
+    } catch (e) {
+      notif.show("tempat tidak ditemukan", false);
+    }
   };
 
   onMount(async () => {
@@ -91,11 +106,20 @@ export function Save(props: SaveProps) {
             onChange={(e) => setReq("deskripsi", e.currentTarget.value)}
           />
           <Input
-            label="Tempat Temu"
+            label="Tempat Hilang"
             required
-            placeholder="Masukkan Tempat Temu"
+            placeholder="Masukkan Tempat Hilang"
             value={req.tempat_temu}
             onChange={(e) => setReq("tempat_temu", e.currentTarget.value)}
+            append={
+              <button
+                class="p-3 bg-purple-500 text-white"
+                type="button"
+                onClick={handleCariTempat}
+              >
+                <SearchIcon class="w-4 h-4" />
+              </button>
+            }
           />
           <div class="mb-2">
             <label for="">Lokasi Maps</label>
