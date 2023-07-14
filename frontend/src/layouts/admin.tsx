@@ -90,14 +90,14 @@ export default function (props: Props) {
     <>
       <div class="bg-gray-100 min-h-screen text-gray-700 overflow-x-hidden">
         <div
-          class="z-5 bg-black bg-opacity-25 fixed top-0 left-0 right-0 bottom-0 lg:hidden"
+          class="z-[99999] bg-black bg-opacity-25 fixed top-0 left-0 right-0 bottom-0 lg:hidden"
           classList={{
             hidden: !showSidebar(),
           }}
           onClick={toggleSidebar}
         ></div>
         <div
-          class="fixed top-0 bottom-0 left-0 w-80 bg-white z-5 p-10 px-8 flex flex-col justify-between transform transition lg:translate-x-0"
+          class="fixed top-0 bottom-0 left-0 w-80 bg-white z-[99999] p-10 px-8 flex flex-col justify-between transform transition lg:translate-x-0"
           classList={{
             "-translate-x-full": !showSidebar(),
           }}

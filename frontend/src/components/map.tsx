@@ -55,6 +55,7 @@ export default function (props: Props) {
   };
 
   const handleLocationFound = (e: any) => {
+    console.log(e.latlng);
     map().setView(e.latlng);
   };
 

@@ -220,6 +220,7 @@ export default function () {
               <Select
                 label="Role"
                 value={req.role}
+                required
                 onChange={(e) => setReq("role", e.currentTarget.value)}
               >
                 <option value="">Pilih Role</option>
