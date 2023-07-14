@@ -6,7 +6,7 @@ import {
   useStore,
   useVisibleTask$,
 } from "@builder.io/qwik";
-import { type DocumentHead, Link } from "@builder.io/qwik-city";
+import { type DocumentHead, Link, useNavigate } from "@builder.io/qwik-city";
 import Img from "~/components/img";
 import Title from "~/components/title";
 import { NotifContext } from "~/contexts/notif";
@@ -19,6 +19,7 @@ export default component$(() => {
   const user = useSignal<User[]>([]);
   const req = useStore<BarangHilang>({});
   const notif = useContext(NotifContext);
+  const nav = useNavigate();
 
   const getUser = $(async () => {
     const res = await http.get("/user");
@@ -29,6 +30,7 @@ export default component$(() => {
     try {
       await http.post("/barang/hilang", req);
       notif.show("data berhasil disimpan");
+      nav("/barang-hilang");
     } catch (e: any) {
       notif.show(e.response.data.message, "bg-red-500");
     }
@@ -61,6 +63,7 @@ export default component$(() => {
             <div class="mb-2">
               <label for="">Nama</label>
               <input
+                required
                 type="text"
                 class="t-input"
                 placeholder="Masukkan Nama"
@@ -81,6 +84,7 @@ export default component$(() => {
             <div class="mb-2">
               <label for="">Tempat Hilang</label>
               <input
+                required
                 type="text"
                 class="t-input"
                 placeholder="Masukkan Tempat Hilang"
@@ -139,6 +143,7 @@ export default component$(() => {
                 name=""
                 id=""
                 class="t-input"
+                required
                 placeholder="Masukkan Hadiah"
                 value={req.hadiah}
                 onChange$={(e) => (req.hadiah = parseInt(e.target.value))}
