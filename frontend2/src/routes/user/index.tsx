@@ -1,6 +1,7 @@
 import { Show, createEffect, createSignal, onMount } from "solid-js";
 import { createStore } from "solid-js/store";
 import { DeleteIcon, EditIcon } from "~/components/icons";
+import Img from "~/components/img";
 import Input from "~/components/input";
 import Modal from "~/components/modal";
 import Pagination from "~/components/pagination";
@@ -123,15 +124,14 @@ export default function () {
         }
       />
 
-      <div class="mb-3">
-        <Input
-          placeholder="Cari..."
-          value={filter.search}
-          onChange={(e) => setFilter("search", e.currentTarget.value)}
-        />
-      </div>
-
       <div class="bg-white rounded-lg shadow-sm p-5">
+        <div class="mb-3">
+          <Input
+            placeholder="Cari..."
+            value={filter.search}
+            onChange={(e) => setFilter("search", e.currentTarget.value)}
+          />
+        </div>
         <Table
           heads={["Nama", "Alamat", "Telepon", "Email", "Opsi"]}
           items={items().map((item) => [
@@ -144,6 +144,8 @@ export default function () {
                 class="mr-3"
                 onClick={() => {
                   setReq(item);
+                  setReq("foto", "");
+                  setReq("password", "");
                   setIsEdit(true);
                   setModal("save", true);
                 }}
@@ -247,13 +249,11 @@ export default function () {
               />
               <div class="mb-2">
                 <div class="bg-gray-50 rounded p-4 flex items-center justify-center">
-                  <Show when={req.foto_url} fallback={<div class="h-40"></div>}>
-                    <img
-                      src={req.foto_url}
-                      alt="Foto User"
-                      class="object-cover w-40 h-40 !rounded"
-                    />
-                  </Show>
+                  <Img
+                    src={req.foto_url}
+                    alt="Foto User"
+                    class="object-cover w-40 h-40 !rounded"
+                  />
                 </div>
               </div>
               <Input

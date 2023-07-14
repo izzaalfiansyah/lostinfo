@@ -14,7 +14,7 @@ export default function (props: Props) {
         <label for="">{local.label}</label>
       </Show>
       <select
-        class="w-full rounded focus:ring-2 focus:ring-purple-300 border-gray-200 transition p-1.5"
+        class="w-full rounded focus:ring-2 focus:ring-purple-300 border-gray-200 transition p-1.5 px-3"
         {...others}
       ></select>
       <Show when={local.hint}>

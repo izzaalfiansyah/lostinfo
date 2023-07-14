@@ -6,6 +6,9 @@ import { useAuth } from "~/contexts/auth";
 import { useNotif } from "~/contexts/notif";
 import http from "~/libs/http";
 
+import "./user";
+import "./barang-hilang";
+
 export default function () {
   const [total, setTotal] = createStore({
     user: 0,

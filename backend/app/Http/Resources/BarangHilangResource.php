@@ -16,8 +16,8 @@ class BarangHilangResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'id' => (int) $this->id,
-            'user_id' => (int) $this->user_id,
+            'id' => $this->id,
+            'user_id' => $this->user_id,
             'user' => new UserResource(User::find($this->user_id)),
             'nama' => $this->nama,
             'deskripsi' => $this->deskripsi,
@@ -25,8 +25,8 @@ class BarangHilangResource extends JsonResource
             'maps' => $this->maps,
             'foto' => $this->foto,
             'foto_url' => asset($this->foto ?: '/assets/barang_default.jpg'),
-            'hadiah' => (int) $this->hadiah,
-            'ditemukan' => (int) $this->ditemukan,
+            'hadiah' => $this->hadiah,
+            'ditemukan' => $this->ditemukan,
             'ditemukan_detail' => ['Belum', 'Sudah'][(int) $this->ditemukan],
         ];
     }

@@ -1,25 +1,27 @@
-import { type HTMLAttributes, component$ } from "@builder.io/qwik";
+import { JSX, Show, splitProps } from "solid-js";
 
-interface Props extends HTMLAttributes<HTMLDivElement> {
+interface Props extends JSX.ImgHTMLAttributes<HTMLImageElement> {
   src: any;
   alt: any;
 }
 
-export default component$((props: Props) => {
-  const { src, alt, class: classList, ...other } = props;
+export default (props: Props) => {
+  const [{ class: classList }, others] = splitProps(props, ["class"]);
 
   return (
-    <a
-      href={src}
-      target="_blank"
-      class={["inline-block overflow-hidden rounded-lg", classList as string]}
-    >
-      <img
-        src={src}
-        alt={alt}
-        class="w-full h-full object-cover transition hover:scale-110"
-        {...(other as any)}
-      />
-    </a>
+    <Show when={others.src} fallback={<div class={classList}></div>}>
+      <a
+        href={others.src}
+        target="_blank"
+        class={
+          "inline-block overflow-hidden rounded-lg " + (classList as string)
+        }
+      >
+        <img
+          class="w-full h-full object-cover transition hover:scale-110"
+          {...others}
+        />
+      </a>
+    </Show>
   );
-});
+};
