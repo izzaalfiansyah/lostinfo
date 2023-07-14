@@ -10,9 +10,7 @@ export default function (props: Props) {
 
   return (
     <div class="mb-2">
-      <Show when={local.label}>
-        <label for="">{local.label}</label>
-      </Show>
+      <InputLabel {...others}>{local.label}</InputLabel>
       <input
         class="w-full"
         classList={{
@@ -25,5 +23,18 @@ export default function (props: Props) {
         <div class="text-xs text-gray-400">{local.hint}</div>
       </Show>
     </div>
+  );
+}
+
+export function InputLabel(props: any) {
+  return (
+    <Show when={props.children}>
+      <label for="">
+        {props.children}
+        <Show when={props.required}>
+          <span class="text-red-500 ml-0.5">*</span>
+        </Show>
+      </label>
+    </Show>
   );
 }
