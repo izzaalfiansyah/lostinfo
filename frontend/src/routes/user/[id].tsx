@@ -1,7 +1,12 @@
 import { For, Show, createSignal, onMount } from "solid-js";
 import { createStore } from "solid-js/store";
 import { useParams } from "solid-start";
-import { EnvelopeIcon, MapPinIcon, PhoneIcon } from "~/components/icons";
+import {
+  EditIcon,
+  EnvelopeIcon,
+  MapPinIcon,
+  PhoneIcon,
+} from "~/components/icons";
 import Img from "~/components/img";
 import Title from "~/components/title";
 import { useNotif } from "~/contexts/notif";
@@ -11,10 +16,12 @@ import http from "~/libs/http";
 import BarangHilang from "../barang-hilang";
 import BarangTemu from "../barang-temu";
 import { Dynamic } from "solid-js/web";
+import ModalSave from "~/components/user/modal-save";
 
 export default function () {
   const [req, setReq] = createStore<User>();
   const [selectedTab, setSelectedTab] = createSignal<number>(0);
+  const [modalEdit, setModalEdit] = createSignal<boolean>(false);
 
   const tabs = [
     {
@@ -34,7 +41,6 @@ export default function () {
     try {
       const { data } = await http.get("/user/" + params.id);
       setReq(data.data);
-      console.log(req);
     } catch (e: any) {
       notif.show(e.response.data.message, false);
     }
@@ -62,9 +68,20 @@ export default function () {
           <div class="grow">
             <div class="text-center lg:text-left">
               <div class="text-2xl font-semibold">{req.nama}</div>
-              <div class="text-purple-500">@{req.username}</div>
+              <div>@{req.username}</div>
+              <div class="mt-2 flex lg:justify-start justify-center">
+                <button
+                  type="button"
+                  class="text-sm text-purple-500 border block border-purple-500 hover:text-white hover:bg-purple-500 transition rounded-full px-3 p-1 flex items-center"
+                  onClick={() => {
+                    setModalEdit(true);
+                  }}
+                >
+                  <EditIcon class="w-4 h-4 mr-2" /> Edit
+                </button>
+              </div>
             </div>
-            <div class="mt-4">
+            <div class="mt-5">
               <table>
                 <tbody>
                   <tr>
@@ -88,12 +105,21 @@ export default function () {
                 </tbody>
               </table>
             </div>
-            <div class="mt-4">
+            <div class="mt-5">
               Bergabung pada {formatDate(req.created_at as string)}
             </div>
           </div>
         </div>
       </div>
+
+      <ModalSave
+        show={modalEdit()}
+        onClose={() => setModalEdit(false)}
+        callback={() => {}}
+        isEdit={true}
+        req={[req, setReq]}
+      />
+
       <Show when={req.id}>
         <div class="mt-5"></div>
         <div class="flex space-x-3 lg:justify-start justify-center">

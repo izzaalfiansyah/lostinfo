@@ -60,7 +60,7 @@ export default function (props: Props) {
   };
 
   const handleLocationError = (e: any) => {
-    notif.show(e.message, false);
+    notif.show("Gagal menemukan lokasi anda", false);
   };
 
   const handleClick = (e: LeafletMouseEvent) => {

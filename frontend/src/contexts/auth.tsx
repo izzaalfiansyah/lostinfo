@@ -29,7 +29,7 @@ const AuthContext = createContext();
 
 export default function AuthProvider(props: Props) {
   const [user, setUser] = props.value;
-  const [isLoading, setIsLoading] = createSignal<boolean>(false);
+  const [isLoading, setIsLoading] = createSignal<boolean>(true);
 
   const value = [
     user,
@@ -52,7 +52,7 @@ export default function AuthProvider(props: Props) {
 
   createEffect(() => {
     user();
-    setIsLoading(false);
+    setIsLoading(true);
     setTimeout(() => {
       setIsLoading(false);
     }, 800);
