@@ -1,17 +1,15 @@
-import { Show, createEffect, createSignal, onMount } from "solid-js";
+import { createEffect, createSignal, onMount } from "solid-js";
 import { createStore } from "solid-js/store";
+import { A } from "solid-start";
 import { DeleteIcon, EditIcon } from "~/components/icons";
-import Img from "~/components/img";
 import Input from "~/components/input";
-import Modal from "~/components/modal";
 import Pagination from "~/components/pagination";
-import Select from "~/components/select";
 import Table from "~/components/table";
-import Textarea from "~/components/textarea";
 import Title from "~/components/title";
+import ModalDelete from "~/components/user/modal-delete";
+import ModalSave from "~/components/user/modal-save";
 import { useNotif } from "~/contexts/notif";
 import User from "~/interfaces/user";
-import fileReader from "~/libs/file-reader";
 import http from "~/libs/http";
 
 export default function () {
@@ -49,43 +47,6 @@ export default function () {
     } catch (e: any) {
       notif.show(e.response.data.message, false);
     }
-  };
-
-  const save = async (e: SubmitEvent) => {
-    e.preventDefault();
-    try {
-      if (isEdit()) {
-        await http.put("/user/" + req.id, req);
-        notif.show("data berhasil diedit");
-      } else {
-        await http.post("/user", req);
-        notif.show("data berhasil disimpan");
-      }
-
-      setModal("save", false);
-      get();
-    } catch (e: any) {
-      notif.show(e.response.data.message, false);
-    }
-  };
-
-  const destroy = async (e: SubmitEvent) => {
-    e.preventDefault();
-    try {
-      await http.delete("/user/" + req.id);
-      notif.show("data berhasil dihapus");
-      setModal("delete", false);
-      get();
-    } catch (e: any) {
-      notif.show(e.response.data.message, false);
-    }
-  };
-
-  const handleFotoChange = async (e: any) => {
-    const file = e.target.files[0];
-    const value = await fileReader(file);
-    setReq("foto", value);
-    setReq("foto_url", value);
   };
 
   createEffect((oldVal: any) => {
@@ -135,7 +96,11 @@ export default function () {
         <Table
           heads={["Nama", "Alamat", "Telepon", "Email", "Opsi"]}
           items={items().map((item) => [
-            item.nama,
+            <>
+              <A href={"/user/" + item.id} class="text-purple-600">
+                {item.nama}
+              </A>
+            </>,
             item.alamat,
             item.telepon,
             item.email,
@@ -176,141 +141,20 @@ export default function () {
         />
       </div>
 
-      <Modal
+      <ModalSave
         show={modal.save}
         onClose={() => setModal("save", false)}
-        title={(isEdit() ? "Edit" : "Tambah") + " Pengguna"}
-      >
-        <form onSubmit={save} class="w-[800px] max-w-full">
-          <div class="font-semibold mb-5"></div>
-          <div class="flex lg:flex-row justify-between flex-col gap-3">
-            <div class="flex-1">
-              <Input
-                label="Nama"
-                placeholder="Masukkan Nama"
-                required
-                maxLength={255}
-                value={req.nama}
-                onChange={(e) => setReq("nama", e.currentTarget.value)}
-              />
-              <Textarea
-                label="Alamat"
-                placeholder="Masukkan Alamat"
-                required
-                rows={3}
-                value={req.alamat}
-                onChange={(e) => setReq("alamat", e.currentTarget.value)}
-              />
-              <Input
-                label="Email"
-                type="email"
-                placeholder="Masukkan Email"
-                required
-                value={req.email}
-                onChange={(e) => setReq("email", e.currentTarget.value)}
-              />
-              <Input
-                label="Telepon"
-                type="tel"
-                placeholder="Masukkan Telepon"
-                required
-                value={req.telepon}
-                onChange={(e) => setReq("telepon", e.currentTarget.value)}
-              />
-              <Select
-                label="Role"
-                value={req.role}
-                required
-                onChange={(e) => setReq("role", e.currentTarget.value)}
-              >
-                <option value="">Pilih Role</option>
-                <option value="1">Admin</option>
-                <option value="2">Pengguna</option>
-              </Select>
-              <Select
-                label="Status"
-                value={req.status}
-                onChange={(e) => setReq("status", e.currentTarget.value)}
-              >
-                <option value="">Pilih Status</option>
-                <option value="1">Aktif</option>
-                <option value="0">Nonaktif</option>
-              </Select>
-            </div>
-            <div class="flex-1">
-              <Input
-                label="Foto"
-                type="file"
-                title="Pilih Foto"
-                required={!isEdit()}
-                onChange={handleFotoChange}
-                hint={
-                  isEdit() ? "Kosongkan jika tidak ingin mengganti foto" : ""
-                }
-              />
-              <div class="mb-2">
-                <div class="bg-gray-50 rounded p-4 flex items-center justify-center">
-                  <Img
-                    src={req.foto_url}
-                    alt="Foto User"
-                    class="object-cover w-40 h-40 !rounded"
-                  />
-                </div>
-              </div>
-              <Input
-                label="Username"
-                placeholder="Masukkan Username"
-                required
-                value={req.username}
-                onChange={(e) => setReq("username", e.currentTarget.value)}
-              />
-              <Input
-                label="Password"
-                type="password"
-                placeholder="Masukkan Password"
-                required={!isEdit()}
-                value={req.password}
-                onChange={(e) => setReq("password", e.currentTarget.value)}
-                hint={
-                  isEdit()
-                    ? "Kosongkan jika tidak ingin mengganti password"
-                    : ""
-                }
-              />
-            </div>
-          </div>
+        callback={get}
+        isEdit={isEdit()}
+        req={[req, setReq]}
+      />
 
-          <div class="mt-8 flex justify-end">
-            <button
-              type="submit"
-              class="px-4 py-2 bg-purple-600 rounded shadow-sm text-white"
-            >
-              Simpan
-            </button>
-          </div>
-        </form>
-      </Modal>
-
-      <Modal
+      <ModalDelete
         show={modal.delete}
         onClose={() => setModal("delete", false)}
-        title="Hapus Pengguna"
-      >
-        <form onSubmit={destroy} class="max-w-full w-[500px]">
-          <p>
-            Anda yakin menghapus <strong>{req.nama}</strong>? Data akan dihapus
-            secara permanen!
-          </p>
-          <div class="mt-8 flex justify-end">
-            <button
-              type="submit"
-              class="bg-red-500 text-white py-2 px-4 rounded shadow-sm"
-            >
-              Hapus
-            </button>
-          </div>
-        </form>
-      </Modal>
+        callback={get}
+        req={[req, setReq]}
+      />
     </>
   );
 }

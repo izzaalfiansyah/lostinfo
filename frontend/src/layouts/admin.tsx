@@ -174,7 +174,11 @@ export default function (props: Props) {
               <div class="flex-1"></div>
               <div class="flex-1 items-center flex justify-end space-x-4 border-l-2">
                 <div class="lg:block hidden">Hello, {auth()?.username}</div>
-                <div class="rounded-full w-12 h-12 bg-gray-200"></div>
+                <img
+                  src={auth().foto_url}
+                  alt={auth().nama}
+                  class="block rounded-full w-12 h-12 bg-gray-200"
+                />
               </div>
             </div>
           </div>

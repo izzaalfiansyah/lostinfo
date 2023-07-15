@@ -1,10 +1,10 @@
-import { For, createEffect, createSignal, onMount } from "solid-js";
+import { For, Show, createEffect, createSignal, onMount } from "solid-js";
 import { createStore } from "solid-js/store";
 import { A } from "solid-start";
+import ModalDelete from "~/components/barang-temu/modal-delete";
 import { DeleteIcon, EditIcon } from "~/components/icons";
 import Img from "~/components/img";
 import Input from "~/components/input";
-import Modal from "~/components/modal";
 import Pagination from "~/components/pagination";
 import Title from "~/components/title";
 import { useNotif } from "~/contexts/notif";
@@ -12,7 +12,11 @@ import BarangTemu from "~/interfaces/barang-temu";
 import formatDate from "~/libs/format-date";
 import http from "~/libs/http";
 
-export default function () {
+interface Props {
+  user_id?: any;
+}
+
+export default function (props: Props) {
   const [req, setReq] = createStore<BarangTemu>({});
   const [items, setItems] = createSignal<BarangTemu[]>([]);
   const [modal, setModal] = createStore({
@@ -24,6 +28,7 @@ export default function () {
     recordTotal: 0,
     limit: 9,
     search: "",
+    user_id: props.user_id || "",
   });
 
   const notif = useNotif();
@@ -38,18 +43,6 @@ export default function () {
       setFilter("pageTotal", pageTotal);
       setFilter("recordTotal", data.data.length);
       setItems(data.data);
-    } catch (e: any) {
-      notif.show(e.response.data.message, false);
-    }
-  };
-
-  const destroy = async (e: SubmitEvent) => {
-    e.preventDefault();
-    try {
-      await http.delete("/barang/temu/" + req.id);
-      notif.show("data berhasil dihapus");
-      setModal("delete", false);
-      get();
     } catch (e: any) {
       notif.show(e.response.data.message, false);
     }
@@ -72,18 +65,20 @@ export default function () {
 
   return (
     <>
-      <Title
-        title="Data Barang Temu"
-        subtitle="Menjelajahi dan menganalisis data barang temu"
-        action={
-          <A
-            href="/barang-temu/create"
-            class="px-5 p-2 text-white bg-purple-600 rounded shadow-sm mt-4 lg:mt-0"
-          >
-            Tambah
-          </A>
-        }
-      ></Title>
+      <Show when={!props.user_id}>
+        <Title
+          title="Data Barang Temu"
+          subtitle="Menjelajahi dan menganalisis data barang temu"
+          action={
+            <A
+              href="/barang-temu/create"
+              class="px-5 p-2 text-white bg-purple-600 rounded shadow-sm mt-4 lg:mt-0"
+            >
+              Tambah
+            </A>
+          }
+        ></Title>
+      </Show>
 
       <div class="mb-3">
         <Input
@@ -94,7 +89,12 @@ export default function () {
       </div>
 
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
-        <For each={items()}>
+        <For
+          each={items()}
+          fallback={
+            <div class="text-center p-5 lg:col-span-3">Data tidak tersedia</div>
+          }
+        >
           {(item) => (
             <div class="bg-white rounded-lg shadow-sm flex items-center space-x-3 p-3 relative overflow-hidden">
               <Img src={item.foto_url} alt={item.nama} class="w-28 h-28" />
@@ -142,22 +142,12 @@ export default function () {
         />
       </div>
 
-      <Modal
+      <ModalDelete
         show={modal.delete}
         onClose={() => setModal("delete", false)}
-        title="Hapus Barang Temu"
-      >
-        <form onSubmit={destroy} class="max-w-full w-[500px]">
-          <p>
-            Anda yakin menghapus barang <strong>{req.nama}</strong>?
-          </p>
-          <div class="mt-8 justify-end flex">
-            <button class="bg-red-500 text-white px-4 p-2 rounded">
-              Hapus
-            </button>
-          </div>
-        </form>
-      </Modal>
+        callback={get}
+        req={[req, setReq]}
+      />
     </>
   );
 }

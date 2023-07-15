@@ -14,7 +14,7 @@ export default function (props: Props) {
   return (
     <>
       <Show when={props.show}>
-        <div class="fixed top-0 left-0 right-0 bottom-0 z-40 flex items-center justify-center overflow-y-auto p-5">
+        <div class="fixed top-0 left-0 right-0 bottom-0 z-[100000] flex items-center justify-center overflow-y-auto p-5">
           <div
             class="fixed top-0 left-0 right-0 bottom-0 bg-black bg-opacity-25"
             onClick={handleClick}

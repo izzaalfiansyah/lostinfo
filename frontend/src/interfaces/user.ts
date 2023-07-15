@@ -12,6 +12,8 @@ interface User {
   role_detail?: string;
   status?: string;
   status_detail?: string;
+  created_at?: string;
+  updated_at?: string;
 }
 
 export default User;

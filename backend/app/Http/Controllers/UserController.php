@@ -37,6 +37,13 @@ class UserController extends Controller
         return UserResource::collection($items);
     }
 
+    function show($id)
+    {
+        $item = User::find($id);
+
+        return new UserResource($item);
+    }
+
     public function store(UserRequest $req)
     {
         $data = $req->validated();

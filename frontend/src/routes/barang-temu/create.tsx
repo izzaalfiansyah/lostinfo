@@ -1,6 +1,6 @@
 import { For, Show, createSignal, onMount } from "solid-js";
 import { SetStoreFunction, createStore } from "solid-js/store";
-import { A, useNavigate } from "solid-start";
+import { useNavigate } from "solid-start";
 import { SearchIcon } from "~/components/icons";
 import Img from "~/components/img";
 import Input from "~/components/input";
@@ -187,12 +187,13 @@ export function Save(props: SaveProps) {
         >
           Simpan Data
         </button>
-        <A
-          href="/barang-temu"
+        <button
+          type="button"
+          onClick={() => window.history.back()}
           class="button px-4 p-2 bg-gray-400 text-white rounded shadow-sm"
         >
           Kembali
-        </A>
+        </button>
       </div>
     </form>
   );
