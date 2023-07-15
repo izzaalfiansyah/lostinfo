@@ -8,6 +8,7 @@ import Textarea from "../textarea";
 import Select from "../select";
 import fileReader from "~/libs/file-reader";
 import Img from "../img";
+import FileInput from "../file-input";
 
 interface Props {
   show: boolean;
@@ -110,12 +111,12 @@ export default function (props: Props) {
             </Select>
           </div>
           <div class="flex-1">
-            <Input
+            <FileInput
               label="Foto"
-              type="file"
               title="Pilih Foto"
               required={!props.isEdit}
               onChange={handleFotoChange}
+              accept="iamge/*"
               hint={
                 props.isEdit ? "Kosongkan jika tidak ingin mengganti foto" : ""
               }

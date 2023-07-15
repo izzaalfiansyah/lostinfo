@@ -13,17 +13,13 @@ export default function (props: Props) {
   return (
     <div class="mb-2">
       <InputLabel {...others}>{local.label}</InputLabel>
-      <div class="relative flex items-center">
-        {props.prepend}
+      <div class="flex flex-row">
+        <div class="h-10">{props.prepend}</div>
         <input
-          class="grow"
-          classList={{
-            "focus:ring-2 focus:ring-purple-300 border-gray-200 transition py-1.5 disabled:bg-gray-100":
-              others.type != "file",
-          }}
+          class="w-full h-10 focus:ring-2 focus:ring-purple-300 border-gray-200 transition py-1.5 disabled:bg-gray-100"
           {...others}
         />
-        {props.append}
+        <div class="h-10">{props.append}</div>
       </div>
       <Show when={local.hint}>
         <div class="text-xs text-gray-400">{local.hint}</div>

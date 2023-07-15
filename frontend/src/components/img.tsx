@@ -13,9 +13,7 @@ export default (props: Props) => {
       <a
         href={others.src}
         target="_blank"
-        class={
-          "inline-block overflow-hidden rounded-lg " + (classList as string)
-        }
+        class={"inline-block overflow-hidden rounded " + (classList as string)}
       >
         <img
           class="w-full h-full object-cover transition hover:scale-110"

@@ -167,7 +167,7 @@ export default function (props: Props) {
             </button>
             <input
               type="text"
-              class="bg-white rounded p-2.5 px-4 outline-none flex-1 border-gray-200 transition focus:ring-purple-300 focus:ring-2 mr-5"
+              class="bg-white rounded p-2.5 px-4 outline-none lg:flex-1 w-2/3 border-gray-200 transition focus:ring-purple-300 focus:ring-2 mr-5"
               placeholder="Cari Sesuatu..."
             />
             <div class="flex-1 flex justify-between items-center">

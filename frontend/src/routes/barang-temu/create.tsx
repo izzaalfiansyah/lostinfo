@@ -1,6 +1,7 @@
 import { For, Show, createSignal, onMount } from "solid-js";
 import { SetStoreFunction, createStore } from "solid-js/store";
 import { useNavigate } from "solid-start";
+import FileInput from "~/components/file-input";
 import { SearchIcon } from "~/components/icons";
 import Img from "~/components/img";
 import Input from "~/components/input";
@@ -150,15 +151,14 @@ export function Save(props: SaveProps) {
               {(item) => <option value={item.id as any}>{item.nama}</option>}
             </For>
           </Select>
-          <Input
-            type="file"
+          <FileInput
             label="Foto"
             title="Pilih Foto"
             onChange={handleFotoChange}
             accept="image/*"
           />
           <div class="mb-2">
-            <div class="bg-gray-100 rounded-lg flex items-center justify-center p-5">
+            <div class="bg-gray-50 rounded flex items-center justify-center p-3">
               <Img src={req.foto_url} alt="Foto Barang" class="w-24 h-24" />
             </div>
           </div>
