@@ -72,7 +72,7 @@ export default function (props: Props) {
           action={
             <A
               href="/barang-hilang/create"
-              class="px-5 p-2 text-white bg-purple-600 rounded shadow-sm mt-4 lg:mt-0"
+              class="px-5 p-2 text-white bg-purple-600 rounded shadow-sm mt-4 lg:mt-0 text-center"
             >
               Tambah
             </A>

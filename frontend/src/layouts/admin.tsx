@@ -171,13 +171,13 @@ export default function (props: Props) {
               placeholder="Cari Sesuatu..."
             />
             <div class="flex-1 flex justify-between items-center">
-              <div class="flex-1"></div>
-              <div class="flex-1 items-center flex justify-end space-x-4 border-l-2">
+              <div class="lg:flex-1"></div>
+              <div class="grow items-center flex justify-end space-x-4 lg:border-l-2">
                 <div class="lg:block hidden">Hello, {auth()?.username}</div>
                 <img
                   src={auth().foto_url}
                   alt={auth().nama}
-                  class="block rounded-full w-12 h-12 bg-gray-200"
+                  class="block rounded-full !w-12 !h-12 bg-gray-200"
                 />
               </div>
             </div>
