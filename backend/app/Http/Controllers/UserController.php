@@ -49,6 +49,7 @@ class UserController extends Controller
         $data = $req->validated();
 
         $data['password'] = Hash::make($req->password);
+        $data['ktp'] = $this->uploadBase64($req->ktp, 'user-ktp', 'png');
 
         if ($req->foto) {
             $data['foto'] = $this->uploadBase64($req->foto, 'user', 'png');
@@ -76,6 +77,13 @@ class UserController extends Controller
             @unlink(public_path($item->foto));
         } else {
             unset($data['foto']);
+        }
+
+        if ($req->ktp) {
+            $data['ktp'] = $this->uploadBase64($req->ktp, 'user-ktp', 'png');
+            @unlink(public_path($item->ktp));
+        } else {
+            unset($data['ktp']);
         }
 
         $item?->update($data);

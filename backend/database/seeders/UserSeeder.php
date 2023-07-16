@@ -20,6 +20,7 @@ class UserSeeder extends Seeder
             'alamat' => 'Jember',
             'email' => 'superadmin@admin.com',
             'telepon' => '081231921351',
+            'ktp' => '-',
             'role' => '1',
             'status' => '1',
         ]);

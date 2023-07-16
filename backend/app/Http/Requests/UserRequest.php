@@ -25,6 +25,7 @@ class UserRequest extends FormRequest
             'email' => 'required|email',
             'telepon' => 'required|numeric',
             'foto' => ['nullable', new Base64],
+            'ktp' => [$id ? 'nullable' : 'required', new Base64],
             'role' => 'required|in:1,2',
             'status' => 'required|in:1,0',
         ];
