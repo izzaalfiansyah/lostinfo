@@ -99,8 +99,17 @@ export default function (props: Props) {
           fallback={
             <For each={Array.from({ length: 6 })}>
               {(item) => (
-                <Card class="!p-3">
-                  <Skeleton class="h-28 rounded-lg"></Skeleton>
+                <Card class="!p-3 flex items-center space-x-3">
+                  <Skeleton class="h-28 w-28 rounded-lg" />
+                  <div class="grow">
+                    <Skeleton class="p-2 rounded-full mb-2" />
+                    <Skeleton class="p-1 rounded-full mb-1" />
+                    <Skeleton class="p-1 rounded-full" />
+                    <div class="mt-3 flex justify-between gap-x-3">
+                      <Skeleton class="rounded-full p-3 flex-1" />
+                      <Skeleton class="rounded-full p-3 flex-1" />
+                    </div>
+                  </div>
                 </Card>
               )}
             </For>

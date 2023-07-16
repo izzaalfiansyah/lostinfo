@@ -7,6 +7,7 @@ import { DeleteIcon, EditIcon } from "~/components/icons";
 import Img from "~/components/img";
 import Input from "~/components/input";
 import Pagination from "~/components/pagination";
+import Skeleton from "~/components/skeleton";
 import Title from "~/components/title";
 import { useNotif } from "~/contexts/notif";
 import BarangTemu from "~/interfaces/barang-temu";
@@ -20,6 +21,7 @@ interface Props {
 export default function (props: Props) {
   const [req, setReq] = createStore<BarangTemu>({});
   const [items, setItems] = createSignal<BarangTemu[]>([]);
+  const [isLoading, setIsLoading] = createSignal<boolean>(false);
   const [modal, setModal] = createStore({
     delete: false,
   });
@@ -61,7 +63,9 @@ export default function (props: Props) {
   });
 
   onMount(async () => {
+    setIsLoading(true);
     await get();
+    setIsLoading(false);
   });
 
   return (
@@ -90,45 +94,69 @@ export default function (props: Props) {
       </div>
 
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
-        <For
-          each={items()}
+        <Show
+          when={!isLoading()}
           fallback={
-            <div class="text-center p-5 lg:col-span-3">Data tidak tersedia</div>
+            <For each={Array.from({ length: 6 })}>
+              {(item) => (
+                <Card class="!p-3 flex items-center space-x-3">
+                  <Skeleton class="h-28 w-28 rounded-lg" />
+                  <div class="grow">
+                    <Skeleton class="p-2 rounded-full mb-2" />
+                    <Skeleton class="p-1 rounded-full mb-1" />
+                    <Skeleton class="p-1 rounded-full" />
+                    <div class="mt-3 flex justify-between gap-x-3">
+                      <Skeleton class="rounded-full p-3 flex-1" />
+                      <Skeleton class="rounded-full p-3 flex-1" />
+                    </div>
+                  </div>
+                </Card>
+              )}
+            </For>
           }
         >
-          {(item) => (
-            <Card class="flex items-center space-x-3 !p-3">
-              <Img src={item.foto_url} alt={item.nama} class="w-28 h-28" />
-              <div class="grow truncate">
-                <div class="font-semibold truncate">{item.nama}</div>
-                <div class="text-gray-500 text-xs mt-1">
-                  Oleh @{item.user?.username}
-                </div>
-                <div class="text-gray-500 text-xs">
-                  {formatDate(item.created_at as string, true)}
-                </div>
-                <div class="mt-3 flex items-center">
-                  <A
-                    href={"/barang-temu/" + item.id}
-                    class="text-sm text-purple-500 border inline-block border-purple-500 hover:text-white hover:bg-purple-500 transition rounded-full px-3 p-1"
-                  >
-                    <EditIcon class="w-4 h-4" />
-                  </A>
-                  <button
-                    type="button"
-                    class="ml-1 text-sm text-red-500 border inline-block border-red-500 hover:text-white hover:bg-red-500 transition rounded-full px-3 p-1"
-                    onClick={() => {
-                      setReq(item);
-                      setModal("delete", true);
-                    }}
-                  >
-                    <DeleteIcon class="w-4 h-4" />
-                  </button>
-                </div>
+          <For
+            each={items()}
+            fallback={
+              <div class="text-center p-5 lg:col-span-3">
+                Data tidak tersedia
               </div>
-            </Card>
-          )}
-        </For>
+            }
+          >
+            {(item) => (
+              <Card class="flex items-center space-x-3 !p-3">
+                <Img src={item.foto_url} alt={item.nama} class="w-28 h-28" />
+                <div class="grow truncate">
+                  <div class="font-semibold truncate">{item.nama}</div>
+                  <div class="text-gray-500 text-xs mt-1">
+                    Oleh @{item.user?.username}
+                  </div>
+                  <div class="text-gray-500 text-xs">
+                    {formatDate(item.created_at as string, true)}
+                  </div>
+                  <div class="mt-3 flex items-center">
+                    <A
+                      href={"/barang-temu/" + item.id}
+                      class="text-sm text-purple-500 border inline-block border-purple-500 hover:text-white hover:bg-purple-500 transition rounded-full px-3 p-1"
+                    >
+                      <EditIcon class="w-4 h-4" />
+                    </A>
+                    <button
+                      type="button"
+                      class="ml-1 text-sm text-red-500 border inline-block border-red-500 hover:text-white hover:bg-red-500 transition rounded-full px-3 p-1"
+                      onClick={() => {
+                        setReq(item);
+                        setModal("delete", true);
+                      }}
+                    >
+                      <DeleteIcon class="w-4 h-4" />
+                    </button>
+                  </div>
+                </div>
+              </Card>
+            )}
+          </For>
+        </Show>
       </div>
 
       <Card class="mt-4">

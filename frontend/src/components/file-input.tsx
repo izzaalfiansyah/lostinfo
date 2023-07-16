@@ -14,7 +14,7 @@ export default function (props: Props) {
       <InputLabel {...others}>{local.label}</InputLabel>
       <input
         type="file"
-        class="w-full h-10 border border-gray-200 file:border-none file:h-10 file:px-3 file:bg-gray-100 file:mr-3 focus:outline-none focus:ring-2 focus:ring-purple-300 transition disabled:bg-gray-100 focus:border-purple-500"
+        class="w-full h-10 border border-gray-200 file:border-none file:text-white file:h-10 file:px-3 file:bg-purple-500 file:mr-3 focus:outline-none focus:ring-2 focus:ring-purple-300 transition disabled:bg-gray-100 focus:border-purple-500"
         {...others}
       />
       <Show when={local.hint}>

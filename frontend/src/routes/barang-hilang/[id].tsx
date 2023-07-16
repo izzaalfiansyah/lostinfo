@@ -23,8 +23,7 @@ export default function () {
     }
   };
 
-  const update = async (e: SubmitEvent) => {
-    e.preventDefault();
+  const update = async () => {
     try {
       await http.put("/barang/hilang/" + params.id, req);
       notif.show("data berhasil disimpan");

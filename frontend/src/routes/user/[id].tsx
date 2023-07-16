@@ -27,6 +27,7 @@ export default function (props: Props) {
   const [req, setReq] = createStore<User>();
   const [selectedTab, setSelectedTab] = createSignal<number>(0);
   const [modalEdit, setModalEdit] = createSignal<boolean>(false);
+  const [isLoading, setIsLoading] = createSignal(false);
 
   const tabs = [
     {

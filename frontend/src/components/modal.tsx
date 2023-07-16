@@ -20,8 +20,8 @@ export default function (props: Props) {
   };
 
   const handleKeyDown = (e: KeyboardEvent) => {
-    e.preventDefault();
     if (e.key == "Escape") {
+      window.history.back();
       handleClose();
     }
   };

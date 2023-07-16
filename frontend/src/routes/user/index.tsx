@@ -34,10 +34,23 @@ export default function () {
   const notif = useNotif();
 
   const nullable = () => {
-    setReq({});
+    setReq({
+      id: "",
+      nama: "",
+      alamat: "",
+      email: "",
+      foto: "",
+      foto_url: "",
+      password: "",
+      role: "",
+      status: "",
+      telepon: "",
+      username: "",
+    });
   };
 
   const get = async () => {
+    setIsLoading(true);
     try {
       const { data } = await http.get("/user", {
         params: filter,
@@ -50,6 +63,7 @@ export default function () {
     } catch (e: any) {
       notif.show(e.response.data.message, false);
     }
+    setIsLoading(false);
   };
 
   createEffect((oldVal: any) => {
@@ -66,9 +80,7 @@ export default function () {
   });
 
   onMount(async () => {
-    setIsLoading(true);
     await get();
-    setIsLoading(false);
   });
 
   return (
@@ -95,7 +107,10 @@ export default function () {
           <Input
             placeholder="Cari..."
             value={filter.search}
-            onChange={(e) => setFilter("search", e.currentTarget.value)}
+            onChange={(e) => {
+              setFilter("search", e.currentTarget.value);
+              setFilter("page", 1);
+            }}
           />
         </div>
         <Table
@@ -133,7 +148,6 @@ export default function () {
                     </button>
                     <button
                       onClick={() => {
-                        nullable();
                         setReq(item);
                         setModal("delete", true);
                       }}
