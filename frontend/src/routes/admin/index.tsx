@@ -1,4 +1,4 @@
-import { For, Show, createSignal, onMount } from "solid-js";
+import { For, Show, createEffect, createSignal, onMount } from "solid-js";
 import { createStore } from "solid-js/store";
 import Card from "~/components/card";
 import { ArchiveIcon, ArchiveXIcon, UsersIcon } from "~/components/icons";
@@ -7,6 +7,8 @@ import Title from "~/components/title";
 import { useAuth } from "~/contexts/auth";
 import { useNotif } from "~/contexts/notif";
 import http from "~/libs/http";
+import { Chart, registerables } from "chart.js";
+import Input from "~/components/input";
 
 export default function () {
   const [total, setTotal] = createStore({
@@ -15,6 +17,9 @@ export default function () {
     barangTemu: 0,
   });
   const [isLoading, setIsLoading] = createSignal(false);
+  const [tahun, setTahun] = createSignal(new Date().getFullYear());
+  const [chart, setChart] = createSignal<Chart>();
+  let canvasChart: HTMLCanvasElement | any;
 
   const [auth] = useAuth();
   const notif = useNotif();
@@ -33,9 +38,80 @@ export default function () {
     }
   };
 
+  const getChart = async () => {
+    try {
+      const { data } = await http.get("/grafik/barang", {
+        params: {
+          tahun: tahun(),
+        },
+      });
+
+      let bulan: any[] = [];
+      let barang_hilang: any[] = [];
+      let barang_temu: any[] = [];
+
+      data.data.barang_hilang.forEach((item: any) => {
+        bulan.push(item.bulan.slice(0, 3));
+        barang_hilang.push(item.jumlah);
+      });
+
+      data.data.barang_temu.forEach((item: any) => {
+        barang_temu.push(item.jumlah);
+      });
+
+      if (chart()) {
+        chart()?.destroy();
+      }
+
+      Chart.register(...registerables);
+      const ctx = new Chart(canvasChart, {
+        type: "line",
+        data: {
+          labels: bulan,
+          datasets: [
+            {
+              label: "Temuan",
+              data: barang_temu,
+              borderWidth: 1,
+              backgroundColor: "#a855f7",
+              borderColor: "#a855f7",
+            },
+            {
+              label: "Hilang",
+              data: barang_hilang,
+              borderWidth: 1,
+              backgroundColor: "#ef4444",
+              borderColor: "#ef4444",
+            },
+          ],
+        },
+        options: {
+          responsive: true,
+          interaction: {
+            intersect: false,
+          },
+          scales: {
+            y: {
+              beginAtZero: true,
+            },
+          },
+        },
+      });
+
+      setChart(ctx);
+    } catch (e: any) {
+      notif.show(e.response.data.message, false);
+    }
+  };
+
+  createEffect(() => {
+    getChart();
+  });
+
   onMount(async () => {
     setIsLoading(true);
     await getData();
+    await getChart();
     setIsLoading(false);
   });
 
@@ -99,8 +175,22 @@ export default function () {
           </Card>
         </Show>
       </div>
-      <Card title="Grafik Barang Ditemukan dan Belum Ditemukan">
-        <div class="h-72"></div>
+      <Card title="Grafik Barang Hilang dan Temuan">
+        <div class="flex lg:flex-row flex-col items-center gap-x-5 mb-5">
+          <div>Filter Tahun :</div>
+          <div class="grow">
+            <Input
+              type="number"
+              value={tahun()}
+              onChange={(e) => setTahun(parseInt(e.currentTarget.value))}
+              max={new Date().getFullYear()}
+            />
+          </div>
+        </div>
+        <Show when={isLoading()}>
+          <Skeleton class="h-80 rounded-lg" />
+        </Show>
+        <canvas classList={{ "!w-0": isLoading() }} ref={canvasChart}></canvas>
       </Card>
     </>
   );

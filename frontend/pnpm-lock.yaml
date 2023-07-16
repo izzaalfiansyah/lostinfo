@@ -8,6 +8,7 @@ specifiers:
   '@types/leaflet': ^1.9.3
   autoprefixer: ^10.4.13
   axios: ^1.4.0
+  chart.js: ^4.3.0
   leaflet: ^1.9.4
   postcss: ^8.4.21
   solid-js: ^1.7.2
@@ -25,6 +26,7 @@ dependencies:
   '@tailwindcss/forms': 0.5.4_tailwindcss@3.3.3
   '@types/leaflet': 1.9.3
   axios: 1.4.0
+  chart.js: 4.3.0
   leaflet: 1.9.4
   solid-js: 1.7.8
   solid-start: 0.2.26_gjfgll37jjxv7ysqghgl7xhegm
@@ -1578,6 +1580,10 @@ packages:
       '@jridgewell/resolve-uri': 3.1.0
       '@jridgewell/sourcemap-codec': 1.4.14
 
+  /@kurkle/color/0.3.2:
+    resolution: {integrity: sha512-fuscdXJ9G1qb7W8VdHi+IwRqij3lBkosAm4ydQtEmbY58OzHXqQhvlxqEkoz0yssNVn38bcpRWgA9PP+OGoisw==}
+    dev: false
+
   /@nicolo-ribaudo/semver-v6/6.3.3:
     resolution: {integrity: sha512-3Yc1fUTs69MG/uZbJlLSI3JISMn2UV2rg+1D/vROUqZyh3l6iYHCs7GMp+M40ZD7yOdDbYjJcU1oTJhrc+dGKg==}
     hasBin: true
@@ -1973,6 +1979,13 @@ packages:
       ansi-styles: 3.2.1
       escape-string-regexp: 1.0.5
       supports-color: 5.5.0
+
+  /chart.js/4.3.0:
+    resolution: {integrity: sha512-ynG0E79xGfMaV2xAHdbhwiPLczxnNNnasrmPEXriXsPJGjmhOBYzFVEsB65w2qMDz+CaBJJuJD0inE/ab/h36g==}
+    engines: {pnpm: '>=7'}
+    dependencies:
+      '@kurkle/color': 0.3.2
+    dev: false
 
   /chokidar/3.5.3:
     resolution: {integrity: sha512-Dr3sfKRP6oTcjf2JmUmFJfeVMvXBdegxB0iVQ5eb2V10uFJUCAS8OByZdVAyVb8xXNz3GjjTgj9kLWsZTqE6kw==}
