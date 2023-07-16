@@ -4,6 +4,9 @@ export default function (props: JSX.HTMLAttributes<HTMLDivElement>) {
   const [{ class: classList }, others] = splitProps(props, ["class"]);
 
   return (
-    <div class={"animate-pulse bg-gray-100 " + classList} {...others}></div>
+    <div
+      class={"animate-pulse bg-gray-100 text-transparent " + classList}
+      {...others}
+    ></div>
   );
 }

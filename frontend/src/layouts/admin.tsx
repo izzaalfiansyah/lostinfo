@@ -42,11 +42,11 @@ export default function (props: Props) {
       title: "Data Barang Temu",
       path: "/barang-temu",
     },
-    {
-      icon: StackIcon,
-      title: "Testimoni",
-      path: "/testimoni",
-    },
+    // {
+    //   icon: StackIcon,
+    //   title: "Testimoni",
+    //   path: "/testimoni",
+    // },
     {
       icon: AccountIcon,
       title: "Akun",
@@ -75,9 +75,10 @@ export default function (props: Props) {
     }
   };
 
-  const logout = () => {
+  const logout = (e: SubmitEvent) => {
     authFn.logout();
     nav("/login");
+    e.preventDefault();
   };
 
   onMount(() => {
@@ -140,7 +141,7 @@ export default function (props: Props) {
                 <li class="mb-1 relative px-8">
                   <button
                     type="button"
-                    class="p-2 px-3 block rounded flex items-center space-x-3"
+                    class="p-2 px-3 block rounded flex items-center space-x-3 w-full"
                     onClick={() => setModalLogout(true)}
                   >
                     <LogoutIcon class="w-5 h-5 mr-3" />

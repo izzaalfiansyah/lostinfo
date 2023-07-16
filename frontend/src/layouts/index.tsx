@@ -13,7 +13,9 @@ export default function (props: JSX.HTMLAttributes<HTMLDivElement>) {
     <>
       <AuthProvider value={[auth, setAuth]}>
         <NotifProvider>
-          <Dynamic component={auth() ? Admin : Auth}>{props.children}</Dynamic>
+          <Dynamic component={auth()?.id ? Admin : Auth}>
+            {props.children}
+          </Dynamic>
         </NotifProvider>
       </AuthProvider>
     </>

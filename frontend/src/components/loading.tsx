@@ -1,9 +1,9 @@
 export default function () {
   return (
     <>
-      {/* <div class="fixed top-0 left-0 right-0 bottom-0 z-[999999999] bg-white flex items-center justify-center space-x-4">
+      <div class="fixed top-0 left-0 right-0 bottom-0 z-[999999999] bg-white flex items-center justify-center space-x-4">
         <LoadingItem />
-      </div> */}
+      </div>
     </>
   );
 }
