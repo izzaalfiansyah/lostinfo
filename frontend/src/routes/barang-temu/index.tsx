@@ -2,6 +2,7 @@ import { For, Show, createEffect, createSignal, onMount } from "solid-js";
 import { createStore } from "solid-js/store";
 import { A } from "solid-start";
 import ModalDelete from "~/components/barang-temu/modal-delete";
+import Card from "~/components/card";
 import { DeleteIcon, EditIcon } from "~/components/icons";
 import Img from "~/components/img";
 import Input from "~/components/input";
@@ -96,7 +97,7 @@ export default function (props: Props) {
           }
         >
           {(item) => (
-            <div class="bg-white rounded-lg shadow-sm flex items-center space-x-3 p-3 relative overflow-hidden">
+            <Card class="flex items-center space-x-3 !p-3">
               <Img src={item.foto_url} alt={item.nama} class="w-28 h-28" />
               <div class="grow truncate">
                 <div class="font-semibold truncate">{item.nama}</div>
@@ -125,12 +126,12 @@ export default function (props: Props) {
                   </button>
                 </div>
               </div>
-            </div>
+            </Card>
           )}
         </For>
       </div>
 
-      <div class="mt-4 bg-white rounded-lg shadow-sm p-5">
+      <Card class="mt-4">
         <Pagination
           record={items().length}
           recordTotal={filter.recordTotal}
@@ -140,7 +141,7 @@ export default function (props: Props) {
             setFilter("page", val);
           }}
         />
-      </div>
+      </Card>
 
       <ModalDelete
         show={modal.delete}

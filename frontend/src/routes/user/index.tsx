@@ -1,6 +1,7 @@
 import { createEffect, createSignal, onMount } from "solid-js";
 import { createStore } from "solid-js/store";
 import { A } from "solid-start";
+import Card from "~/components/card";
 import { DeleteIcon, EditIcon } from "~/components/icons";
 import Input from "~/components/input";
 import Pagination from "~/components/pagination";
@@ -85,7 +86,7 @@ export default function () {
         }
       />
 
-      <div class="bg-white rounded-lg shadow-sm p-5">
+      <Card>
         <div class="mb-3">
           <Input
             placeholder="Cari..."
@@ -139,7 +140,7 @@ export default function () {
             setFilter("page", val);
           }}
         />
-      </div>
+      </Card>
 
       <ModalSave
         show={modal.save}

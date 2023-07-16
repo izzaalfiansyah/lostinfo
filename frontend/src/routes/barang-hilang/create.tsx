@@ -1,6 +1,7 @@
 import { For, Show, createSignal, onMount } from "solid-js";
 import { SetStoreFunction, createStore } from "solid-js/store";
 import { useNavigate } from "solid-start";
+import Card from "~/components/card";
 import FileInput from "~/components/file-input";
 import { SearchIcon } from "~/components/icons";
 import Img from "~/components/img";
@@ -89,125 +90,129 @@ export function Save(props: SaveProps) {
   });
 
   return (
-    <form onSubmit={props.onSubmit} class="bg-white rounded-lg shadow-sm p-5">
-      <div class="grid lg:grid-cols-2 grid-cols-1 gap-5">
-        <div>
-          <Input
-            label="Nama"
-            required
-            placeholder="Masukkan Nama"
-            value={req.nama}
-            onChange={(e) => setReq("nama", e.currentTarget.value)}
-          />
-          <Textarea
-            label="Deskripsi"
-            placeholder="Masukkan Deskripsi"
-            value={req.deskripsi}
-            rows={3}
-            onChange={(e) => setReq("deskripsi", e.currentTarget.value)}
-          />
-          <Input
-            label="Tempat Hilang"
-            required
-            placeholder="Masukkan Tempat Hilang"
-            value={req.tempat_hilang}
-            onChange={(e) => setReq("tempat_hilang", e.currentTarget.value)}
-            append={
-              <button
-                class="p-3 bg-purple-500 text-white h-full flex items-center justify-center"
-                type="button"
-                onClick={handleCariTempat}
-              >
-                <SearchIcon class="w-4 h-4" />
-              </button>
-            }
-          />
-          <div class="mb-2">
-            <label for="">Lokasi Maps</label>
+    <Card>
+      <form onSubmit={props.onSubmit}>
+        <div class="grid lg:grid-cols-2 grid-cols-1 gap-5">
+          <div>
             <Input
-              value={[req.maps?.lat, req.maps?.lng].toString()}
-              placeholder="[lat,lng]"
-              disabled
+              label="Nama"
+              required
+              placeholder="Masukkan Nama"
+              value={req.nama}
+              onChange={(e) => setReq("nama", e.currentTarget.value)}
             />
-            <Map
-              value={req.maps}
-              onChange={(e) => {
-                setReq("maps", {
-                  lat: e.lat as any,
-                  lng: e.lng as any,
-                });
-              }}
-            ></Map>
-          </div>
-        </div>
-        <div>
-          <Select
-            label="Pemilik"
-            value={req.user_id}
-            onChange={(e) => setReq("user_id", e.currentTarget.value)}
-          >
-            <option value="">Pilih Pemilik</option>
-            <For each={users()}>
-              {(item) => <option value={item.id as any}>{item.nama}</option>}
-            </For>
-          </Select>
-          <FileInput
-            label="Foto"
-            title="Pilih Foto"
-            accept="image/*"
-            onChange={handleFotoChange}
-          />
-          <div class="mb-2">
-            <div class="bg-gray-50 rounded flex items-center justify-center p-3">
-              <Img src={req.foto_url} alt="Foto Barang" class="w-24 h-24" />
+            <Textarea
+              label="Deskripsi"
+              placeholder="Masukkan Deskripsi"
+              value={req.deskripsi}
+              rows={3}
+              onChange={(e) => setReq("deskripsi", e.currentTarget.value)}
+            />
+            <Input
+              label="Tempat Hilang"
+              required
+              placeholder="Masukkan Tempat Hilang"
+              value={req.tempat_hilang}
+              onChange={(e) => setReq("tempat_hilang", e.currentTarget.value)}
+              append={
+                <button
+                  class="p-3 bg-purple-500 text-white h-full flex items-center justify-center"
+                  type="button"
+                  onClick={handleCariTempat}
+                >
+                  <SearchIcon class="w-4 h-4" />
+                </button>
+              }
+            />
+            <div class="mb-2">
+              <label for="">Lokasi Maps</label>
+              <Input
+                value={[req.maps?.lat, req.maps?.lng].toString()}
+                placeholder="[lat,lng]"
+                disabled
+              />
+              <Map
+                value={req.maps}
+                onChange={(e) => {
+                  setReq("maps", {
+                    lat: e.lat as any,
+                    lng: e.lng as any,
+                  });
+                }}
+              ></Map>
             </div>
           </div>
-          <Input
-            type="number"
-            label="Hadiah"
-            required
-            placeholder="Masukkan Hadiah"
-            value={req.hadiah}
-            prepend={
-              <div class="p-3 bg-gray-200 h-full flex items-center justify-center">
-                Rp
-              </div>
-            }
-            onChange={(e) => setReq("hadiah", parseInt(e.currentTarget.value))}
-          />
-          <Show when={req.id}>
+          <div>
             <Select
-              label="Ditemukan"
-              value={req.ditemukan}
-              onChange={(e) => setReq("ditemukan", e.currentTarget.value)}
+              label="Pemilik"
+              value={req.user_id}
+              onChange={(e) => setReq("user_id", e.currentTarget.value)}
             >
-              <option value="">Pilih Status</option>
-              <option value={"1"}>Sudah Ditemukan</option>
-              <option value={"0"}>Belum Ditemukan</option>
+              <option value="">Pilih Pemilik</option>
+              <For each={users()}>
+                {(item) => <option value={item.id as any}>{item.nama}</option>}
+              </For>
             </Select>
-            <Input
-              label="Tanggal Hilang"
-              value={formatDate(req.created_at as string)}
-              disabled
+            <FileInput
+              label="Foto"
+              title="Pilih Foto"
+              accept="image/*"
+              onChange={handleFotoChange}
             />
-          </Show>
+            <div class="mb-2">
+              <div class="bg-gray-50 rounded flex items-center justify-center p-3">
+                <Img src={req.foto_url} alt="Foto Barang" class="w-24 h-24" />
+              </div>
+            </div>
+            <Input
+              type="number"
+              label="Hadiah"
+              required
+              placeholder="Masukkan Hadiah"
+              value={req.hadiah}
+              prepend={
+                <div class="p-3 bg-gray-200 h-full flex items-center justify-center">
+                  Rp
+                </div>
+              }
+              onChange={(e) =>
+                setReq("hadiah", parseInt(e.currentTarget.value))
+              }
+            />
+            <Show when={req.id}>
+              <Select
+                label="Ditemukan"
+                value={req.ditemukan}
+                onChange={(e) => setReq("ditemukan", e.currentTarget.value)}
+              >
+                <option value="">Pilih Status</option>
+                <option value={"1"}>Sudah Ditemukan</option>
+                <option value={"0"}>Belum Ditemukan</option>
+              </Select>
+              <Input
+                label="Tanggal Hilang"
+                value={formatDate(req.created_at as string)}
+                disabled
+              />
+            </Show>
+          </div>
         </div>
-      </div>
-      <div class="mt-4">
-        <button
-          type="submit"
-          class="px-4 p-2 bg-purple-500 rounded shadow-sm text-white mr-2"
-        >
-          Simpan Data
-        </button>
-        <button
-          type="button"
-          onClick={() => window.history.back()}
-          class="button px-4 p-2 bg-gray-400 text-white rounded shadow-sm"
-        >
-          Kembali
-        </button>
-      </div>
-    </form>
+        <div class="mt-4">
+          <button
+            type="submit"
+            class="px-4 p-2 bg-purple-500 rounded shadow-sm text-white mr-2"
+          >
+            Simpan Data
+          </button>
+          <button
+            type="button"
+            onClick={() => window.history.back()}
+            class="button px-4 p-2 bg-gray-400 text-white rounded shadow-sm"
+          >
+            Kembali
+          </button>
+        </div>
+      </form>
+    </Card>
   );
 }

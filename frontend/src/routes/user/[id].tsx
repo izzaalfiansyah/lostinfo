@@ -17,8 +17,13 @@ import BarangHilang from "../barang-hilang";
 import BarangTemu from "../barang-temu";
 import { Dynamic } from "solid-js/web";
 import ModalSave from "~/components/user/modal-save";
+import Card from "~/components/card";
 
-export default function () {
+interface Props {
+  id?: any;
+}
+
+export default function (props: Props) {
   const [req, setReq] = createStore<User>();
   const [selectedTab, setSelectedTab] = createSignal<number>(0);
   const [modalEdit, setModalEdit] = createSignal<boolean>(false);
@@ -39,8 +44,11 @@ export default function () {
 
   const get = async () => {
     try {
-      const { data } = await http.get("/user/" + params.id);
+      const id = props.id ? props.id : params.id;
+      const { data } = await http.get("/user/" + id);
       setReq(data.data);
+      setReq("password", "");
+      setReq("foto", "");
     } catch (e: any) {
       notif.show(e.response.data.message, false);
     }
@@ -52,11 +60,13 @@ export default function () {
 
   return (
     <>
-      <Title
-        title="Detail User"
-        subtitle="Data lanjutan mengenai data user"
-      ></Title>
-      <div class="bg-white rounded-lg shadow-sm p-5">
+      <Show when={!props.id}>
+        <Title
+          title="Detail User"
+          subtitle="Data lanjutan mengenai data user"
+        ></Title>
+      </Show>
+      <Card>
         <div class="flex lg:items-center gap-5 lg:flex-row flex-col">
           <div class="flex items-center justify-center">
             <Img
@@ -69,17 +79,19 @@ export default function () {
             <div class="text-center lg:text-left">
               <div class="text-2xl font-semibold">{req.nama}</div>
               <div>@{req.username}</div>
-              <div class="mt-2 flex lg:justify-start justify-center">
-                <button
-                  type="button"
-                  class="text-sm text-purple-500 border block border-purple-500 hover:text-white hover:bg-purple-500 transition rounded-full px-3 p-1 flex items-center"
-                  onClick={() => {
-                    setModalEdit(true);
-                  }}
-                >
-                  <EditIcon class="w-4 h-4 mr-2" /> Edit
-                </button>
-              </div>
+              <Show when={!props.id}>
+                <div class="mt-2 flex lg:justify-start justify-center">
+                  <button
+                    type="button"
+                    class="text-sm text-purple-500 border block border-purple-500 hover:text-white hover:bg-purple-500 transition rounded-full px-3 p-1 flex items-center"
+                    onClick={() => {
+                      setModalEdit(true);
+                    }}
+                  >
+                    <EditIcon class="w-4 h-4 mr-2" /> Edit
+                  </button>
+                </div>
+              </Show>
             </div>
             <div class="mt-5">
               <table>
@@ -110,17 +122,19 @@ export default function () {
             </div>
           </div>
         </div>
-      </div>
+      </Card>
 
-      <ModalSave
-        show={modalEdit()}
-        onClose={() => setModalEdit(false)}
-        callback={() => {}}
-        isEdit={true}
-        req={[req, setReq]}
-      />
+      <Show when={!props.id}>
+        <ModalSave
+          show={modalEdit()}
+          onClose={() => setModalEdit(false)}
+          callback={get}
+          isEdit={true}
+          req={[req, setReq]}
+        />
+      </Show>
 
-      <Show when={req.id}>
+      <Show when={req.id && !props.id}>
         <div class="mt-5"></div>
         <div class="flex space-x-3 lg:justify-start justify-center">
           <For each={tabs}>
