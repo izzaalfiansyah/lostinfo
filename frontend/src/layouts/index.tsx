@@ -5,6 +5,7 @@ import Auth from "./auth";
 import { Dynamic } from "solid-js/web";
 import User from "~/interfaces/user";
 import NotifProvider from "~/contexts/notif";
+import DialogImgProvider from "~/contexts/dialog-img";
 
 export default function (props: JSX.HTMLAttributes<HTMLDivElement>) {
   const [auth, setAuth] = createSignal<User>({});
@@ -13,9 +14,11 @@ export default function (props: JSX.HTMLAttributes<HTMLDivElement>) {
     <>
       <AuthProvider value={[auth, setAuth]}>
         <NotifProvider>
-          <Dynamic component={auth()?.id ? Admin : Auth}>
-            {props.children}
-          </Dynamic>
+          <DialogImgProvider>
+            <Dynamic component={auth()?.id ? Admin : Auth}>
+              {props.children}
+            </Dynamic>
+          </DialogImgProvider>
         </NotifProvider>
       </AuthProvider>
     </>

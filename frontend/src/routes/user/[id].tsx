@@ -19,6 +19,7 @@ import { Dynamic } from "solid-js/web";
 import ModalSave from "~/components/user/modal-save";
 import Card from "~/components/card";
 import Skeleton from "~/components/skeleton";
+import { useDialogImg } from "~/contexts/dialog-img";
 
 interface Props {
   id?: any;
@@ -43,6 +44,7 @@ export default function (props: Props) {
 
   const notif = useNotif();
   const params = useParams();
+  const dialogImg = useDialogImg();
 
   const get = async () => {
     setIsLoading(true);
@@ -123,13 +125,13 @@ export default function (props: Props) {
                     </button>
                   </Show>
 
-                  <a
-                    href={req.ktp_url}
+                  <button
+                    type="button"
+                    onClick={() => dialogImg.show(req.ktp_url as string)}
                     class="text-sm text-red-500 border block border-red-500 hover:text-white hover:bg-red-500 transition rounded-full px-3 p-1 flex items-center"
-                    target="_blank"
                   >
                     <div class="h-4" /> Lihat KTP
-                  </a>
+                  </button>
                 </div>
               </div>
               <div class="mt-5">

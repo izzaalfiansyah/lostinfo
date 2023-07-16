@@ -53,6 +53,12 @@ export default function () {
     setReq("foto_url", value);
   };
 
+  const handleKTPChange = async (e: any) => {
+    const file = e.target.files[0];
+    const value = await fileReader(file);
+    setReq("ktp", value);
+  };
+
   createEffect((oldId) => {
     const id = auth().id;
 
@@ -155,6 +161,13 @@ export default function () {
                   />
                 </div>
               </div>
+              <FileInput
+                label="Foto KTP"
+                title="Pilih Foto KTP"
+                onChange={handleKTPChange}
+                accept="image/*"
+                hint={"Kosongkan jika tidak ingin mengganti foto KTP"}
+              />
             </div>
           </div>
           <div class="border-b border-gray-200 my-5"></div>

@@ -46,7 +46,7 @@ export default function (props: Props) {
       <Show when={props.show}>
         <div class="fixed top-0 left-0 right-0 bottom-0 z-[100000] flex items-center justify-center overflow-y-auto p-5">
           <div
-            class="fixed top-0 left-0 right-0 bottom-0 bg-black bg-opacity-25"
+            class="fixed top-0 left-0 right-0 bottom-0 bg-black bg-opacity-50"
             onClick={(e) => {
               e.preventDefault();
               window.history.back();
