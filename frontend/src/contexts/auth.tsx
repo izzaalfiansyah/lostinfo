@@ -9,6 +9,7 @@ import {
   onMount,
   useContext,
 } from "solid-js";
+import Loading from "~/components/loading";
 import User from "~/interfaces/user";
 
 type Value = [Accessor<User>, Setter<User | null>];
@@ -17,7 +18,7 @@ interface Props extends JSX.HTMLAttributes<HTMLDivElement> {
   value: Value;
 }
 
-type ValueUse = [
+type ValProps = [
   Accessor<User>,
   {
     login: (val: User, loading?: boolean) => void;
@@ -31,7 +32,7 @@ export default function AuthProvider(props: Props) {
   const [user, setUser] = props.value;
   const [isLoading, setIsLoading] = createSignal<boolean>(true);
 
-  const value = [
+  const value: ValProps = [
     user,
     {
       login: (val: User, loading: boolean = true) => {
@@ -69,11 +70,7 @@ export default function AuthProvider(props: Props) {
   return (
     <>
       <Show when={isLoading()}>
-        <div class="fixed top-0 left-0 right-0 bottom-0 z-[999999999] bg-white flex items-center justify-center space-x-4">
-          <div class="animate animate-pulse rounded-full p-2 bg-purple-600"></div>
-          <div class="animate animate-pulse rounded-full p-2 bg-purple-600"></div>
-          <div class="animate animate-pulse rounded-full p-2 bg-purple-600"></div>
-        </div>
+        <Loading />
       </Show>
       <AuthContext.Provider value={value}>
         {props.children}
@@ -83,5 +80,5 @@ export default function AuthProvider(props: Props) {
 }
 
 export function useAuth() {
-  return useContext<ValueUse>(AuthContext as any);
+  return useContext<ValProps>(AuthContext as any);
 }

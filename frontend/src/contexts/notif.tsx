@@ -4,6 +4,10 @@ interface Props {
   children: JSX.Element;
 }
 
+interface ValProps {
+  show: (message: string, success?: boolean) => void;
+}
+
 const NotifContext = createContext();
 
 export default function NotifProvider(props: Props) {
@@ -11,7 +15,7 @@ export default function NotifProvider(props: Props) {
   const [color, setColor] = createSignal<string>("");
   const [message, setMessage] = createSignal<string>("");
 
-  const value = {
+  const value: ValProps = {
     show: (message: string, success: boolean = true) => {
       setShow(true);
       setColor(success ? "bg-green-500" : "bg-red-500");
@@ -44,7 +48,5 @@ export default function NotifProvider(props: Props) {
 }
 
 export function useNotif() {
-  return useContext<{
-    show: (message: string, success?: boolean) => void;
-  }>(NotifContext as any);
+  return useContext<ValProps>(NotifContext as any);
 }

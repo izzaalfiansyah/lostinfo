@@ -5,6 +5,7 @@ import Card from "~/components/card";
 import { DeleteIcon, EditIcon } from "~/components/icons";
 import Input from "~/components/input";
 import Pagination from "~/components/pagination";
+import Skeleton from "~/components/skeleton";
 import Table from "~/components/table";
 import Title from "~/components/title";
 import ModalDelete from "~/components/user/modal-delete";
@@ -17,6 +18,7 @@ export default function () {
   const [items, setItems] = createSignal<User[]>([]);
   const [req, setReq] = createStore<User>({});
   const [isEdit, setIsEdit] = createSignal<boolean>(false);
+  const [isLoading, setIsLoading] = createSignal<boolean>(false);
   const [modal, setModal] = createStore({
     save: false,
     delete: false,
@@ -64,7 +66,9 @@ export default function () {
   });
 
   onMount(async () => {
+    setIsLoading(true);
     await get();
+    setIsLoading(false);
   });
 
   return (
@@ -96,39 +100,49 @@ export default function () {
         </div>
         <Table
           heads={["Nama", "Alamat", "Telepon", "Email", "Opsi"]}
-          items={items().map((item) => [
-            <>
-              <A href={"/user/" + item.id} class="text-purple-600">
-                {item.nama}
-              </A>
-            </>,
-            item.alamat,
-            item.telepon,
-            item.email,
-            <>
-              <button
-                class="mr-3"
-                onClick={() => {
-                  setReq(item);
-                  setReq("foto", "");
-                  setReq("password", "");
-                  setIsEdit(true);
-                  setModal("save", true);
-                }}
-              >
-                <EditIcon class="w-4 h-4 text-purple-600" />
-              </button>
-              <button
-                onClick={() => {
-                  nullable();
-                  setReq(item);
-                  setModal("delete", true);
-                }}
-              >
-                <DeleteIcon class="w-4 h-4 text-red-600" />
-              </button>
-            </>,
-          ])}
+          items={
+            isLoading()
+              ? Array.from({ length: 5 }).map(() => [
+                  <Skeleton class="rounded-full p-2" />,
+                  <Skeleton class="rounded-full p-2" />,
+                  <Skeleton class="rounded-full p-2" />,
+                  <Skeleton class="rounded-full p-2" />,
+                  <Skeleton class="rounded-full p-2" />,
+                ])
+              : items().map((item) => [
+                  <>
+                    <A href={"/user/" + item.id} class="text-purple-600">
+                      {item.nama}
+                    </A>
+                  </>,
+                  item.alamat,
+                  item.telepon,
+                  item.email,
+                  <>
+                    <button
+                      class="mr-3"
+                      onClick={() => {
+                        setReq(item);
+                        setReq("foto", "");
+                        setReq("password", "");
+                        setIsEdit(true);
+                        setModal("save", true);
+                      }}
+                    >
+                      <EditIcon class="w-4 h-4 text-purple-600" />
+                    </button>
+                    <button
+                      onClick={() => {
+                        nullable();
+                        setReq(item);
+                        setModal("delete", true);
+                      }}
+                    >
+                      <DeleteIcon class="w-4 h-4 text-red-600" />
+                    </button>
+                  </>,
+                ])
+          }
         />
         <div class="mt-3"></div>
         <Pagination

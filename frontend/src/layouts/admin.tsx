@@ -172,14 +172,17 @@ export default function (props: Props) {
             />
             <div class="flex-1 flex justify-between items-center">
               <div class="lg:flex-1"></div>
-              <div class="grow items-center flex justify-end space-x-4 lg:border-l-2">
+              <A
+                href="/akun"
+                class="block grow items-center flex justify-end space-x-4 lg:border-l-2"
+              >
                 <div class="lg:block hidden">Hello, {auth()?.username}</div>
                 <img
                   src={auth().foto_url}
                   alt={auth().nama}
                   class="block rounded-full !w-12 !h-12 bg-gray-200"
                 />
-              </div>
+              </A>
             </div>
           </div>
           <Modal show={modalLogout()} onClose={() => setModalLogout(false)}>

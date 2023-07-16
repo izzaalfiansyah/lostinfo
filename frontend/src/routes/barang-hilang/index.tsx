@@ -7,6 +7,7 @@ import { DeleteIcon, EditIcon } from "~/components/icons";
 import Img from "~/components/img";
 import Input from "~/components/input";
 import Pagination from "~/components/pagination";
+import Skeleton from "~/components/skeleton";
 import Title from "~/components/title";
 import { useNotif } from "~/contexts/notif";
 import BarangHilang from "~/interfaces/barang-hilang";
@@ -20,6 +21,7 @@ interface Props {
 export default function (props: Props) {
   const [req, setReq] = createStore<BarangHilang>({});
   const [items, setItems] = createSignal<BarangHilang[]>([]);
+  const [isLoading, setIsLoading] = createSignal(false);
   const [modal, setModal] = createStore({
     delete: false,
   });
@@ -61,7 +63,9 @@ export default function (props: Props) {
   });
 
   onMount(async () => {
+    setIsLoading(true);
     await get();
+    setIsLoading(false);
   });
 
   return (
@@ -90,45 +94,60 @@ export default function (props: Props) {
       </div>
 
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
-        <For
-          each={items()}
+        <Show
+          when={!isLoading()}
           fallback={
-            <div class="text-center p-5 lg:col-span-3">Data tidak tersedia</div>
+            <For each={Array.from({ length: 6 })}>
+              {(item) => (
+                <Card class="!p-3">
+                  <Skeleton class="h-28 rounded-lg"></Skeleton>
+                </Card>
+              )}
+            </For>
           }
         >
-          {(item) => (
-            <Card class="flex items-center space-x-3 !p-3">
-              <Img src={item.foto_url} alt={item.nama} class="w-28 h-28" />
-              <div class="grow truncate">
-                <div class="font-semibold truncate">{item.nama}</div>
-                <div class="text-gray-500 text-xs mt-1">
-                  @{item.user?.username}
-                </div>
-                <div class="text-gray-500 text-xs">
-                  {formatDate(item.created_at as string, true)}
-                </div>
-                <div class="mt-3 flex items-center">
-                  <A
-                    href={"/barang-hilang/" + item.id}
-                    class="text-sm text-purple-500 border inline-block border-purple-500 hover:text-white hover:bg-purple-500 transition rounded-full px-3 p-1"
-                  >
-                    <EditIcon class="w-4 h-4" />
-                  </A>
-                  <button
-                    type="button"
-                    class="ml-1 text-sm text-red-500 border inline-block border-red-500 hover:text-white hover:bg-red-500 transition rounded-full px-3 p-1"
-                    onClick={() => {
-                      setReq(item);
-                      setModal("delete", true);
-                    }}
-                  >
-                    <DeleteIcon class="w-4 h-4" />
-                  </button>
-                </div>
+          <For
+            each={items()}
+            fallback={
+              <div class="text-center p-5 lg:col-span-3">
+                Data tidak tersedia
               </div>
-            </Card>
-          )}
-        </For>
+            }
+          >
+            {(item) => (
+              <Card class="flex items-center space-x-3 !p-3">
+                <Img src={item.foto_url} alt={item.nama} class="w-28 h-28" />
+                <div class="grow truncate">
+                  <div class="font-semibold truncate">{item.nama}</div>
+                  <div class="text-gray-500 text-xs mt-1">
+                    @{item.user?.username}
+                  </div>
+                  <div class="text-gray-500 text-xs">
+                    {formatDate(item.created_at as string, true)}
+                  </div>
+                  <div class="mt-3 flex items-center">
+                    <A
+                      href={"/barang-hilang/" + item.id}
+                      class="text-sm text-purple-500 border inline-block border-purple-500 hover:text-white hover:bg-purple-500 transition rounded-full px-3 p-1"
+                    >
+                      <EditIcon class="w-4 h-4" />
+                    </A>
+                    <button
+                      type="button"
+                      class="ml-1 text-sm text-red-500 border inline-block border-red-500 hover:text-white hover:bg-red-500 transition rounded-full px-3 p-1"
+                      onClick={() => {
+                        setReq(item);
+                        setModal("delete", true);
+                      }}
+                    >
+                      <DeleteIcon class="w-4 h-4" />
+                    </button>
+                  </div>
+                </div>
+              </Card>
+            )}
+          </For>
+        </Show>
       </div>
 
       <Card class="mt-4">
