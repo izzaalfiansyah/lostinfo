@@ -18,6 +18,7 @@ import BarangTemu from "../barang-temu";
 import { Dynamic } from "solid-js/web";
 import ModalSave from "~/components/user/modal-save";
 import Card from "~/components/card";
+import Skeleton from "~/components/skeleton";
 
 interface Props {
   id?: any;
@@ -44,6 +45,7 @@ export default function (props: Props) {
   const params = useParams();
 
   const get = async () => {
+    setIsLoading(true);
     try {
       const id = props.id ? props.id : params.id;
       const { data } = await http.get("/user/" + id);
@@ -53,6 +55,7 @@ export default function (props: Props) {
     } catch (e: any) {
       notif.show(e.response.data.message, false);
     }
+    setIsLoading(false);
   };
 
   createEffect(() => {
@@ -73,59 +76,82 @@ export default function (props: Props) {
       </Show>
       <Card>
         <div class="flex lg:items-center gap-5 lg:flex-row flex-col">
-          <div class="flex items-center justify-center">
-            <Img
-              src={req.foto_url}
-              alt={req.nama}
-              class="rounded-lg w-64 h-64 object-cover"
-            />
-          </div>
-          <div class="grow">
-            <div class="text-center lg:text-left">
-              <div class="text-2xl font-semibold">{req.nama}</div>
-              <div>@{req.username}</div>
-              <Show when={!props.id}>
-                <div class="mt-2 flex lg:justify-start justify-center">
-                  <button
-                    type="button"
-                    class="text-sm text-purple-500 border block border-purple-500 hover:text-white hover:bg-purple-500 transition rounded-full px-3 p-1 flex items-center"
-                    onClick={() => {
-                      setModalEdit(true);
-                    }}
-                  >
-                    <EditIcon class="w-4 h-4 mr-2" /> Edit
-                  </button>
+          <Show
+            when={!isLoading()}
+            fallback={
+              <>
+                <div class="flex items-center justify-center">
+                  <Skeleton class="rounded-lg w-64 h-64" />
                 </div>
-              </Show>
+                <div class="grow">
+                  <Skeleton class="p-4 rounded-full mb-2" />
+                  <Skeleton class="p-2 rounded-full mb-2" />
+                  <div class="mt-6">
+                    <Skeleton class="p-2 rounded-full mb-1" />
+                    <Skeleton class="p-2 rounded-full mb-1" />
+                    <Skeleton class="p-2 rounded-full mb-1" />
+                  </div>
+                  <div class="mt-5">
+                    <Skeleton class="p-2 rounded-full" />
+                  </div>
+                </div>
+              </>
+            }
+          >
+            <div class="flex items-center justify-center">
+              <Img
+                src={req.foto_url}
+                alt={req.nama}
+                class="rounded-lg w-64 h-64 object-cover"
+              />
             </div>
-            <div class="mt-5">
-              <table>
-                <tbody>
-                  <tr>
-                    <td class="pr-4">
-                      <MapPinIcon class="w-5 h-5" />
-                    </td>
-                    <td>{req.alamat}</td>
-                  </tr>
-                  <tr>
-                    <td>
-                      <EnvelopeIcon class="w-5 h-5" />
-                    </td>
-                    <td>{req.email}</td>
-                  </tr>
-                  <tr>
-                    <td>
-                      <PhoneIcon class="w-5 h-5" />
-                    </td>
-                    <td>{req.telepon}</td>
-                  </tr>
-                </tbody>
-              </table>
+            <div class="grow">
+              <div class="text-center lg:text-left">
+                <div class="text-2xl font-semibold">{req.nama}</div>
+                <div>@{req.username}</div>
+                <Show when={!props.id}>
+                  <div class="mt-2 flex lg:justify-start justify-center">
+                    <button
+                      type="button"
+                      class="text-sm text-purple-500 border block border-purple-500 hover:text-white hover:bg-purple-500 transition rounded-full px-3 p-1 flex items-center"
+                      onClick={() => {
+                        setModalEdit(true);
+                      }}
+                    >
+                      <EditIcon class="w-4 h-4 mr-2" /> Edit
+                    </button>
+                  </div>
+                </Show>
+              </div>
+              <div class="mt-5">
+                <table>
+                  <tbody>
+                    <tr>
+                      <td class="pr-4">
+                        <MapPinIcon class="w-5 h-5" />
+                      </td>
+                      <td>{req.alamat}</td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <EnvelopeIcon class="w-5 h-5" />
+                      </td>
+                      <td>{req.email}</td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <PhoneIcon class="w-5 h-5" />
+                      </td>
+                      <td>{req.telepon}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <div class="mt-5">
+                Bergabung pada {formatDate(req.created_at as string)}
+              </div>
             </div>
-            <div class="mt-5">
-              Bergabung pada {formatDate(req.created_at as string)}
-            </div>
-          </div>
+          </Show>
         </div>
       </Card>
 

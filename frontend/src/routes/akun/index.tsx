@@ -1,7 +1,7 @@
 import Title from "~/components/title";
 import UserDetail from "../user/[id]";
 import { useAuth } from "~/contexts/auth";
-import { Show, createEffect, onMount } from "solid-js";
+import { Show, createEffect, createSignal, onMount } from "solid-js";
 import Card from "~/components/card";
 import Input from "~/components/input";
 import Textarea from "~/components/textarea";
@@ -16,11 +16,13 @@ import fileReader from "~/libs/file-reader";
 
 export default function () {
   const [req, setReq] = createStore<User>();
+  const [isLoading, setIsLoading] = createSignal(false);
 
   const [auth, setAuth] = useAuth();
   const notif = useNotif();
 
   const get = async () => {
+    setIsLoading(true);
     try {
       const { data } = await http.get("/user/" + auth().id);
       setReq(data.data);
@@ -30,6 +32,7 @@ export default function () {
     } catch (e: any) {
       notif.show(e.response.data.message, false);
     }
+    setIsLoading(false);
   };
 
   const update = async (e: SubmitEvent) => {
@@ -74,10 +77,10 @@ export default function () {
       <div class="mt-3"></div>
       <Card title="Edit Akun">
         <form onSubmit={update}>
-          <div class="font-semibold mb-5"></div>
           <div class="flex lg:flex-row justify-between flex-col gap-3">
             <div class="flex-1">
               <Input
+                disabled={isLoading()}
                 label="Nama"
                 placeholder="Masukkan Nama"
                 required
@@ -86,6 +89,7 @@ export default function () {
                 onChange={(e) => setReq("nama", e.currentTarget.value)}
               />
               <Textarea
+                disabled={isLoading()}
                 label="Alamat"
                 placeholder="Masukkan Alamat"
                 required
@@ -94,6 +98,7 @@ export default function () {
                 onChange={(e) => setReq("alamat", e.currentTarget.value)}
               />
               <Input
+                disabled={isLoading()}
                 label="Email"
                 type="email"
                 placeholder="Masukkan Email"
@@ -102,6 +107,7 @@ export default function () {
                 onChange={(e) => setReq("email", e.currentTarget.value)}
               />
               <Input
+                disabled={isLoading()}
                 label="Telepon"
                 type="tel"
                 placeholder="Masukkan Telepon"
@@ -109,7 +115,8 @@ export default function () {
                 value={req.telepon}
                 onChange={(e) => setReq("telepon", e.currentTarget.value)}
               />
-              <Select
+              {/* <Select
+                disabled={isLoading()}
                 label="Role"
                 value={req.role}
                 required
@@ -120,6 +127,7 @@ export default function () {
                 <option value="2">Pengguna</option>
               </Select>
               <Select
+                disabled={isLoading()}
                 label="Status"
                 value={req.status}
                 onChange={(e) => setReq("status", e.currentTarget.value)}
@@ -127,10 +135,11 @@ export default function () {
                 <option value="">Pilih Status</option>
                 <option value="1">Aktif</option>
                 <option value="0">Nonaktif</option>
-              </Select>
+              </Select> */}
             </div>
             <div class="flex-1">
               <FileInput
+                disabled={isLoading()}
                 label="Foto"
                 title="Pilih Foto"
                 onChange={handleFotoChange}
@@ -146,14 +155,24 @@ export default function () {
                   />
                 </div>
               </div>
+            </div>
+          </div>
+          <div class="border-b border-gray-200 my-5"></div>
+          <div class="font-semibold mb-5">Autentikasi Akun</div>
+          <div class="flex lg:flex-row justify-between flex-col gap-3">
+            <div class="flex-1">
               <Input
+                disabled={isLoading()}
                 label="Username"
                 placeholder="Masukkan Username"
                 required
                 value={req.username}
                 onChange={(e) => setReq("username", e.currentTarget.value)}
               />
+            </div>
+            <div class="flex-1">
               <Input
+                disabled={isLoading()}
                 label="Password"
                 type="password"
                 placeholder="Masukkan Password"
