@@ -26,6 +26,7 @@ export default function () {
       setReq(data.data);
       setReq("foto", "");
       setReq("password", "");
+      setAuth.login(data.data, false);
     } catch (e: any) {
       notif.show(e.response.data.message, false);
     }
@@ -34,8 +35,9 @@ export default function () {
   const update = async (e: SubmitEvent) => {
     e.preventDefault();
     try {
-      await http.put("/user/" + auth().id);
+      await http.put("/user/" + auth().id, req);
       get();
+      notif.show("data berhasil disimpan");
     } catch (e: any) {
       notif.show(e.response.data.message, false);
     }

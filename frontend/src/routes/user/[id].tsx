@@ -1,4 +1,4 @@
-import { For, Show, createSignal, onMount } from "solid-js";
+import { For, Show, createEffect, createSignal, onMount } from "solid-js";
 import { createStore } from "solid-js/store";
 import { useParams } from "solid-start";
 import {
@@ -53,6 +53,10 @@ export default function (props: Props) {
       notif.show(e.response.data.message, false);
     }
   };
+
+  createEffect(() => {
+    get();
+  });
 
   onMount(async () => {
     await get();
@@ -128,7 +132,7 @@ export default function (props: Props) {
         <ModalSave
           show={modalEdit()}
           onClose={() => setModalEdit(false)}
-          callback={get}
+          callback={() => {}}
           isEdit={true}
           req={[req, setReq]}
         />

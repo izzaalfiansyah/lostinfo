@@ -138,14 +138,14 @@ export default function (props: Props) {
                   )}
                 </For>
                 <li class="mb-1 relative px-8">
-                  <a
-                    href="#"
+                  <button
+                    type="button"
                     class="p-2 px-3 block rounded flex items-center space-x-3"
                     onClick={() => setModalLogout(true)}
                   >
                     <LogoutIcon class="w-5 h-5 mr-3" />
                     Logout
-                  </a>
+                  </button>
                 </li>
               </ul>
             </div>

@@ -20,7 +20,7 @@ interface Props extends JSX.HTMLAttributes<HTMLDivElement> {
 type ValueUse = [
   Accessor<User>,
   {
-    login: (val: User) => void;
+    login: (val: User, loading?: boolean) => void;
     logout: () => void;
   }
 ];
@@ -34,12 +34,16 @@ export default function AuthProvider(props: Props) {
   const value = [
     user,
     {
-      login: (val: User) => {
+      login: (val: User, loading: boolean = true) => {
+        setIsLoading(loading);
         setUser(val);
         localStorage.setItem("xuser", JSON.stringify(val));
       },
       logout: () => {
-        setUser(null);
+        setIsLoading(true);
+        setUser({
+          id: undefined,
+        });
         localStorage.removeItem("xuser");
       },
     },
@@ -51,11 +55,11 @@ export default function AuthProvider(props: Props) {
   };
 
   createEffect(() => {
-    user();
-    setIsLoading(true);
-    setTimeout(() => {
-      setIsLoading(false);
-    }, 800);
+    if (isLoading() == true) {
+      setTimeout(() => {
+        setIsLoading(false);
+      }, 800);
+    }
   });
 
   onMount(async () => {
