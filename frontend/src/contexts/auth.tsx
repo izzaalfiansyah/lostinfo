@@ -9,6 +9,7 @@ import {
   onMount,
   useContext,
 } from "solid-js";
+import { useLocation, useNavigate } from "solid-start";
 import Loading from "~/components/loading";
 import User from "~/interfaces/user";
 
@@ -31,6 +32,9 @@ const AuthContext = createContext();
 export default function AuthProvider(props: Props) {
   const [user, setUser] = props.value;
   const [isLoading, setIsLoading] = createSignal<boolean>(true);
+
+  const loc = useLocation();
+  const nav = useNavigate();
 
   const value: ValProps = [
     user,
@@ -60,6 +64,26 @@ export default function AuthProvider(props: Props) {
       setTimeout(() => {
         setIsLoading(false);
       }, 800);
+    }
+  });
+
+  createEffect(() => {
+    const id = user()?.id;
+    const role = user()?.role;
+    const path = loc.pathname;
+
+    if (!isLoading()) {
+      if (id) {
+        if (role == "1" && !path.includes("/admin")) {
+          nav("/admin", { replace: true });
+        }
+      }
+
+      if (!id) {
+        if (path.includes("/admin")) {
+          nav("/login", { replace: true });
+        }
+      }
     }
   });
 

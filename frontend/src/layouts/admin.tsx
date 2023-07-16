@@ -1,4 +1,4 @@
-import { For, JSX, createSignal, onMount } from "solid-js";
+import { For, JSX, createSignal } from "solid-js";
 import { A, useLocation, useNavigate } from "solid-start";
 import {
   AccountIcon,
@@ -8,7 +8,6 @@ import {
   LogoutIcon,
   LoveIcon,
   MenuIcon,
-  StackIcon,
   UsersIcon,
 } from "~/components/icons";
 import Modal from "~/components/modal";
@@ -25,32 +24,32 @@ export default function (props: Props) {
     {
       icon: HomeIcon,
       title: "Dashboard",
-      path: "/",
+      path: "/admin",
     },
     {
       icon: UsersIcon,
       title: "Data User",
-      path: "/user",
+      path: "/admin/user",
     },
     {
       icon: ArchiveXIcon,
       title: "Data Barang Hilang",
-      path: "/barang-hilang",
+      path: "/admin/barang-hilang",
     },
     {
       icon: ArchiveIcon,
       title: "Data Barang Temu",
-      path: "/barang-temu",
+      path: "/admin/barang-temu",
     },
     // {
     //   icon: StackIcon,
     //   title: "Testimoni",
-    //   path: "/testimoni",
+    //   path: "/admin/testimoni",
     // },
     {
       icon: AccountIcon,
       title: "Akun",
-      path: "/akun",
+      path: "/admin/akun",
     },
   ];
 
@@ -66,8 +65,8 @@ export default function (props: Props) {
   };
 
   const checkActive = (path: string) => {
-    if (path == "/") {
-      if (path == "/" && loc.pathname == "/") {
+    if (path == "/admin") {
+      if (loc.pathname == "/admin") {
         return true;
       }
     } else {
@@ -80,12 +79,6 @@ export default function (props: Props) {
     nav("/login");
     e.preventDefault();
   };
-
-  onMount(() => {
-    if (!auth()) {
-      nav("/login");
-    }
-  });
 
   return (
     <>
@@ -174,7 +167,7 @@ export default function (props: Props) {
             <div class="flex-1 flex justify-between items-center">
               <div class="lg:flex-1"></div>
               <A
-                href="/akun"
+                href="/admin/akun"
                 class="block grow items-center flex justify-end space-x-4 lg:border-l-2"
               >
                 <div class="lg:block hidden">Hello, {auth()?.username}</div>

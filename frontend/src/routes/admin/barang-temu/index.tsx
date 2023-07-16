@@ -76,7 +76,7 @@ export default function (props: Props) {
           subtitle="Menjelajahi dan menganalisis data barang temu"
           action={
             <A
-              href="/barang-temu/create"
+              href="/admin/barang-temu/create"
               class="px-5 p-2 text-white bg-purple-600 rounded shadow-sm mt-4 lg:mt-0 text-center"
             >
               Tambah
@@ -136,7 +136,7 @@ export default function (props: Props) {
                   </div>
                   <div class="mt-3 flex items-center">
                     <A
-                      href={"/barang-temu/" + item.id}
+                      href={"/admin/barang-temu/" + item.id}
                       class="text-sm text-purple-500 border inline-block border-purple-500 hover:text-white hover:bg-purple-500 transition rounded-full px-3 p-1"
                     >
                       <EditIcon class="w-4 h-4" />

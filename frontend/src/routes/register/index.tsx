@@ -207,10 +207,10 @@ export default function () {
               <li>
                 Pengguna wajib bertanggungjawab atas barang temuan dengan
                 bersungguh-sungguh. Pengguna memahami bahwa pertanggungjawaban
-                atas barang temuan di atur sisi hukum pidana, tindakan mengambil
-                barang yang ditemukan di tengah jalan untuk dimiliki, bisa
-                dijerat Pasal 372 KUHP (tindak pidana penggelapan) atau Pasal
-                362 KUHP (tindak pidana pencurian).
+                atas barang temuan telah di atur di sisi hukum, tindakan
+                mengambil barang yang ditemukan di tengah jalan untuk dimiliki,
+                bisa dijerat Pasal 372 KUHP (tindak pidana penggelapan) atau
+                Pasal 362 KUHP (tindak pidana pencurian).
               </li>
             </ul>
           </div>

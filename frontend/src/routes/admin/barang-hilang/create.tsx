@@ -27,7 +27,7 @@ export default function () {
     try {
       await http.post("/barang/hilang", req);
       notif.show("data berhasil disimpan");
-      nav("/barang-hilang");
+      nav("/admin/barang-hilang");
     } catch (e: any) {
       notif.show(e.response.data.message, false);
     }

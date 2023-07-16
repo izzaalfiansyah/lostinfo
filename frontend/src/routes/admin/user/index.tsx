@@ -126,7 +126,7 @@ export default function () {
                 ])
               : items().map((item) => [
                   <>
-                    <A href={"/user/" + item.id} class="text-purple-600">
+                    <A href={"/admin/user/" + item.id} class="text-purple-600">
                       {item.nama}
                     </A>
                   </>,
