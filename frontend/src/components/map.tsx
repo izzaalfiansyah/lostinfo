@@ -56,7 +56,7 @@ export default function (props: Props) {
   };
 
   const handleLocationFound = (e: any) => {
-    makeMarker(e.latlng);
+    map().setView(e.latlng).setZoom(17);
   };
 
   const handleLocationError = (e: any) => {

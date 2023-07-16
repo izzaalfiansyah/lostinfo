@@ -23,8 +23,7 @@ export default function () {
   const notif = useNotif();
   const nav = useNavigate();
 
-  const save = async (e: SubmitEvent) => {
-    e.preventDefault();
+  const save = async () => {
     try {
       await http.post("/barang/temu", req);
       notif.show("data berhasil disimpan");
@@ -47,12 +46,13 @@ export default function () {
 
 interface SaveProps {
   item: [BarangTemu, SetStoreFunction<BarangTemu>];
-  onSubmit: (e: SubmitEvent) => void;
+  onSubmit: () => Promise<void>;
   onMount?: () => void;
 }
 
 export function Save(props: SaveProps) {
   const [users, setUsers] = createSignal<User[]>([]);
+  const [isLoading, setIsLoading] = createSignal(false);
   const [req, setReq] = props.item;
 
   const notif = useNotif();
@@ -60,6 +60,13 @@ export function Save(props: SaveProps) {
   const getUser = async () => {
     const { data } = await http.get("/user");
     setUsers(data.data);
+  };
+
+  const handleSubmit = async (e: SubmitEvent) => {
+    e.preventDefault();
+    setIsLoading(true);
+    await props.onSubmit();
+    setIsLoading(false);
   };
 
   const handleFotoChange = async (e: any) => {
@@ -70,6 +77,7 @@ export function Save(props: SaveProps) {
   };
 
   const handleCariTempat = async () => {
+    setIsLoading(true);
     try {
       const data = await getLatLngByAddress(req.tempat_temu as string);
       setReq("maps", {
@@ -79,31 +87,36 @@ export function Save(props: SaveProps) {
     } catch (e) {
       notif.show("tempat tidak ditemukan", false);
     }
+    setIsLoading(false);
   };
 
   onMount(async () => {
+    setIsLoading(true);
     await getUser();
 
     if (props.onMount) {
       props.onMount();
     }
+    setIsLoading(false);
   });
 
   return (
     <Card>
-      <form onSubmit={props.onSubmit}>
+      <form onSubmit={handleSubmit}>
         <div class="grid lg:grid-cols-2 grid-cols-1 gap-5">
           <div>
             <Input
               label="Nama"
               required
               placeholder="Masukkan Nama"
+              disabled={isLoading()}
               value={req.nama}
               onChange={(e) => setReq("nama", e.currentTarget.value)}
             />
             <Textarea
               label="Deskripsi"
               placeholder="Masukkan Deskripsi"
+              disabled={isLoading()}
               value={req.deskripsi}
               rows={3}
               onChange={(e) => setReq("deskripsi", e.currentTarget.value)}
@@ -112,6 +125,7 @@ export function Save(props: SaveProps) {
               label="Tempat Hilang"
               required
               placeholder="Masukkan Tempat Hilang"
+              disabled={isLoading()}
               value={req.tempat_temu}
               onChange={(e) => setReq("tempat_temu", e.currentTarget.value)}
               append={
@@ -145,9 +159,11 @@ export function Save(props: SaveProps) {
           <div>
             <Select
               label="Penemu"
+              disabled={isLoading()}
               value={req.user_id}
               onChange={(e) => setReq("user_id", e.currentTarget.value)}
             >
+              disabled={isLoading()}
               <option value="">Pilih Penemu</option>
               <For each={users()}>
                 {(item) => <option value={item.id as any}>{item.nama}</option>}
@@ -167,6 +183,7 @@ export function Save(props: SaveProps) {
             <Show when={req.id}>
               <Select
                 label="Dikembalikan"
+                disabled={isLoading()}
                 value={req.dikembalikan}
                 onChange={(e) => setReq("dikembalikan", e.currentTarget.value)}
               >

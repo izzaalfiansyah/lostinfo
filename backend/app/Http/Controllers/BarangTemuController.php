@@ -25,8 +25,7 @@ class BarangTemuController extends Controller
             $builder = $builder->where(function ($query) use ($search) {
                 return $query->where('nama', 'like', "%$search%")
                     ->orWhere('deskripsi', 'like', "%$search%")
-                    ->orWhere('tempat_hilang', 'like', "%$search%")
-                    ->orWhere('hadiah', 'like', "%$search%");
+                    ->orWhere('tempat_temu', 'like', "%$search%");
             });
         }
 
