@@ -21,7 +21,7 @@ return new class extends Migration
             $table->string('telepon');
             $table->string('foto')->nullable();
             $table->enum('role', [1, 2])->comment('1: admin, 2: user');
-            $table->enum('status', [1, 0])->comment('1: aktif, 0: nonaktif')->default('0');
+            $table->enum('status', [1, 0, 9])->comment('1: aktif, 0: nonaktif, 9: banned')->default('0');
             $table->rememberToken();
             $table->timestamps();
         });

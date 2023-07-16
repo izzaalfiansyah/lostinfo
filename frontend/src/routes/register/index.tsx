@@ -1,14 +1,16 @@
 import { createSignal } from "solid-js";
 import { createStore } from "solid-js/store";
-import { A } from "solid-start";
+import { A, useNavigate } from "solid-start";
 import Card from "~/components/card";
 import Checkbox from "~/components/checkbox";
 import FileInput from "~/components/file-input";
 import Input from "~/components/input";
 import Modal from "~/components/modal";
 import Textarea from "~/components/textarea";
+import { useNotif } from "~/contexts/notif";
 import User from "~/interfaces/user";
 import fileReader from "~/libs/file-reader";
+import http from "~/libs/http";
 
 interface ReqInterface extends User {
   konfirmasi_password?: string;
@@ -18,6 +20,10 @@ export default function () {
   const [req, setReq] = createStore<ReqInterface>({});
   const [showPassword, setShowPassword] = createSignal(false);
   const [showPrivacy, setShowPrivacy] = createSignal(false);
+  const [isLoading, setIsLoading] = createSignal(false);
+
+  const notif = useNotif();
+  const nav = useNavigate();
 
   const handleKTPChange = async (e: any) => {
     const file = e.target.files[0];
@@ -26,10 +32,33 @@ export default function () {
     setReq("ktp", value);
   };
 
+  const store = async (e: SubmitEvent) => {
+    e.preventDefault();
+    setIsLoading(true);
+    try {
+      if (req.password != req.konfirmasi_password) {
+        notif.show("konfirmasi password salah", false);
+        return null;
+      }
+
+      setReq("role", "2");
+      setReq("status", "0");
+
+      await http.post("/user", req);
+      notif.show(
+        "Akun berhasil terdaftar. Periksa email anda untuk verifikasi akun!"
+      );
+      nav("/login");
+    } catch (e: any) {
+      notif.show(e.response.data.message, false);
+    }
+    setIsLoading(false);
+  };
+
   return (
     <div class="max-w-full w-[800px]">
       <Card class="py-10">
-        <form>
+        <form onSubmit={store}>
           <div class="mb-5">
             <div class="font-semibold text-lg">Register</div>
           </div>
@@ -40,6 +69,7 @@ export default function () {
                 placeholder="Masukkan Nama"
                 required
                 value={req.nama}
+                disabled={isLoading()}
                 maxLength={255}
                 onChange={(e) => setReq("nama", e.currentTarget.value)}
               />
@@ -49,6 +79,7 @@ export default function () {
                 placeholder="Masukkan Alamat"
                 required
                 value={req.alamat}
+                disabled={isLoading()}
                 onChange={(e) => setReq("alamat", e.currentTarget.value)}
               />
               <Input
@@ -57,6 +88,7 @@ export default function () {
                 placeholder="Masukkan Email"
                 required
                 value={req.email}
+                disabled={isLoading()}
                 maxLength={255}
                 onChange={(e) => setReq("email", e.currentTarget.value)}
               />
@@ -66,6 +98,7 @@ export default function () {
                 placeholder="Masukkan Telepon"
                 required
                 value={req.telepon}
+                disabled={isLoading()}
                 maxLength={255}
                 onChange={(e) => setReq("telepon", e.currentTarget.value)}
               />
@@ -75,7 +108,7 @@ export default function () {
                 label="FotoKTP"
                 title="Pilih Foto KTP"
                 required
-                value={req.ktp}
+                disabled={isLoading()}
                 maxLength={255}
                 onChange={handleKTPChange}
               />
@@ -85,6 +118,7 @@ export default function () {
                 placeholder="Masukkan Username"
                 required
                 value={req.username}
+                disabled={isLoading()}
                 maxLength={255}
                 onChange={(e) => setReq("username", e.currentTarget.value)}
               />
@@ -94,7 +128,9 @@ export default function () {
                 placeholder="*******"
                 required
                 value={req.password}
+                disabled={isLoading()}
                 maxLength={255}
+                min={8}
                 onChange={(e) => setReq("password", e.currentTarget.value)}
               />
               <Input
@@ -103,7 +139,9 @@ export default function () {
                 placeholder="*******"
                 required
                 value={req.konfirmasi_password}
+                disabled={isLoading()}
                 maxLength={255}
+                min={8}
                 onChange={(e) =>
                   setReq("konfirmasi_password", e.currentTarget.value)
                 }

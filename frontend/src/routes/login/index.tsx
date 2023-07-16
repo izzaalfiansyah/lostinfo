@@ -1,4 +1,4 @@
-import { onMount } from "solid-js";
+import { createSignal, onMount } from "solid-js";
 import { createStore } from "solid-js/store";
 import { A, useNavigate } from "solid-start";
 import Card from "~/components/card";
@@ -13,6 +13,7 @@ export default function () {
     username: "",
     password: "",
   });
+  const [isLoading, setIsLoading] = createSignal(false);
 
   const nav = useNavigate();
   const [auth, authFn] = useAuth();
@@ -25,17 +26,28 @@ export default function () {
 
   const login = async (e: SubmitEvent) => {
     e.preventDefault();
-
+    setIsLoading(true);
     try {
-      const res = await http.post("/login", req);
-      const item = res.data.data as User;
+      const { data } = await http.post("/login", req);
+      const item = data.data as User;
+
+      if (item.status == "1") {
+        notif.show("berhasil login");
+      } else if (item.status == "9") {
+        notif.show(
+          "Upss.. akun anda ter-banned. Silahkan hubungi admin",
+          false
+        );
+        return null;
+      }
+
       nav("/");
       nullable();
-      notif.show("berhasil login");
       authFn.login(item);
     } catch (e: any) {
       notif.show(e.response.data.message, false);
     }
+    setIsLoading(false);
   };
 
   return (

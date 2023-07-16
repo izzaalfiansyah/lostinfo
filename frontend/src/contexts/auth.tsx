@@ -74,8 +74,12 @@ export default function AuthProvider(props: Props) {
 
     if (!isLoading()) {
       if (id) {
-        if (role == "1" && !path.includes("/admin")) {
+        if (user()?.status == "0") {
+          nav("/verifikasi", { replace: true });
+        } else if (role == "1" && !path.includes("/admin")) {
           nav("/admin", { replace: true });
+        } else if (role == "2" && !path.includes("/user")) {
+          nav("/user", { replace: true });
         }
       }
 

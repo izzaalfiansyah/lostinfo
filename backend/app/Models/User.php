@@ -30,6 +30,7 @@ class User extends Authenticatable
         'ktp',
         'role',
         'status',
+        'remember_token',
     ];
 
     /**

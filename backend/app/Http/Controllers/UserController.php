@@ -4,10 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\UserRequest;
 use App\Http\Resources\UserResource;
+use App\Mail\VerifyUser;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 
 class UserController extends Controller
@@ -50,12 +53,14 @@ class UserController extends Controller
 
         $data['password'] = Hash::make($req->password);
         $data['ktp'] = $this->uploadBase64($req->ktp, 'user-ktp', 'png');
+        $data['remember_token'] = date('YmdHis');
 
         if ($req->foto) {
             $data['foto'] = $this->uploadBase64($req->foto, 'user', 'png');
         }
 
         $item = User::create($data);
+        $this->sendVerifikasi($item->id);
 
         return new UserResource($item);
     }
@@ -135,5 +140,29 @@ class UserController extends Controller
                 'message' => 'username tidak ditemukan',
             ], 400);
         }
+    }
+
+    public function verifikasi(Request $req, $id)
+    {
+        $token = $req->token;
+        $item = User::find($id);
+
+        echo '<script>';
+        if ($token == $item->remember_token) {
+            $item->update(['status' => '1']);
+            echo "alert('Akun anda berhasil diverifikasi.');";
+        } else {
+            echo "alert('Terjadi kesalahan! Akun tidak valid.');";
+        }
+        echo 'window.close();';
+        echo '</script>';
+    }
+
+    public function sendVerifikasi($id)
+    {
+        $item = User::find($id);
+        Mail::to($item)->send(new VerifyUser($item));
+
+        return new UserResource($item);
     }
 }
