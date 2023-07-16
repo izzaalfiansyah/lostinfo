@@ -139,6 +139,7 @@ export default function () {
                       onClick={() => {
                         setReq(item);
                         setReq("foto", "");
+                        setReq("ktp", "");
                         setReq("password", "");
                         setIsEdit(true);
                         setModal("save", true);

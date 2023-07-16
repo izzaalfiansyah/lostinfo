@@ -52,6 +52,7 @@ export default function (props: Props) {
       setReq(data.data);
       setReq("password", "");
       setReq("foto", "");
+      setReq("ktp", "");
     } catch (e: any) {
       notif.show(e.response.data.message, false);
     }
@@ -109,19 +110,27 @@ export default function (props: Props) {
               <div class="text-center lg:text-left">
                 <div class="text-2xl font-semibold">{req.nama}</div>
                 <div>@{req.username}</div>
-                <Show when={!props.id}>
-                  <div class="mt-2 flex lg:justify-start justify-center">
+                <div class="mt-2 flex lg:justify-start justify-center">
+                  <Show when={!props.id}>
                     <button
                       type="button"
-                      class="text-sm text-purple-500 border block border-purple-500 hover:text-white hover:bg-purple-500 transition rounded-full px-3 p-1 flex items-center"
+                      class="text-sm text-purple-500 border block border-purple-500 hover:text-white hover:bg-purple-500 transition rounded-full px-3 p-1 flex items-center mr-2"
                       onClick={() => {
                         setModalEdit(true);
                       }}
                     >
                       <EditIcon class="w-4 h-4 mr-2" /> Edit
                     </button>
-                  </div>
-                </Show>
+                  </Show>
+
+                  <a
+                    href={req.ktp_url}
+                    class="text-sm text-red-500 border block border-red-500 hover:text-white hover:bg-red-500 transition rounded-full px-3 p-1 flex items-center"
+                    target="_blank"
+                  >
+                    <div class="h-4" /> Lihat KTP
+                  </a>
+                </div>
               </div>
               <div class="mt-5">
                 <table>

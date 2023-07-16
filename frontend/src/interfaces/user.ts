@@ -8,6 +8,8 @@ interface User {
   telepon?: string | number;
   foto?: string;
   foto_url?: string;
+  ktp?: string;
+  ktp_url?: string;
   role?: string;
   role_detail?: string;
   status?: string;

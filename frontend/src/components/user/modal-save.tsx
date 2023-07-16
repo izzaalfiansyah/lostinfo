@@ -48,6 +48,12 @@ export default function (props: Props) {
     setReq("foto_url", value);
   };
 
+  const handleKTPChange = async (e: any) => {
+    const file = e.target.files[0];
+    const value = await fileReader(file);
+    setReq("ktp", value);
+  };
+
   return (
     <Modal
       show={props.show}
@@ -116,7 +122,7 @@ export default function (props: Props) {
               title="Pilih Foto"
               required={!props.isEdit}
               onChange={handleFotoChange}
-              accept="iamge/*"
+              accept="image/*"
               hint={
                 props.isEdit ? "Kosongkan jika tidak ingin mengganti foto" : ""
               }
@@ -130,6 +136,18 @@ export default function (props: Props) {
                 />
               </div>
             </div>
+            <FileInput
+              label="Foto KTP"
+              title="Pilih Foto KTP"
+              required={!props.isEdit}
+              onChange={handleKTPChange}
+              accept="image/*"
+              hint={
+                props.isEdit
+                  ? "Kosongkan jika tidak ingin mengganti foto KTP"
+                  : ""
+              }
+            />
             <Input
               label="Username"
               placeholder="Masukkan Username"
