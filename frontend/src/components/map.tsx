@@ -26,7 +26,7 @@ export default function (props: Props) {
     );
 
     L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
-      maxZoom: 19,
+      maxZoom: 20,
     }).addTo(map());
 
     if (props.value) {
@@ -51,12 +51,12 @@ export default function (props: Props) {
 
       const latlng = L.latLng(e.lat, e.lng);
 
-      map().setView(latlng).setZoom(15);
+      map().setView(latlng).setZoom(17);
     }
   };
 
   const handleLocationFound = (e: any) => {
-    map().setView(e.latlng);
+    makeMarker(e.latlng);
   };
 
   const handleLocationError = (e: any) => {

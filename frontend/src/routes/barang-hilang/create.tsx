@@ -46,7 +46,7 @@ export default function () {
 
 interface SaveProps {
   item: [BarangHilang, SetStoreFunction<BarangHilang>];
-  onSubmit: () => void;
+  onSubmit: () => Promise<void>;
   onMount?: () => void;
 }
 
@@ -65,7 +65,7 @@ export function Save(props: SaveProps) {
   const handleSubmit = async (e: SubmitEvent) => {
     e.preventDefault();
     setIsLoading(true);
-    props.onSubmit();
+    await props.onSubmit();
     setIsLoading(false);
   };
 

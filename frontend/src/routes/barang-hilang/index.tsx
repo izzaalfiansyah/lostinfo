@@ -37,6 +37,7 @@ export default function (props: Props) {
   const notif = useNotif();
 
   const get = async () => {
+    setIsLoading(true);
     try {
       const { data } = await http.get("/barang/hilang", {
         params: filter,
@@ -49,6 +50,7 @@ export default function (props: Props) {
     } catch (e: any) {
       notif.show(e.response.data.message, false);
     }
+    setIsLoading(false);
   };
 
   createEffect((oldVal) => {
@@ -63,9 +65,7 @@ export default function (props: Props) {
   });
 
   onMount(async () => {
-    setIsLoading(true);
     await get();
-    setIsLoading(false);
   });
 
   return (
