@@ -8,6 +8,8 @@ import { useAuth } from "~/contexts/auth";
 import { useNotif } from "~/contexts/notif";
 import http from "~/libs/http";
 
+import "./register";
+
 export default function () {
   const [total, setTotal] = createStore({
     user: 0,

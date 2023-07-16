@@ -1,6 +1,7 @@
 import { onMount } from "solid-js";
 import { createStore } from "solid-js/store";
 import { A, useNavigate } from "solid-start";
+import Card from "~/components/card";
 import Input from "~/components/input";
 import { useAuth } from "~/contexts/auth";
 import { useNotif } from "~/contexts/notif";
@@ -38,39 +39,43 @@ export default function () {
   };
 
   return (
-    <form onSubmit={login} class="bg-white p-5 rounded-lg shadow-sm py-10">
-      <div class="mb-5">
-        <div class="font-semibold text-lg">Login</div>
-      </div>
-      <Input
-        label="Username"
-        placeholder="Masukkan Username"
-        required
-        value={req.username}
-        onChange={(e) => setReq("username", e.currentTarget.value)}
-      />
-      <Input
-        label="Password"
-        type="password"
-        placeholder="********"
-        required
-        value={req.password}
-        onChange={(e) => setReq("password", e.currentTarget.value)}
-      />
-      <div class="text-center text-sm mt-3">
-        Belum punya akun? register di{" "}
-        <A href="/register" class="text-purple-500">
-          sini
-        </A>
-      </div>
-      <div class="mt-8">
-        <button
-          type="submit"
-          class="bg-purple-500 text-white w-full p-2 rounded shadow-sm"
-        >
-          Masuk
-        </button>
-      </div>
-    </form>
+    <div class="max-w-full w-[500px]">
+      <Card class="py-10">
+        <form onSubmit={login}>
+          <div class="mb-5">
+            <div class="font-semibold text-lg">Login</div>
+          </div>
+          <Input
+            label="Username"
+            placeholder="Masukkan Username"
+            required
+            value={req.username}
+            onChange={(e) => setReq("username", e.currentTarget.value)}
+          />
+          <Input
+            label="Password"
+            type="password"
+            placeholder="********"
+            required
+            value={req.password}
+            onChange={(e) => setReq("password", e.currentTarget.value)}
+          />
+          <div class="text-center text-sm mt-3">
+            Belum punya akun? register di{" "}
+            <A href="/register" class="text-purple-500">
+              sini
+            </A>
+          </div>
+          <div class="mt-8">
+            <button
+              type="submit"
+              class="bg-purple-500 text-white w-full p-2 rounded shadow-sm"
+            >
+              Masuk
+            </button>
+          </div>
+        </form>
+      </Card>
+    </div>
   );
 }
