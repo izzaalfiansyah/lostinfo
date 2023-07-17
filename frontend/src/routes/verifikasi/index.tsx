@@ -56,7 +56,7 @@ export default function () {
             onClick={sendVerification}
             disabled={isLoading()}
             type="submit"
-            class="bg-purple-500 text-white w-full p-2 rounded shadow-sm disabled:bg-purple-500"
+            class="bg-primary text-white w-full p-2 rounded shadow-sm disabled:bg-primary"
           >
             {isLoading() ? "Menunggu..." : "Kirim Ulang"}
           </button>

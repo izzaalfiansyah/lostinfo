@@ -90,7 +90,7 @@ export default function () {
         subtitle="Menjelajahi dan menganalisis data pengguna"
         action={
           <button
-            class="px-5 p-2 text-white bg-purple-600 rounded shadow-sm mt-4 lg:mt-0"
+            class="px-5 p-2 text-white bg-primary rounded shadow-sm mt-4 lg:mt-0"
             onClick={() => {
               nullable();
               setIsEdit(false);
@@ -126,7 +126,7 @@ export default function () {
                 ])
               : items().map((item) => [
                   <>
-                    <A href={"/admin/user/" + item.id} class="text-purple-600">
+                    <A href={"/admin/user/" + item.id} class="text-primary">
                       {item.nama}
                     </A>
                   </>,
@@ -145,7 +145,7 @@ export default function () {
                         setModal("save", true);
                       }}
                     >
-                      <EditIcon class="w-4 h-4 text-purple-600" />
+                      <EditIcon class="w-4 h-4 text-primary" />
                     </button>
                     <button
                       onClick={() => {

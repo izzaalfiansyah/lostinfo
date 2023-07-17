@@ -74,14 +74,14 @@ export default function () {
           />
           <div class="text-center text-sm mt-3">
             Belum punya akun? register di{" "}
-            <A href="/register" class="text-purple-500">
+            <A href="/register" class="text-primary">
               sini
             </A>
           </div>
           <div class="mt-8">
             <button
               type="submit"
-              class="bg-purple-500 text-white w-full p-2 rounded shadow-sm"
+              class="bg-primary text-white w-full p-2 rounded shadow-sm"
             >
               Masuk
             </button>

@@ -130,7 +130,7 @@ export function Save(props: SaveProps) {
               onChange={(e) => setReq("tempat_temu", e.currentTarget.value)}
               append={
                 <button
-                  class="p-3 bg-purple-500 text-white"
+                  class="p-3 bg-primary text-white"
                   type="button"
                   onClick={handleCariTempat}
                 >
@@ -202,7 +202,7 @@ export function Save(props: SaveProps) {
         <div class="mt-4">
           <button
             type="submit"
-            class="px-4 p-2 bg-purple-500 rounded shadow-sm text-white mr-2"
+            class="px-4 p-2 bg-primary rounded shadow-sm text-white mr-2"
           >
             Simpan Data
           </button>

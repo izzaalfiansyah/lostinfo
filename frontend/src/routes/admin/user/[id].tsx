@@ -116,7 +116,7 @@ export default function (props: Props) {
                   <Show when={!props.id}>
                     <button
                       type="button"
-                      class="text-sm text-purple-500 border block border-purple-500 hover:text-white hover:bg-purple-500 transition rounded-full px-3 p-1 flex items-center mr-2"
+                      class="text-sm text-primary border block border-primary hover:text-white hover:bg-primary transition rounded-full px-3 p-1 flex items-center mr-2"
                       onClick={() => {
                         setModalEdit(true);
                       }}
@@ -182,7 +182,7 @@ export default function (props: Props) {
           <For each={tabs}>
             {(item, index) => (
               <button
-                class="bg-purple-500 text-white rounded px-4 p-2 disabled:bg-purple-400 hover:bg-purple-400 transition"
+                class="bg-primary text-white rounded px-4 p-2 disabled:bg-opacity-25 hover:bg-opacity-50 transition"
                 disabled={selectedTab() == index()}
                 onClick={() => setSelectedTab(index())}
               >

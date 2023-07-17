@@ -77,7 +77,7 @@ export default function (props: Props) {
           action={
             <A
               href="/admin/barang-hilang/create"
-              class="px-5 p-2 text-white bg-purple-600 rounded shadow-sm mt-4 lg:mt-0 text-center"
+              class="px-5 p-2 text-white bg-primary rounded shadow-sm mt-4 lg:mt-0 text-center"
             >
               Tambah
             </A>
@@ -137,7 +137,7 @@ export default function (props: Props) {
                   <div class="mt-3 flex items-center">
                     <A
                       href={"/admin/barang-hilang/" + item.id}
-                      class="text-sm text-purple-500 border inline-block border-purple-500 hover:text-white hover:bg-purple-500 transition rounded-full px-3 p-1"
+                      class="text-sm text-primary border inline-block border-primary hover:text-white hover:bg-primary transition rounded-full px-3 p-1"
                     >
                       <EditIcon class="w-4 h-4" />
                     </A>

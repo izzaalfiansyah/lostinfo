@@ -42,7 +42,7 @@ export default function (props: JSX.HTMLAttributes<HTMLDivElement>) {
             {(item) => (
               <A
                 href={item.path}
-                class="block p-4 rounded-full text-gray-700 hover:bg-gray-50 transition hover:text-purple-600"
+                class="block p-4 rounded-full text-gray-700 hover:bg-gray-50 transition hover:text-primary"
                 classList={{ "text-primary": checkActive(item.path) }}
               >
                 {item.icon}

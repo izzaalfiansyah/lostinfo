@@ -159,7 +159,7 @@ export default function () {
                   Saya mengerti dan setuju dengan syarat, ketentuan dan privasi.
                   Lihat{" "}
                   <button
-                    class="text-purple-500"
+                    class="text-primary"
                     type="button"
                     onClick={(e) => setShowPrivacy(true)}
                   >
@@ -172,7 +172,7 @@ export default function () {
             <div class="mb-2"></div>
             <div class="text-sm">
               Sudah punya akun? login di{" "}
-              <A href="/login" class="text-purple-500">
+              <A href="/login" class="text-primary">
                 sini
               </A>
             </div>
@@ -180,7 +180,7 @@ export default function () {
           <div class="mt-8">
             <button
               type="submit"
-              class="bg-purple-500 text-white w-full p-2 rounded shadow-sm"
+              class="bg-primary text-white w-full p-2 rounded shadow-sm"
             >
               Daftar
             </button>
