@@ -84,7 +84,7 @@ export default function AuthProvider(props: Props) {
       }
 
       if (!id) {
-        if (path.includes("/admin")) {
+        if (path.includes("/admin") || path.includes("/user")) {
           nav("/login", { replace: true });
         }
       }

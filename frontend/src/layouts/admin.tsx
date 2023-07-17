@@ -98,7 +98,7 @@ export default function (props: Props) {
         >
           <div>
             <div class="text-4xl font-extrabold">
-              LostInfo<span class="text-purple-500">.</span>
+              LostInfo<span class="text-primary">.</span>
             </div>
             <div class="text-sm text-gray-300">
               Platform Informasi Barang Hilang
@@ -112,9 +112,8 @@ export default function (props: Props) {
                         href={item.path}
                         class="p-2 px-3 block rounded flex items-center transition"
                         classList={{
-                          "text-purple-600 mb-1 bg-purple-200": checkActive(
-                            item.path
-                          ),
+                          "text-primary mb-1 bg-primary bg-opacity-25":
+                            checkActive(item.path),
                         }}
                         onClick={toggleSidebar}
                       >
@@ -122,7 +121,7 @@ export default function (props: Props) {
                         {item.title}
                       </A>
                       <div
-                        class="h-full w-1 bg-purple-500 rounded-r absolute top-0 left-0 bottom-0 transform origin-left transition"
+                        class="h-full w-1 bg-primary rounded-r absolute top-0 left-0 bottom-0 transform origin-left transition"
                         classList={{
                           "scale-100": checkActive(item.path),
                           "scale-0": !checkActive(item.path),
