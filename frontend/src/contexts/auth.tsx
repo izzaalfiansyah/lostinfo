@@ -12,6 +12,7 @@ import {
 import { useLocation, useNavigate } from "solid-start";
 import Loading from "~/components/loading";
 import User from "~/interfaces/user";
+import http from "~/libs/http";
 
 type Value = [Accessor<User>, Setter<User | null>];
 
@@ -42,21 +43,33 @@ export default function AuthProvider(props: Props) {
       login: (val: User, loading: boolean = true) => {
         setIsLoading(loading);
         setUser(val);
-        localStorage.setItem("xuser", JSON.stringify(val));
+        localStorage.setItem("xid", val.id as string);
       },
       logout: () => {
         setIsLoading(true);
         setUser({
           id: undefined,
         });
-        localStorage.removeItem("xuser");
+        localStorage.removeItem("xid");
       },
     },
   ];
 
   const getUser = async () => {
-    const user = JSON.parse(localStorage.getItem("xuser") as string);
-    setUser(user);
+    const id = localStorage.getItem("xid") as string;
+
+    setUser({
+      id: id,
+    });
+
+    try {
+      if (id) {
+        const { data } = await http.get("/user/" + id);
+        setUser(data.data);
+      }
+    } catch (e) {
+      setUser({ id: undefined });
+    }
   };
 
   createEffect(() => {
@@ -92,7 +105,9 @@ export default function AuthProvider(props: Props) {
   });
 
   onMount(async () => {
+    setIsLoading(true);
     await getUser();
+    setIsLoading(false);
   });
 
   return (

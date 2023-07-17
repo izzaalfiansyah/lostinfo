@@ -179,10 +179,11 @@ export default function () {
           </div>
           <div class="mt-8">
             <button
+              disabled={isLoading()}
               type="submit"
               class="bg-primary text-white w-full p-2 rounded shadow-sm"
             >
-              Daftar
+              {isLoading() ? "Menunggu..." : "Daftar"}
             </button>
           </div>
         </form>

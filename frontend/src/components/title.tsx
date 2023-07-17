@@ -14,7 +14,7 @@ export default function (props: Props) {
       <div class="py-3 mb-3 flex lg:items-center justify-between lg:flex-row flex-col">
         <div>
           <div class="text-xl font-bold">{props.title}</div>
-          <p class="text-sm">{props.subtitle}</p>
+          {/* <p class="text-sm">{props.subtitle}</p> */}
         </div>
 
         {props.action}

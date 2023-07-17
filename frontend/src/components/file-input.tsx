@@ -14,7 +14,7 @@ export default function (props: Props) {
     <div class="mb-2">
       <InputLabel {...others}>{local.label}</InputLabel>
       <div class="relative">
-        <div class="absolute top-0 left-0 w-10 h-10 pointer-events-none bg-purple-500 text-white flex items-center justify-center">
+        <div class="absolute top-0 left-0 w-10 h-10 pointer-events-none bg-primary text-white flex items-center justify-center">
           <LinkIcon class="w-5 h-5" />
         </div>
         <input

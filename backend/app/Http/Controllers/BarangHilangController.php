@@ -30,7 +30,13 @@ class BarangHilangController extends Controller
             });
         }
 
-        $items = $builder->orderBy('created_at', 'desc')->paginate($req->limit ?: 10);
+        if ($orderBy = $req->orderBy) {
+            $builder = $builder->orderBy($orderBy);
+        } else {
+            $builder = $builder->orderBy('created_at', 'desc');
+        }
+
+        $items = $builder->paginate($req->limit ?: 10);
 
         return BarangHilangResource::collection($items);
     }

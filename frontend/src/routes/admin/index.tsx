@@ -154,8 +154,8 @@ export default function () {
             </div>
           </Card>
           <Card class="flex items-center px-10">
-            <div class="rounded-full bg-purple-200 h-20 w-20 flex items-center justify-center mr-6">
-              <ArchiveIcon class="w-12 h-12 text-purple-500" />
+            <div class="rounded-full bg-primary bg-opacity-25 h-20 w-20 flex items-center justify-center mr-6">
+              <ArchiveIcon class="w-12 h-12 text-primary" />
             </div>
             <div>
               <div class="text-4xl font-semibold">
@@ -165,8 +165,8 @@ export default function () {
             </div>
           </Card>
           <Card class="flex items-center px-10">
-            <div class="rounded-full bg-purple-200 h-20 w-20 flex items-center justify-center mr-6">
-              <ArchiveXIcon class="w-12 h-12 text-purple-500" />
+            <div class="rounded-full bg-primary bg-opacity-25 h-20 w-20 flex items-center justify-center mr-6">
+              <ArchiveXIcon class="w-12 h-12 text-primary" />
             </div>
             <div>
               <div class="text-4xl font-semibold">

@@ -62,6 +62,7 @@ export default function () {
             placeholder="Masukkan Username"
             required
             value={req.username}
+            disabled={isLoading()}
             onChange={(e) => setReq("username", e.currentTarget.value)}
           />
           <Input
@@ -70,6 +71,7 @@ export default function () {
             placeholder="********"
             required
             value={req.password}
+            disabled={isLoading()}
             onChange={(e) => setReq("password", e.currentTarget.value)}
           />
           <div class="text-center text-sm mt-3">
@@ -81,9 +83,10 @@ export default function () {
           <div class="mt-8">
             <button
               type="submit"
+              disabled={isLoading()}
               class="bg-primary text-white w-full p-2 rounded shadow-sm"
             >
-              Masuk
+              {isLoading() ? "Menunggu..." : "Masuk"}
             </button>
           </div>
         </form>

@@ -174,7 +174,7 @@ export default function (props: Props) {
         <div class="mt-8 flex justify-end">
           <button
             type="submit"
-            class="px-4 py-2 bg-purple-600 rounded shadow-sm text-white"
+            class="px-4 py-2 bg-primary rounded shadow-sm text-white"
           >
             Simpan
           </button>

@@ -11,9 +11,9 @@ export default function () {
 export function LoadingItem() {
   return (
     <>
-      <div class="animate animate-pulse rounded-full p-2 bg-purple-600"></div>
-      <div class="animate animate-pulse rounded-full p-3 bg-purple-600"></div>
-      <div class="animate animate-pulse rounded-full p-2 bg-purple-600"></div>
+      <div class="animate animate-pulse rounded-full p-2 bg-primary"></div>
+      <div class="animate animate-pulse rounded-full p-3 bg-primary"></div>
+      <div class="animate animate-pulse rounded-full p-2 bg-primary"></div>
     </>
   );
 }
