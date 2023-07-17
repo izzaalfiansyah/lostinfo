@@ -10,6 +10,7 @@ interface Props {
     lng?: any;
   };
   onChange?: (latlng: LatLng) => void;
+  class?: string;
 }
 
 export default function (props: Props) {
@@ -56,6 +57,15 @@ export default function (props: Props) {
   };
 
   const handleLocationFound = (e: any) => {
+    L.circle(e.latlng, {
+      color: "red",
+      fillColor: "#f03",
+      fillOpacity: 0.5,
+      radius: 15,
+    })
+      .bindPopup("Kamu berada di sini")
+      .openPopup()
+      .addTo(map());
     map().setView(e.latlng).setZoom(17);
   };
 
@@ -85,7 +95,7 @@ export default function (props: Props) {
     render();
   });
 
-  return <div id="map" class="h-64 bg-gray-100 rounded"></div>;
+  return <div id="map" class={"h-64 bg-gray-100 rounded " + props.class}></div>;
 }
 
 export const getAddressByLatLng = async (latlng: any) => {

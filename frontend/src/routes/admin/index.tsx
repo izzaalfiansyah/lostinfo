@@ -73,8 +73,8 @@ export default function () {
               label: "Temuan",
               data: barang_temu,
               borderWidth: 2,
-              backgroundColor: "#a855f7",
-              borderColor: "#a855f7",
+              backgroundColor: "#4784f5",
+              borderColor: "#4784f5",
               tension: 0.4,
             },
             {

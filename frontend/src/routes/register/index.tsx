@@ -20,6 +20,7 @@ export default function () {
   const [req, setReq] = createStore<ReqInterface>({});
   const [showPassword, setShowPassword] = createSignal(false);
   const [showPrivacy, setShowPrivacy] = createSignal(false);
+  const [isAgree, setIsAgree] = createSignal(false);
   const [isLoading, setIsLoading] = createSignal(false);
 
   const notif = useNotif();
@@ -34,6 +35,12 @@ export default function () {
 
   const store = async (e: SubmitEvent) => {
     e.preventDefault();
+
+    if (!isAgree()) {
+      setShowPrivacy(true);
+      return null;
+    }
+
     setIsLoading(true);
     try {
       if (req.password != req.konfirmasi_password) {
@@ -154,6 +161,8 @@ export default function () {
           </div>
           <div class="text-center mt-3">
             <Checkbox
+              checked={isAgree()}
+              onChange={(e) => setIsAgree(e.currentTarget.checked)}
               label={
                 <>
                   Saya mengerti dan setuju dengan syarat, ketentuan dan privasi.
@@ -167,7 +176,6 @@ export default function () {
                   </button>
                 </>
               }
-              required
             />
             <div class="mb-2"></div>
             <div class="text-sm">
@@ -252,6 +260,19 @@ export default function () {
                 Pasal 362 KUHP (tindak pidana pencurian).
               </li>
             </ul>
+            <div class="text-sm mt-5">
+              <Checkbox
+                checked={isAgree()}
+                onChange={(e) => setIsAgree(e.currentTarget.checked)}
+                label={
+                  <>
+                    Saya mengerti dan setuju dengan syarat, ketentuan dan
+                    privasi.
+                  </>
+                }
+                required
+              />
+            </div>
           </div>
           <div class="mt-5 flex justify-end">
             <button
