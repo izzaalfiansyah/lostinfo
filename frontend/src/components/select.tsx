@@ -13,7 +13,7 @@ export default function (props: Props) {
     <div class="mb-2">
       <InputLabel {...others}>{local.label}</InputLabel>
       <select
-        class="w-full h-10 focus:ring-2 focus:ring-purple-300 border-gray-200 transition p-1.5 px-3 disabled:bg-gray-100"
+        class="w-full h-10 focus:ring-2 focus:border-primary focus:ring-primary focus:ring-opacity-10 border-gray-100 transition p-1.5 px-3 disabled:bg-gray-100"
         {...others}
       ></select>
       <Show when={local.hint}>

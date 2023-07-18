@@ -10,6 +10,7 @@ import {
   MenuIcon,
   UsersIcon,
 } from "~/components/icons";
+import Img from "~/components/img";
 import Modal from "~/components/modal";
 import { useAuth } from "~/contexts/auth";
 
@@ -214,10 +215,18 @@ export default function (props: Props) {
           }}
         >
           <div>
-            <div class="text-4xl font-extrabold">
-              LostInfo<span class="text-white">.</span>
+            <div class="inline-flex items-center gap-x-3 bg-white text-gray-800 rounded-full px-5 p-2 shadow">
+              <img
+                src="https://polije.ac.id/wp-content/uploads/elementor/thumbs/LOGO-POLITEKNIK-NEGERI-JEMBER-200x200-p501e8qsx93hro564g7wmlj5f1d6bn1idluqt46f2o.png"
+                class="w-12 h-12"
+              />
+              <div class="border-l pl-3 flex-1 truncate">
+                <div class="text-lg font-extrabold">LostInfo.</div>
+                <div class="text-xs truncate">
+                  Platform Informasi Barang Hilang
+                </div>
+              </div>
             </div>
-            <div class="text-sm">Platform Informasi Barang Hilang</div>
             <div class="mt-10 -mx-8">
               <ul>
                 <For each={menus}>
@@ -271,27 +280,27 @@ export default function (props: Props) {
         <div class="lg:ml-80 p-5">
           <div class="flex justify-between mb-5 items-center">
             <button
-              class="lg:hidden mr-4 bg-white p-2 rounded"
+              class="lg:hidden mr-4 bg-white p-2 rounded shadow-sm"
               onClick={toggleSidebar}
             >
               <MenuIcon class="w-6 h-6" />
             </button>
             <input
               type="text"
-              class="bg-white rounded p-2.5 px-4 outline-none lg:flex-1 w-2/3 border-gray-200 transition focus:ring-purple-300 focus:ring-2 mr-5"
+              class="bg-white rounded p-2.5 px-4 outline-none lg:flex-1 w-2/3 border-gray-100 transition focus:ring-primary focus:ring-opacity-10 focus:border-primary focus:ring-2 mr-5"
               placeholder="Cari Sesuatu..."
             />
             <div class="flex-1 flex justify-between items-center">
-              <div class="lg:flex-1"></div>
+              <div class="lg:grow"></div>
               <A
                 href="/admin/akun"
-                class="block grow items-center flex justify-end space-x-4 lg:border-l-2"
+                class="block items-center inline-flex justify-end space-x-4 lg:bg-white lg:p-2 rounded lg:px-6"
               >
                 <div class="lg:block hidden">{auth()?.username}</div>
-                <img
+                <Img
                   src={auth().foto_url}
                   alt={auth().nama}
-                  class="block rounded-full !w-12 !h-12 bg-gray-200"
+                  class="block rounded-full !w-10 !h-10 bg-gray-200"
                 />
               </A>
             </div>

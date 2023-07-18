@@ -40,7 +40,7 @@ export default function () {
 
   return (
     <div class="max-w-full w-[500px]">
-      <Card class="py-10">
+      <Card class="py-10 rounded-xl">
         <div class="mb-5">
           <div class="font-semibold text-lg">Verifikasi Akun</div>
         </div>
@@ -51,7 +51,7 @@ export default function () {
           terbaru dari kami.
         </p>
 
-        <div class="mt-8">
+        <div class="mt-10">
           <button
             onClick={sendVerification}
             disabled={isLoading()}

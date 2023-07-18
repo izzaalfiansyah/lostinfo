@@ -64,7 +64,7 @@ export default function () {
 
   return (
     <div class="max-w-full w-[800px]">
-      <Card class="py-10">
+      <Card class="py-10 rounded-xl">
         <form onSubmit={store}>
           <div class="mb-5">
             <div class="font-semibold text-lg">Register</div>
@@ -159,7 +159,7 @@ export default function () {
               />
             </div>
           </div>
-          <div class="text-center mt-3">
+          <div class="lg:mt-3">
             <Checkbox
               checked={isAgree()}
               onChange={(e) => setIsAgree(e.currentTarget.checked)}
@@ -177,15 +177,8 @@ export default function () {
                 </>
               }
             />
-            <div class="mb-2"></div>
-            <div class="text-sm">
-              Sudah punya akun? login di{" "}
-              <A href="/login" class="text-primary">
-                sini
-              </A>
-            </div>
           </div>
-          <div class="mt-8">
+          <div class="mt-10">
             <button
               disabled={isLoading()}
               type="submit"
@@ -193,6 +186,12 @@ export default function () {
             >
               {isLoading() ? "Menunggu..." : "Daftar"}
             </button>
+          </div>
+          <div class="text-center mt-5">
+            Sudah punya akun? login di{" "}
+            <A href="/login" class="text-primary">
+              sini
+            </A>
           </div>
         </form>
       </Card>

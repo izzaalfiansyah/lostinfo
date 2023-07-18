@@ -11,7 +11,7 @@ interface Props {
 export default function (props: Props) {
   return (
     <>
-      <Card class="mb-3">
+      <Card class="mb-3 border-t-4 border-primary">
         <Title>LostInfo - {props.title}</Title>
         <div class="flex lg:items-center justify-between lg:flex-row flex-col">
           <div>

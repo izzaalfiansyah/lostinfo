@@ -52,7 +52,7 @@ export default function () {
 
   return (
     <div class="max-w-full w-[500px]">
-      <Card class="py-10">
+      <Card class="py-10 rounded-xl">
         <form onSubmit={login}>
           <div class="mb-5">
             <div class="font-semibold text-lg">Login</div>
@@ -74,13 +74,7 @@ export default function () {
             disabled={isLoading()}
             onChange={(e) => setReq("password", e.currentTarget.value)}
           />
-          <div class="text-center text-sm mt-3">
-            Belum punya akun? register di{" "}
-            <A href="/register" class="text-primary">
-              sini
-            </A>
-          </div>
-          <div class="mt-8">
+          <div class="mt-10">
             <button
               type="submit"
               disabled={isLoading()}
@@ -88,6 +82,12 @@ export default function () {
             >
               {isLoading() ? "Menunggu..." : "Masuk"}
             </button>
+          </div>
+          <div class="text-center mt-5">
+            Belum punya akun? register di{" "}
+            <A href="/register" class="text-primary">
+              sini
+            </A>
           </div>
         </form>
       </Card>

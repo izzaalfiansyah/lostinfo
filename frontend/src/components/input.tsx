@@ -16,7 +16,7 @@ export default function (props: Props) {
       <div class="flex flex-row">
         <div class="h-10">{props.prepend}</div>
         <input
-          class="w-full h-10 focus:ring-2 focus:ring-purple-300 border-gray-200 transition py-1.5 disabled:bg-gray-100"
+          class="w-full h-10 focus:ring-2 focus:border-primary focus:ring-primary focus:ring-opacity-10 border-gray-100 transition py-1.5 disabled:bg-gray-100"
           {...others}
         />
         <div class="h-10">{props.append}</div>

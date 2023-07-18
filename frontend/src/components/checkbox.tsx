@@ -9,14 +9,14 @@ export default function (props: Props) {
 
   return (
     <div class="mb-2">
-      <label class="inline-flex items-center">
+      <label class="inline-flex">
         <input
           type="checkbox"
           class="rounded border-gray-200 text-purple-500 focus:ring focus:ring-purple-100 focus:border-purple-500 transition"
           {...others}
         />
         <Show when={label}>
-          <span class="ml-1">{label}</span>
+          <span class="ml-2 -mt-1">{label}</span>
         </Show>
       </label>
     </div>
