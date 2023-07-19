@@ -9,6 +9,7 @@ import Select from "../select";
 import fileReader from "~/libs/file-reader";
 import Img from "../img";
 import FileInput from "../file-input";
+import Button from "../button";
 
 interface Props {
   show: boolean;
@@ -172,12 +173,12 @@ export default function (props: Props) {
         </div>
 
         <div class="mt-8 flex justify-end">
-          <button
-            type="submit"
-            class="px-4 py-2 bg-primary rounded shadow-sm text-white"
-          >
+          <Button type="submit" variant="primary">
             Simpan
-          </button>
+          </Button>
+          <Button onClick={props.onClose} class="ml-2">
+            Batal
+          </Button>
         </div>
       </form>
     </Modal>

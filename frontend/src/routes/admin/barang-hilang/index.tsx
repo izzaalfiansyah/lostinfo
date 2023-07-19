@@ -1,7 +1,8 @@
 import { For, Show, createEffect, createSignal, onMount } from "solid-js";
 import { createStore } from "solid-js/store";
-import { A } from "solid-start";
+import { A, useNavigate } from "solid-start";
 import ModalDelete from "~/components/barang-hilang/modal-delete";
+import Button from "~/components/button";
 import Card from "~/components/card";
 import { DeleteIcon, EditIcon } from "~/components/icons";
 import Img from "~/components/img";
@@ -35,6 +36,7 @@ export default function (props: Props) {
   });
 
   const notif = useNotif();
+  const nav = useNavigate();
 
   const get = async () => {
     setIsLoading(true);
@@ -75,12 +77,12 @@ export default function (props: Props) {
           title="Data Barang Hilang"
           subtitle="Menjelajahi dan menganalisis data barang hilang"
           action={
-            <A
-              href="/admin/barang-hilang/create"
-              class="px-5 p-2 text-white bg-primary rounded shadow-sm mt-4 lg:mt-0 text-center"
+            <Button
+              onClick={() => nav("/admin/barang-hilang/create")}
+              variant="primary"
             >
               Tambah
-            </A>
+            </Button>
           }
         ></Title>
       </Show>
@@ -128,9 +130,12 @@ export default function (props: Props) {
                 <Img src={item.foto_url} alt={item.nama} class="w-28 h-28" />
                 <div class="grow truncate">
                   <div class="font-semibold truncate">{item.nama}</div>
-                  <div class="text-gray-500 text-xs mt-1">
+                  <A
+                    href={"/admin/user/" + item.user_id}
+                    class="text-gray-500 text-xs mt-1 text-primary"
+                  >
                     @{item.user?.username}
-                  </div>
+                  </A>
                   <div class="text-gray-500 text-xs">
                     {formatDate(item.created_at as string, true)}
                   </div>

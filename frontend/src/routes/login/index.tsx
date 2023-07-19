@@ -1,6 +1,7 @@
 import { createSignal, onMount } from "solid-js";
 import { createStore } from "solid-js/store";
 import { A, useNavigate } from "solid-start";
+import Button from "~/components/button";
 import Card from "~/components/card";
 import Input from "~/components/input";
 import { useAuth } from "~/contexts/auth";
@@ -75,13 +76,14 @@ export default function () {
             onChange={(e) => setReq("password", e.currentTarget.value)}
           />
           <div class="mt-10">
-            <button
+            <Button
               type="submit"
               disabled={isLoading()}
-              class="bg-primary text-white w-full p-2 rounded shadow-sm"
+              variant="primary"
+              class="w-full"
             >
               {isLoading() ? "Menunggu..." : "Masuk"}
-            </button>
+            </Button>
           </div>
           <div class="text-center mt-5">
             Belum punya akun? register di{" "}

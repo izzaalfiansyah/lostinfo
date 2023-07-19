@@ -143,8 +143,8 @@ export default function () {
           }
         >
           <Card class="flex items-center px-10">
-            <div class="rounded-full bg-primary bg-opacity-25 h-20 w-20 flex items-center justify-center mr-6">
-              <UsersIcon class="w-12 h-12 text-primary" />
+            <div class="rounded-full bg-primary h-20 w-20 flex items-center justify-center mr-6">
+              <UsersIcon class="w-12 h-12 text-white" />
             </div>
             <div>
               <div class="text-4xl font-semibold">
@@ -154,8 +154,8 @@ export default function () {
             </div>
           </Card>
           <Card class="flex items-center px-10">
-            <div class="rounded-full bg-primary bg-opacity-25 h-20 w-20 flex items-center justify-center mr-6">
-              <ArchiveIcon class="w-12 h-12 text-primary" />
+            <div class="rounded-full bg-primary h-20 w-20 flex items-center justify-center mr-6">
+              <ArchiveIcon class="w-12 h-12 text-white" />
             </div>
             <div>
               <div class="text-4xl font-semibold">
@@ -165,8 +165,8 @@ export default function () {
             </div>
           </Card>
           <Card class="flex items-center px-10">
-            <div class="rounded-full bg-primary bg-opacity-25 h-20 w-20 flex items-center justify-center mr-6">
-              <ArchiveXIcon class="w-12 h-12 text-primary" />
+            <div class="rounded-full bg-primary h-20 w-20 flex items-center justify-center mr-6">
+              <ArchiveXIcon class="w-12 h-12 text-white" />
             </div>
             <div>
               <div class="text-4xl font-semibold">

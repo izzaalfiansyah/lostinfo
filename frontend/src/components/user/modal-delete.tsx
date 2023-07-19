@@ -3,6 +3,7 @@ import Modal from "../modal";
 import User from "~/interfaces/user";
 import http from "~/libs/http";
 import { useNotif } from "~/contexts/notif";
+import Button from "../button";
 
 interface Props {
   show: boolean;
@@ -36,12 +37,12 @@ export default function (props: Props) {
           secara permanen!
         </p>
         <div class="mt-8 flex justify-end">
-          <button
-            type="submit"
-            class="bg-red-500 text-white py-2 px-4 rounded shadow-sm"
-          >
+          <Button type="submit" variant="red">
             Hapus
-          </button>
+          </Button>
+          <Button class="ml-2" onClick={props.onClose}>
+            Batal
+          </Button>
         </div>
       </form>
     </Modal>

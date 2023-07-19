@@ -12,7 +12,7 @@ export default function (props: Props) {
       <label class="inline-flex">
         <input
           type="checkbox"
-          class="rounded border-gray-200 text-purple-500 focus:ring focus:ring-purple-100 focus:border-purple-500 transition"
+          class="rounded border-gray-200 text-primary focus:ring-2 focus:ring-primary focus:ring-opacity-10 focus:border-primary transition"
           {...others}
         />
         <Show when={label}>

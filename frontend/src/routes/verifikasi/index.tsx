@@ -1,4 +1,5 @@
 import { createEffect, createSignal, onMount } from "solid-js";
+import Button from "~/components/button";
 import Card from "~/components/card";
 import { useAuth } from "~/contexts/auth";
 import { useNotif } from "~/contexts/notif";
@@ -52,14 +53,15 @@ export default function () {
         </p>
 
         <div class="mt-10">
-          <button
+          <Button
             onClick={sendVerification}
             disabled={isLoading()}
             type="submit"
-            class="bg-primary text-white w-full p-2 rounded shadow-sm disabled:bg-primary"
+            variant="primary"
+            class="w-full"
           >
             {isLoading() ? "Menunggu..." : "Kirim Ulang"}
-          </button>
+          </Button>
         </div>
       </Card>
     </div>

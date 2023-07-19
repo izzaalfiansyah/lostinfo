@@ -13,6 +13,7 @@ import User from "~/interfaces/user";
 import { useNotif } from "~/contexts/notif";
 import http from "~/libs/http";
 import fileReader from "~/libs/file-reader";
+import Button from "~/components/button";
 
 export default function () {
   const [req, setReq] = createStore<User>();
@@ -197,12 +198,9 @@ export default function () {
           </div>
 
           <div class="mt-8 flex justify-end">
-            <button
-              type="submit"
-              class="px-4 py-2 bg-primary rounded shadow-sm text-white"
-            >
+            <Button variant="primary" type="submit">
               Simpan
-            </button>
+            </Button>
           </div>
         </form>
       </Card>

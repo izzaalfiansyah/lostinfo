@@ -3,6 +3,7 @@ import Modal from "../modal";
 import { SetStoreFunction } from "solid-js/store";
 import http from "~/libs/http";
 import { useNotif } from "~/contexts/notif";
+import Button from "../button";
 
 interface Props {
   show: boolean;
@@ -35,7 +36,9 @@ export default function (props: Props) {
           Anda yakin menghapus barang <strong>{req.nama}</strong>?
         </p>
         <div class="mt-8 justify-end flex">
-          <button class="bg-red-500 text-white px-4 p-2 rounded">Hapus</button>
+          <Button type="submit" variant="red">
+            Hapus
+          </Button>
         </div>
       </form>
     </Modal>

@@ -5,6 +5,7 @@ import {
   ArchiveIcon,
   ArchiveXIcon,
   HomeIcon,
+  LogoutIcon,
 } from "~/components/icons";
 
 export default function (props: JSX.HTMLAttributes<HTMLDivElement>) {
@@ -15,12 +16,12 @@ export default function (props: JSX.HTMLAttributes<HTMLDivElement>) {
       icon: <HomeIcon class="w-5 h-5" />,
     },
     {
-      path: "/user/barang/hilang",
+      path: "/user/barang-hilang",
       title: "Barang Hilang",
       icon: <ArchiveXIcon class="w-5 h-5" />,
     },
     {
-      path: "/user/barang/temu",
+      path: "/user/barang-temu",
       title: "Barang Temuan",
       icon: <ArchiveIcon class="w-5 h-5" />,
     },
@@ -44,17 +45,19 @@ export default function (props: JSX.HTMLAttributes<HTMLDivElement>) {
   };
 
   return (
-    <div class="min-h-screen bg-gray-50">
-      <div class="p-5 w-full min-h-screen flex flex-col">
-        <div class="grow h-full mb-20 flex flex-col">{props.children}</div>
+    <div class="min-h-screen bg-gray-50 bg-opacity-25">
+      <div class="p-3 w-full min-h-screen flex flex-col">
+        <div class="grow h-full pb-20 flex flex-col relative">
+          {props.children}
+        </div>
       </div>
-      <div class="fixed bottom-0 left-0 right-0 flex justify-evenly bg-white h-20 rounded-t-lg shadow z-[99999] fixed">
+      <div class="fixed bottom-0 left-0 right-0 flex justify-evenly bg-white h-20 rounded-t-lg shadow z-[99999] fixed items-center">
         <For each={menus}>
           {(item) => (
             <A
               href={item.path}
-              class="block p-4 rounded-full text-gray-700 hover:bg-gray-50 transition hover:text-primary"
-              classList={{ "text-primary": checkActive(item.path) }}
+              class="block p-4 rounded-full text-gray-700 hover:bg-gray-50 transition hover:bg-primary hover:bg-opacity-10 hover:bg-opacity-10 origin-center ease-in"
+              classList={{ "!bg-primary !text-white": checkActive(item.path) }}
             >
               {item.icon}
             </A>

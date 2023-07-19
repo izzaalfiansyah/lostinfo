@@ -1,6 +1,7 @@
 import { For, Show, createSignal, onMount } from "solid-js";
 import { SetStoreFunction, createStore } from "solid-js/store";
 import { useNavigate } from "solid-start";
+import Button from "~/components/button";
 import Card from "~/components/card";
 import FileInput from "~/components/file-input";
 import { SearchIcon } from "~/components/icons";
@@ -216,21 +217,13 @@ export function Save(props: SaveProps) {
             </Show>
           </div>
         </div>
-        <div class="mt-4">
-          <button
-            type="submit"
-            class="px-4 p-2 bg-primary rounded shadow-sm text-white mr-2 disabled:bg-purple-400 transition"
-            disabled={isLoading()}
-          >
-            Simpan Data
-          </button>
-          <button
-            type="button"
-            onClick={() => window.history.back()}
-            class="button px-4 p-2 bg-gray-400 text-white rounded shadow-sm"
-          >
+        <div class="mt-5">
+          <Button type="submit" variant="primary" disabled={isLoading()}>
+            {isLoading() ? "Memuat..." : "Simpan Data"}
+          </Button>
+          <Button class="ml-3" onClick={() => window.history.back()}>
             Kembali
-          </button>
+          </Button>
         </div>
       </form>
     </Card>

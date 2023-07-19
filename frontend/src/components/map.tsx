@@ -11,6 +11,7 @@ interface Props {
   };
   onChange?: (latlng: LatLng) => void;
   class?: string;
+  disabled?: boolean;
 }
 
 export default function (props: Props) {
@@ -26,7 +27,8 @@ export default function (props: Props) {
         .locate({ setView: true })
     );
 
-    L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
+    L.tileLayer("https://tileserver.memomaps.de/tilegen/{z}/{x}/{y}.png", {
+      // L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
       maxZoom: 20,
     }).addTo(map());
 
@@ -41,6 +43,8 @@ export default function (props: Props) {
   };
 
   const makeMarker = (e: { lat: any; lng: any }) => {
+    if (props.disabled) return false;
+
     if (marker()) {
       marker().remove();
     }
@@ -57,15 +61,18 @@ export default function (props: Props) {
   };
 
   const handleLocationFound = (e: any) => {
-    L.circle(e.latlng, {
+    const circle = L.circle(e.latlng, {
       color: "red",
       fillColor: "#f03",
       fillOpacity: 0.5,
       radius: 15,
     })
       .bindPopup("Kamu berada di sini")
-      .openPopup()
-      .addTo(map());
+      .openPopup();
+
+    circle.on("click", (e) => makeMarker(e.latlng));
+    circle.addTo(map());
+
     map().setView(e.latlng).setZoom(17);
   };
 
@@ -95,7 +102,12 @@ export default function (props: Props) {
     render();
   });
 
-  return <div id="map" class={"h-64 bg-gray-100 rounded " + props.class}></div>;
+  return (
+    <div
+      id="map"
+      class={"h-64 outline-none bg-gray-100 rounded " + props.class}
+    ></div>
+  );
 }
 
 export const getAddressByLatLng = async (latlng: any) => {

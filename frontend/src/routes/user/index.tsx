@@ -3,6 +3,7 @@ import Img from "~/components/img";
 import Input from "~/components/input";
 import Map from "~/components/map";
 import Skeleton from "~/components/skeleton";
+import TitleUser from "~/components/title-user";
 import { useNotif } from "~/contexts/notif";
 import BarangHilang from "~/interfaces/barang-hilang";
 import http from "~/libs/http";
@@ -33,7 +34,8 @@ export default function () {
 
   return (
     <>
-      <Map class="!h-full grow"></Map>
+      <TitleUser>LostInfo.</TitleUser>
+      <Map disabled={true} class="!h-full grow"></Map>
     </>
   );
 }

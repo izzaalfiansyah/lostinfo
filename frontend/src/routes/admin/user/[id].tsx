@@ -20,6 +20,7 @@ import ModalSave from "~/components/user/modal-save";
 import Card from "~/components/card";
 import Skeleton from "~/components/skeleton";
 import { useDialogImg } from "~/contexts/dialog-img";
+import Button from "~/components/button";
 
 interface Props {
   id?: any;
@@ -181,13 +182,13 @@ export default function (props: Props) {
         <div class="flex space-x-3 lg:justify-start justify-center">
           <For each={tabs}>
             {(item, index) => (
-              <button
-                class="bg-primary text-white rounded px-4 p-2 disabled:bg-opacity-25 hover:bg-opacity-50 transition"
+              <Button
+                variant="primary"
                 disabled={selectedTab() == index()}
                 onClick={() => setSelectedTab(index())}
               >
                 {item.title}
-              </button>
+              </Button>
             )}
           </For>
         </div>

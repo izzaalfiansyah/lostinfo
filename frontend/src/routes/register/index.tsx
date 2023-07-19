@@ -1,6 +1,7 @@
 import { createSignal } from "solid-js";
 import { createStore } from "solid-js/store";
 import { A, useNavigate } from "solid-start";
+import Button from "~/components/button";
 import Card from "~/components/card";
 import Checkbox from "~/components/checkbox";
 import FileInput from "~/components/file-input";
@@ -63,7 +64,7 @@ export default function () {
   };
 
   return (
-    <div class="max-w-full w-[800px]">
+    <div class="max-w-full w-[900px]">
       <Card class="py-10 rounded-xl">
         <form onSubmit={store}>
           <div class="mb-5">
@@ -179,13 +180,14 @@ export default function () {
             />
           </div>
           <div class="mt-10">
-            <button
+            <Button
               disabled={isLoading()}
               type="submit"
-              class="bg-primary text-white w-full p-2 rounded shadow-sm"
+              variant="primary"
+              class="w-full"
             >
               {isLoading() ? "Menunggu..." : "Daftar"}
-            </button>
+            </Button>
           </div>
           <div class="text-center mt-5">
             Sudah punya akun? login di{" "}
@@ -274,12 +276,7 @@ export default function () {
             </div>
           </div>
           <div class="mt-5 flex justify-end">
-            <button
-              class="px-4 p-2 bg-gray-400 text-white rounded shadow-sm"
-              onClick={() => setShowPrivacy(false)}
-            >
-              Tutup
-            </button>
+            <Button onClick={() => setShowPrivacy(false)}>Tutup</Button>
           </div>
         </div>
       </Modal>

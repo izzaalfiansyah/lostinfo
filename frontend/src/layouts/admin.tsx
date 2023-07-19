@@ -1,5 +1,6 @@
 import { For, JSX, createSignal } from "solid-js";
 import { A, useLocation, useNavigate } from "solid-start";
+import Button from "~/components/button";
 import {
   AccountIcon,
   ArchiveIcon,
@@ -200,7 +201,7 @@ export default function (props: Props) {
         </div>
       </div> */}
 
-      <div class="bg-gray-50 min-h-screen text-gray-700 overflow-x-hidden">
+      <div class="bg-gray-50 bg-opacity-25 min-h-screen text-gray-700 overflow-x-hidden">
         <div
           class="z-[99999] bg-black bg-opacity-25 fixed top-0 left-0 right-0 bottom-0 lg:hidden"
           classList={{
@@ -277,7 +278,7 @@ export default function (props: Props) {
             </div>
           </div>
         </div>
-        <div class="lg:ml-80 p-5">
+        <div class="lg:ml-80 p-3">
           <div class="flex justify-between mb-5 items-center">
             <button
               class="lg:hidden mr-4 bg-white p-2 rounded shadow-sm"
@@ -294,7 +295,7 @@ export default function (props: Props) {
               <div class="lg:grow"></div>
               <A
                 href="/admin/akun"
-                class="block items-center inline-flex justify-end space-x-4 lg:bg-white lg:p-2 rounded lg:px-6"
+                class="block items-center inline-flex justify-end space-x-4 lg:bg-white lg:p-2 rounded lg:px-6 lg:shadow-sm"
               >
                 <div class="lg:block hidden">{auth()?.username}</div>
                 <Img
@@ -310,12 +311,9 @@ export default function (props: Props) {
               <div class="font-semibold mb-3">Logout</div>
               <p>Anda yakin akan logout? Sesi anda akan berakhir!</p>
               <div class="mt-8 flex items-center justify-end">
-                <button
-                  type="submit"
-                  class="px-4 py-2 bg-red-500 rounded shadow-sm text-white"
-                >
+                <Button type="submit" variant="red">
                   Keluar
-                </button>
+                </Button>
               </div>
             </form>
           </Modal>

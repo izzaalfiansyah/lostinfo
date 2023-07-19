@@ -1,6 +1,7 @@
 import { createEffect, createSignal, onMount } from "solid-js";
 import { createStore } from "solid-js/store";
 import { A } from "solid-start";
+import Button from "~/components/button";
 import Card from "~/components/card";
 import { DeleteIcon, EditIcon } from "~/components/icons";
 import Input from "~/components/input";
@@ -89,8 +90,8 @@ export default function () {
         title="Data User"
         subtitle="Menjelajahi dan menganalisis data pengguna"
         action={
-          <button
-            class="px-5 p-2 text-white bg-primary rounded shadow-sm mt-4 lg:mt-0"
+          <Button
+            variant="primary"
             onClick={() => {
               nullable();
               setIsEdit(false);
@@ -98,7 +99,7 @@ export default function () {
             }}
           >
             Tambah
-          </button>
+          </Button>
         }
       />
 
