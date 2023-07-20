@@ -16,7 +16,8 @@ class BarangTemu extends Model
         'nama',
         'deskripsi',
         'tempat_temu',
-        'maps',
+        'maps_lat',
+        'maps_lng',
         'foto',
         'dikembalikan',
     ];

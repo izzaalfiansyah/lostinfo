@@ -17,7 +17,8 @@ return new class extends Migration
             $table->string('nama');
             $table->text('deskripsi')->nullable();
             $table->string('tempat_temu');
-            $table->text('maps')->nullable();
+            $table->double('maps_lat')->nullable();
+            $table->double('maps_lng')->nullable();
             $table->text('foto')->nullable();
             $table->enum('dikembalikan', [0, 1])->default('0')->comment('0: belum, 1: sudah');
 

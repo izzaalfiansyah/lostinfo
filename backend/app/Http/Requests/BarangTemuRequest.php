@@ -18,9 +18,8 @@ class BarangTemuRequest extends FormRequest
             'nama' => 'required|max:255',
             'deskripsi' => 'nullable',
             'tempat_temu' => 'required|max:255',
-            'maps' => 'nullable',
-            'maps.lat' => 'required_with:maps',
-            'maps.lng' => 'required_with:maps',
+            'maps_lat' => 'required_with:maps_lng',
+            'maps_lng' => 'required_with:maps_lat',
             'foto' => ['nullable', new Base64()],
             'dikembalikan' => 'nullable|in:1,0',
         ];

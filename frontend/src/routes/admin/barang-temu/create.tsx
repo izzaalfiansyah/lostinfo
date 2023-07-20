@@ -81,10 +81,8 @@ export function Save(props: SaveProps) {
     setIsLoading(true);
     try {
       const data = await getLatLngByAddress(req.tempat_temu as string);
-      setReq("maps", {
-        lat: data[0].lat,
-        lng: data[0].lon,
-      });
+      setReq("maps_lat", data[0].lat);
+      setReq("maps_lng", data[0].lon);
     } catch (e) {
       notif.show("tempat tidak ditemukan", false);
     }
@@ -142,17 +140,18 @@ export function Save(props: SaveProps) {
             <div class="mb-2">
               <label for="">Lokasi Maps</label>
               <Input
-                value={[req.maps?.lat, req.maps?.lng].toString()}
+                value={[req.maps_lat, req.maps_lng].toString()}
                 placeholder="[lat,lng]"
                 disabled
               />
               <Map
-                value={req.maps}
+                value={{
+                  lat: req.maps_lat,
+                  lng: req.maps_lng,
+                }}
                 onChange={(e) => {
-                  setReq("maps", {
-                    lat: e.lat as any,
-                    lng: e.lng as any,
-                  });
+                  setReq("maps_lat", e.lat);
+                  setReq("maps_lng", e.lng);
                 }}
               ></Map>
             </div>

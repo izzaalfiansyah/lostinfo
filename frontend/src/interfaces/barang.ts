@@ -6,10 +6,8 @@ interface Barang {
   user?: User;
   nama?: string;
   deskripsi?: string;
-  maps?: {
-    lat?: string | string;
-    lng?: string | string;
-  };
+  maps_lat?: number;
+  maps_lng?: number;
   foto?: string;
   foto_url?: string;
   created_at?: string;

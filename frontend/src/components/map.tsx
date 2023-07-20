@@ -94,8 +94,7 @@ export default function (props: Props) {
         makeMarker(props.value as any);
       }
     }
-
-    return { ...props.value };
+    return props.value;
   });
 
   onMount(() => {
