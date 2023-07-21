@@ -79,6 +79,7 @@ export default function (props: Props) {
         onChange={(e) => setFilter("search", e.currentTarget.value)}
         placeholder="Cari..."
       />
+      <div class="mb-2"></div>
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
         <Show
           when={!isLoading()}
@@ -103,20 +104,30 @@ export default function (props: Props) {
             fallback={<div class="text-center p-5">Data tidak tersedia</div>}
           >
             {(item) => (
-              <Card class="flex items-center space-x-3 !p-3">
+              <Card class="flex items-center space-x-3 !p-3 relative">
                 <Img src={item.foto_url} alt={item.nama} class="w-28 h-28" />
                 <div class="grow truncate">
                   <div class="font-semibold truncate">{item.nama}</div>
-                  <A
-                    href={"/user/user/" + item.user_id}
-                    class="text-gray-500 text-xs mt-1 text-primary"
+                  {/* <span
+                    class={
+                      "absolute top-[-2px] right-2 rounded-b-lg text-white text-xs px-2 shadow " +
+                      (item.ditemukan == "1" ? "bg-green-500" : "bg-red-500")
+                    }
                   >
-                    @{item.user?.username}
-                  </A>
-                  <div class="text-gray-500 text-xs">
-                    {formatDate(item.created_at as string, true)}
+                    {item.ditemukan_detail} ditemukan
+                  </span> */}
+                  <div>
+                    <A
+                      href={"/user/user/" + item.user_id}
+                      class="text-gray-500 text-xs text-primary"
+                    >
+                      @{item.user?.username}
+                    </A>
                   </div>
-                  <div class="mt-3 flex items-center">
+                  <div class="text-gray-500 text-xs">
+                    Hilang pada {formatDate(item.created_at as string, true)}{" "}
+                  </div>
+                  <div class="mt-2 flex items-center">
                     <Show
                       when={item.user_id == auth().id}
                       fallback={

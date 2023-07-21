@@ -127,15 +127,15 @@ export default function (props: Props) {
                     >
                       <EditIcon class="w-4 h-4 mr-2" /> Edit
                     </button>
-                  </Show>
 
-                  <button
-                    type="button"
-                    onClick={() => dialogImg.show(req.ktp_url as string)}
-                    class="text-sm text-red-500 border block border-red-500 hover:text-white hover:bg-red-500 transition rounded-full px-3 p-1 flex items-center"
-                  >
-                    <div class="h-4" /> Lihat KTP
-                  </button>
+                    <button
+                      type="button"
+                      onClick={() => dialogImg.show(req.ktp_url as string)}
+                      class="text-sm text-red-500 border block border-red-500 hover:text-white hover:bg-red-500 transition rounded-full px-3 p-1 flex items-center"
+                    >
+                      <div class="h-4" /> Lihat KTP
+                    </button>
+                  </Show>
                 </div>
               </div>
               <div class="mt-5">

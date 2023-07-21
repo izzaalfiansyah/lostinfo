@@ -63,7 +63,7 @@ export default function () {
           <>
             <Card title="Detail Barang">
               <Show when={!isLoading()} fallback={<Skeleton class="h-72" />}>
-                <table>
+                <table class="w-full">
                   <tbody>
                     <tr>
                       <td>Nama Barang</td>
@@ -113,13 +113,13 @@ export default function () {
                       <td class="px-3">:</td>
                       <td>
                         <span
-                          class="text-xs text-white rounded-full px-2"
+                          class="text-sm text-white rounded px-3"
                           classList={{
                             "bg-green-500": req.ditemukan == "1",
                             "bg-red-500": req.ditemukan != "1",
                           }}
                         >
-                          {req.ditemukan_detail}
+                          {req.ditemukan_detail} ditemukan
                         </span>
                       </td>
                     </tr>

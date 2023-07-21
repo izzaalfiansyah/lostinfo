@@ -10,7 +10,6 @@ import http from "~/libs/http";
 export default function () {
   const [barangHilangTerdekat, setBarangHilangTerdekat] =
     createSignal<BarangHilang[]>();
-  const [isLoading, setIsLoading] = createSignal(false);
   const [myLocation, setMyLocation] = createSignal<any>();
 
   const nav = useNavigate();

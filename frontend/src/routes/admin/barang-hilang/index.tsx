@@ -126,20 +126,20 @@ export default function (props: Props) {
             }
           >
             {(item) => (
-              <Card class="flex items-center space-x-3 !p-3">
+              <Card class="flex items-center space-x-3 !p-3 relative">
                 <Img src={item.foto_url} alt={item.nama} class="w-28 h-28" />
                 <div class="grow truncate">
                   <div class="font-semibold truncate">{item.nama}</div>
                   <A
                     href={"/admin/user/" + item.user_id}
-                    class="text-gray-500 text-xs mt-1 text-primary"
+                    class="text-gray-500 text-xs text-primary"
                   >
                     @{item.user?.username}
                   </A>
                   <div class="text-gray-500 text-xs">
                     {formatDate(item.created_at as string, true)}
                   </div>
-                  <div class="mt-3 flex items-center">
+                  <div class="mt-2 flex items-center">
                     <A
                       href={"/admin/barang-hilang/" + item.id}
                       class="text-sm text-primary border inline-block border-primary hover:text-white hover:bg-primary transition rounded-full px-3 p-1"

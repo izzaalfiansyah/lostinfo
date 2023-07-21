@@ -77,7 +77,10 @@ export default function (props: Props) {
       .bindPopup("Kamu berada di sini")
       .openPopup();
 
-    circle.on("click", (e) => makeMarker(e.latlng));
+    if (!props.disabled) {
+      circle.on("click", (e) => makeMarker(e.latlng));
+    }
+
     circle.addTo(map());
 
     map().setView(e.latlng).setZoom(17);
