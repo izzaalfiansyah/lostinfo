@@ -14,13 +14,14 @@ import User from "~/interfaces/user";
 import formatDate from "~/libs/format-date";
 import http from "~/libs/http";
 import BarangHilang from "../barang-hilang";
-import BarangTemu from "../barang-temu";
+import BarangTemu from "../barang-hilang";
 import { Dynamic } from "solid-js/web";
 import ModalSave from "~/components/user/modal-save";
 import Card from "~/components/card";
 import Skeleton from "~/components/skeleton";
 import { useDialogImg } from "~/contexts/dialog-img";
 import Button from "~/components/button";
+import { useAuth } from "~/contexts/auth";
 
 interface Props {
   id?: any;
@@ -46,6 +47,7 @@ export default function (props: Props) {
   const notif = useNotif();
   const params = useParams();
   const dialogImg = useDialogImg();
+  const [auth] = useAuth();
 
   const get = async () => {
     setIsLoading(true);
@@ -114,7 +116,7 @@ export default function (props: Props) {
                 <div class="text-2xl font-semibold">{req.nama}</div>
                 <div>@{req.username}</div>
                 <div class="mt-2 flex lg:justify-start justify-center">
-                  <Show when={!props.id}>
+                  <Show when={req.id == auth().id}>
                     <button
                       type="button"
                       class="text-sm text-primary border block border-primary hover:text-white hover:bg-primary transition rounded-full px-3 p-1 flex items-center mr-2"

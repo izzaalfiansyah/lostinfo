@@ -278,7 +278,7 @@ export default function (props: Props) {
             </div>
           </div>
         </div>
-        <div class="lg:ml-80 p-3">
+        <div class="lg:ml-80 p-3 min-h-screen flex flex-col">
           <div class="flex justify-between mb-5 items-center">
             <button
               class="lg:hidden mr-4 bg-white p-2 rounded shadow-sm"

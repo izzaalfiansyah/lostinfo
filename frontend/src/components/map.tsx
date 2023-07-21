@@ -9,7 +9,14 @@ interface Props {
     lat?: any;
     lng?: any;
   };
-  onChange?: (latlng: LatLng) => void;
+  marks?: Array<{
+    lat?: any;
+    lng?: any;
+    text?: string;
+    onClick?: () => any;
+  }>;
+  onChange?: (latlng: LatLng) => any;
+  onLocationFound?: (latlng: LatLng) => any;
   class?: string;
   disabled?: boolean;
 }
@@ -32,22 +39,22 @@ export default function (props: Props) {
       maxZoom: 20,
     }).addTo(map());
 
-    if (props.value) {
-      makeMarker(props.value as any);
-    } else {
-      map().on("locationfound", handleLocationFound);
-      map().on("locationerror", handleLocationError);
-    }
+    map().on("locationfound", handleLocationFound);
+    map().on("locationerror", handleLocationError);
+    makeMarker(props.value as any);
 
     map().on("click", handleClick);
   };
 
   const makeMarker = (e: { lat: any; lng: any }) => {
-    if (props.disabled) return false;
-
     if (marker()) {
       marker().remove();
     }
+
+    if (!e) {
+      return null;
+    }
+
     if (e.lat && e.lng && map()) {
       setMarker(
         L.marker([e.lat, e.lng]).bindPopup(`${e.lat},${e.lng}`)
@@ -62,10 +69,10 @@ export default function (props: Props) {
 
   const handleLocationFound = (e: any) => {
     const circle = L.circle(e.latlng, {
-      color: "red",
-      fillColor: "#f03",
+      color: "dodgerblue",
+      fillColor: "dodgerblue",
       fillOpacity: 0.5,
-      radius: 15,
+      radius: 30,
     })
       .bindPopup("Kamu berada di sini")
       .openPopup();
@@ -74,6 +81,10 @@ export default function (props: Props) {
     circle.addTo(map());
 
     map().setView(e.latlng).setZoom(17);
+
+    if (props.onLocationFound) {
+      props.onLocationFound(e.latlng);
+    }
   };
 
   const handleLocationError = (e: any) => {
@@ -81,6 +92,7 @@ export default function (props: Props) {
   };
 
   const handleClick = (e: LeafletMouseEvent) => {
+    if (props.disabled) return false;
     if (props.onChange) {
       props.onChange(e.latlng);
     }
@@ -95,6 +107,39 @@ export default function (props: Props) {
       }
     }
     return props.value;
+  });
+
+  createEffect((oldMarks) => {
+    if (oldMarks != props.marks) {
+      props.marks?.forEach((item) => {
+        const circle = L.circle(
+          {
+            lat: item.lat,
+            lng: item.lng,
+          },
+          {
+            color: "red",
+            fillColor: "red",
+            fillOpacity: 0.5,
+            radius: 20,
+          }
+        )
+          .bindPopup(item.text || `${item.lat},${item.lng}`)
+          .openPopup({
+            lat: item.lat,
+            lng: item.lng,
+          });
+
+        if (item.onClick) {
+          circle.on("click", item.onClick);
+        }
+
+        circle.addTo(map());
+        circle.openPopup();
+      });
+    }
+
+    return props.marks;
   });
 
   onMount(() => {

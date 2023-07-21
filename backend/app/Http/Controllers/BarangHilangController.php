@@ -6,6 +6,7 @@ use App\Http\Requests\BarangHilangRequest;
 use App\Http\Resources\BarangHilangResource;
 use App\Models\BarangHilang;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Response;
 
 class BarangHilangController extends Controller
 {
@@ -19,6 +20,31 @@ class BarangHilangController extends Controller
 
         if ($ditemukan = $req->ditemukan) {
             $builder = $builder->where('ditemukan', $ditemukan);
+        }
+
+        try {
+            $terdekat = @explode(',', $req->terdekat);
+
+            $lat = $terdekat[0];
+            $lng = $terdekat[1];
+
+            $km = 0.010000000000000; // 1 km
+
+            $builder = $builder->where(function ($query) use ($lat, $lng, $km) {
+                return $query->where('maps_lat', '<=', $lat + $km)
+                    ->where('maps_lat', '>=', $lat - $km);
+            });
+
+            $builder = $builder->where(function ($query) use ($lat, $lng, $km) {
+                return $query->where('maps_lng', '<=', $lng + $km)
+                    ->where('maps_lng', '>=', $lng - $km);
+            });
+        } catch (\Exception $e) {
+            if ($req->terdekat) {
+                return Response::json([
+                    'message' => 'latitude dan longitude tidak diketahui'
+                ], 400);
+            }
         }
 
         if ($search = $req->search) {

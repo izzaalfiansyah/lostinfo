@@ -21,7 +21,6 @@ export default function (props: Props) {
 
   const handleKeyDown = (e: KeyboardEvent) => {
     if (e.key == "Escape") {
-      window.history.back();
       handleClose();
     }
   };
@@ -33,6 +32,9 @@ export default function (props: Props) {
         window.addEventListener("keydown", handleKeyDown);
         window.addEventListener("popstate", handlePopState);
       } else {
+        if (searchParams.m) {
+          window.history.back();
+        }
         window.removeEventListener("popstate", handlePopState);
         window.removeEventListener("keydown", handleKeyDown);
       }
@@ -49,7 +51,6 @@ export default function (props: Props) {
             class="fixed top-0 left-0 right-0 bottom-0 bg-black bg-opacity-50"
             onClick={(e) => {
               e.preventDefault();
-              window.history.back();
               handleClose();
             }}
           ></div>

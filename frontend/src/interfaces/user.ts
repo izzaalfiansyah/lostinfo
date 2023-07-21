@@ -6,6 +6,7 @@ interface User {
   alamat?: string;
   email?: string;
   telepon?: string | number;
+  whatsapp?: string | number;
   foto?: string;
   foto_url?: string;
   ktp?: string;

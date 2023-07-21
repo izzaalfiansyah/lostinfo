@@ -4,7 +4,7 @@ import Card from "./card";
 
 interface Props {
   title: string;
-  subtitle: string;
+  subtitle?: string;
   action?: JSX.Element;
 }
 

@@ -28,6 +28,7 @@ class UserResource extends JsonResource
             'alamat' => $this->alamat,
             'email' => $this->email,
             'telepon' => $this->telepon,
+            'whatsapp' => $this->telepon[0] == 0 ? '62' . substr($this->telepon, 1) : $this->telepon,
             'foto' => $this->foto,
             'foto_url' => asset($this->foto ?: 'assets/user_default.png'),
             'ktp' => $this->ktp,

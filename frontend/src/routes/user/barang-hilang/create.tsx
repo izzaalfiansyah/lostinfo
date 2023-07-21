@@ -11,6 +11,7 @@ import Map, { getLatLngByAddress } from "~/components/map";
 import Select from "~/components/select";
 import Textarea from "~/components/textarea";
 import Title from "~/components/title";
+import { useAuth } from "~/contexts/auth";
 import { useNotif } from "~/contexts/notif";
 import BarangHilang from "~/interfaces/barang-hilang";
 import User from "~/interfaces/user";
@@ -23,12 +24,14 @@ export default function () {
 
   const notif = useNotif();
   const nav = useNavigate();
+  const [auth] = useAuth();
 
   const save = async () => {
     try {
+      setReq("user_id", auth().id);
       await http.post("/barang/hilang", req);
       notif.show("data berhasil disimpan");
-      nav("/admin/barang-hilang");
+      nav("/user/barang-hilang");
     } catch (e: any) {
       notif.show(e.response.data.message, false);
     }
@@ -158,17 +161,6 @@ export function Save(props: SaveProps) {
             </div>
           </div>
           <div>
-            <Select
-              label="Pemilik"
-              value={req.user_id}
-              onChange={(e) => setReq("user_id", e.currentTarget.value)}
-              disabled={isLoading()}
-            >
-              <option value="">Pilih Pemilik</option>
-              <For each={users()}>
-                {(item) => <option value={item.id as any}>{item.nama}</option>}
-              </For>
-            </Select>
             <FileInput
               label="Foto"
               title="Pilih Foto"
