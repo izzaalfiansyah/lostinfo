@@ -3,6 +3,7 @@ import { createStore } from "solid-js/store";
 import { A } from "solid-start";
 import ModalDelete from "~/components/barang-hilang/modal-delete";
 import Card from "~/components/card";
+import FloatingComponent from "~/components/floating-component";
 import { AddIcon, DeleteIcon, EditIcon, SearchIcon } from "~/components/icons";
 import Img from "~/components/img";
 import Input from "~/components/input";
@@ -172,12 +173,14 @@ export default function (props: Props) {
       />
 
       <Show when={!props.user_id}>
-        <A
-          href="/user/barang-hilang/create"
-          class="rounded-full bg-primary h-14 w-14 flex items-center justify-center text-white shadow-lg fixed bottom-10 right-10"
-        >
-          <AddIcon class="w-7 h-7" />
-        </A>
+        <FloatingComponent>
+          <A
+            href="/user/barang-hilang/create"
+            class="rounded-full bg-primary h-14 w-14 flex items-center justify-center text-white shadow-lg"
+          >
+            <AddIcon class="w-7 h-7" />
+          </A>
+        </FloatingComponent>
       </Show>
     </>
   );

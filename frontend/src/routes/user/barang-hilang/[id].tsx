@@ -15,6 +15,8 @@ import Skeleton from "~/components/skeleton";
 import Map from "~/components/map";
 import Button from "~/components/button";
 import openWindow from "~/libs/open-window";
+import { EnvelopeIcon, PhoneIcon } from "~/components/icons";
+import FloatingComponent from "~/components/floating-component";
 
 export default function () {
   const [req, setReq] = createStore<BarangHilang>({});
@@ -130,7 +132,9 @@ export default function () {
                 </table>
               </Show>
             </Card>
+
             <div class="mt-3"></div>
+
             <Card title="Tempat Hilang">
               <Show when={!isLoading()} fallback={<Skeleton class="h-80" />}>
                 <Map
@@ -155,6 +159,38 @@ export default function () {
                 </div>
               </Show>
             </Card>
+
+            <Show when={!isLoading()}>
+              <FloatingComponent>
+                <a
+                  target="_blank"
+                  href={
+                    "mailto:" +
+                    req.user?.email +
+                    "?subject=Saya menemukan " +
+                    req.nama +
+                    " milik anda!"
+                  }
+                  class="rounded-full block bg-red-500 h-12 w-12 flex items-center justify-center text-white shadow-lg"
+                >
+                  <EnvelopeIcon class="w-5 h-5" />
+                </a>
+
+                <a
+                  target="_blank"
+                  href={
+                    "https://wa.me/" +
+                    req.user?.whatsapp +
+                    "?text=Saya menemukan " +
+                    req.nama +
+                    " milik anda!"
+                  }
+                  class="rounded-full block bg-green-500 h-12 w-12 flex items-center justify-center text-white shadow-lg"
+                >
+                  <PhoneIcon class="w-5 h-5" />
+                </a>
+              </FloatingComponent>
+            </Show>
           </>
         }
       >

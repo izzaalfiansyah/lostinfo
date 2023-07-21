@@ -21,6 +21,7 @@ import Card from "~/components/card";
 import Skeleton from "~/components/skeleton";
 import { useDialogImg } from "~/contexts/dialog-img";
 import Button from "~/components/button";
+import { useAuth } from "~/contexts/auth";
 
 interface Props {
   id?: any;
@@ -46,6 +47,7 @@ export default function (props: Props) {
   const notif = useNotif();
   const params = useParams();
   const dialogImg = useDialogImg();
+  const [auth] = useAuth();
 
   const get = async () => {
     setIsLoading(true);
@@ -187,6 +189,37 @@ export default function (props: Props) {
           </Show>
         </div>
       </Card>
+
+      <Show when={req.id != auth().id && !isLoading()}>
+        <div class="flex flex-col gap-2 fixed bottom-10 right-10">
+          <a
+            target="_blank"
+            href={
+              "https://www.google.com/maps?saddr=My+Location&daddr=" +
+              req.alamat
+            }
+            class="rounded-full block bg-blue-500 h-12 w-12 flex items-center justify-center text-white shadow-lg"
+          >
+            <MapPinIcon class="w-5 h-5" />
+          </a>
+
+          <a
+            target="_blank"
+            href={"mailto:" + req.email}
+            class="rounded-full block bg-red-500 h-12 w-12 flex items-center justify-center text-white shadow-lg"
+          >
+            <EnvelopeIcon class="w-5 h-5" />
+          </a>
+
+          <a
+            target="_blank"
+            href={"https://wa.me/" + req.whatsapp}
+            class="rounded-full block bg-green-500 h-12 w-12 flex items-center justify-center text-white shadow-lg"
+          >
+            <PhoneIcon class="w-5 h-5" />
+          </a>
+        </div>
+      </Show>
 
       <Show when={!props.id}>
         <ModalSave
