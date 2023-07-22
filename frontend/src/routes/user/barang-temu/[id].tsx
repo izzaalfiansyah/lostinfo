@@ -162,9 +162,9 @@ export default function () {
                   href={
                     "mailto:" +
                     req.user?.email +
-                    "?subject=Saya menemukan " +
+                    "?subject=" +
                     req.nama +
-                    " milik anda!"
+                    " yang anda temukan adalah milik saya!"
                   }
                   class="rounded-full block bg-red-500 h-12 w-12 flex items-center justify-center text-white shadow-lg"
                 >
@@ -176,9 +176,9 @@ export default function () {
                   href={
                     "https://wa.me/" +
                     req.user?.whatsapp +
-                    "?text=Saya menemukan " +
+                    "?text=" +
                     req.nama +
-                    " milik anda!"
+                    " yang anda temukan adalah milik saya!"
                   }
                   class="rounded-full block bg-green-500 h-12 w-12 flex items-center justify-center text-white shadow-lg"
                 >
