@@ -18,11 +18,13 @@ export default function () {
     BarangTemu[]
   >([]);
   const [myLocation, setMyLocation] = createSignal<any>();
+  const [isLoading, setIsLoading] = createSignal(true);
 
   const nav = useNavigate();
   const notif = useNotif();
 
   const getBarangTerdekat = async () => {
+    setIsLoading(true);
     try {
       if (myLocation().lat && myLocation().lng) {
         const { data: barang_hilang } = await http.get("/barang/hilang", {
@@ -43,6 +45,7 @@ export default function () {
     } catch (e: any) {
       notif.show(e.response.data.message, false);
     }
+    setIsLoading(false);
   };
 
   const barangTerdekat = () => {
@@ -55,6 +58,9 @@ export default function () {
       <Title title="Home"></Title>
       {/* <div class="relative"> */}
       <div class="relative grow flex flex-col">
+        <Show when={isLoading()}>
+          <Skeleton class="!absolute top-0 left-0 right-0 bottom-0 z-[99998] rounded" />
+        </Show>
         <Map
           disabled={true}
           onLocationFound={(e) => {

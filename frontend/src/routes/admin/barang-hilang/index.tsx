@@ -126,7 +126,7 @@ export default function (props: Props) {
             }
           >
             {(item) => (
-              <Card class="flex items-center space-x-3 !p-3 relative">
+              <Card class="flex items-center space-x-3 !p-3">
                 <Img src={item.foto_url} alt={item.nama} class="w-28 h-28" />
                 <div class="grow truncate">
                   <div class="font-semibold truncate">{item.nama}</div>
