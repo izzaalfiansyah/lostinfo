@@ -42,7 +42,7 @@ class BarangHilangController extends Controller
         } catch (\Exception $e) {
             if ($req->terdekat) {
                 return Response::json([
-                    'message' => 'latitude dan longitude tidak diketahui'
+                    'message' => 'latitude dan longitude tidak valid'
                 ], 400);
             }
         }
