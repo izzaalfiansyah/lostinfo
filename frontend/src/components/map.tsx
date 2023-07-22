@@ -10,9 +10,10 @@ interface Props {
     lng?: any;
   };
   marks?: Array<{
-    lat?: any;
-    lng?: any;
+    lat: any;
+    lng: any;
     text?: string;
+    color: string;
     onClick?: () => any;
   }>;
   onChange?: (latlng: LatLng) => any;
@@ -121,8 +122,8 @@ export default function (props: Props) {
             lng: item.lng,
           },
           {
-            color: "red",
-            fillColor: "red",
+            color: item.color,
+            fillColor: item.color,
             fillOpacity: 0.5,
             radius: 20,
           }
