@@ -11,24 +11,27 @@ import Map, { getLatLngByAddress } from "~/components/map";
 import Select from "~/components/select";
 import Textarea from "~/components/textarea";
 import Title from "~/components/title";
+import { useAuth } from "~/contexts/auth";
 import { useNotif } from "~/contexts/notif";
-import BarangHilang from "~/interfaces/barang-hilang";
+import BarangTemu from "~/interfaces/barang-temu";
 import User from "~/interfaces/user";
 import fileReader from "~/libs/file-reader";
 import formatDate from "~/libs/format-date";
 import http from "~/libs/http";
 
 export default function () {
-  const [req, setReq] = createStore<BarangHilang>({});
+  const [req, setReq] = createStore<BarangTemu>({});
 
   const notif = useNotif();
   const nav = useNavigate();
+  const [auth] = useAuth();
 
   const save = async () => {
     try {
-      await http.post("/barang/hilang", req);
+      setReq("user_id", auth().id);
+      await http.post("/barang/temu", req);
       notif.show("data berhasil disimpan");
-      nav("/admin/barang-hilang");
+      nav("/user/barang-temu");
     } catch (e: any) {
       notif.show(e.response.data.message, false);
     }
@@ -37,8 +40,8 @@ export default function () {
   return (
     <>
       <Title
-        title="Tambah Barang Hilang"
-        subtitle="Menambahkan data barang hilang"
+        title="Tambah Barang Temu"
+        subtitle="Menambahkan data barang temu"
       ></Title>
       <Save item={[req, setReq]} onSubmit={save}></Save>
     </>
@@ -46,7 +49,7 @@ export default function () {
 }
 
 interface SaveProps {
-  item: [BarangHilang, SetStoreFunction<BarangHilang>];
+  item: [BarangTemu, SetStoreFunction<BarangTemu>];
   onSubmit: () => Promise<void>;
   onMount?: () => void;
 }
@@ -80,7 +83,7 @@ export function Save(props: SaveProps) {
   const handleCariTempat = async () => {
     setIsLoading(true);
     try {
-      const data = await getLatLngByAddress(req.tempat_hilang as string);
+      const data = await getLatLngByAddress(req.tempat_temu as string);
       setReq("maps_lat", data[0].lat);
       setReq("maps_lng", data[0].lon);
     } catch (e: any) {
@@ -122,12 +125,15 @@ export function Save(props: SaveProps) {
               onChange={(e) => setReq("deskripsi", e.currentTarget.value)}
             />
             <Input
-              label="Tempat Hilang"
+              label="Tempat Temu"
               required
-              placeholder="Masukkan Tempat Hilang"
+              placeholder="Masukkan Tempat Temu"
               disabled={isLoading()}
-              value={req.tempat_hilang}
-              onChange={(e) => setReq("tempat_hilang", e.currentTarget.value)}
+              value={req.tempat_temu}
+              onChange={(e) => {
+                setReq("tempat_temu", e.currentTarget.value);
+                handleCariTempat();
+              }}
               append={
                 <button
                   class="p-3 bg-primary text-white h-full flex items-center justify-center"
@@ -153,17 +159,6 @@ export function Save(props: SaveProps) {
             </div>
           </div>
           <div>
-            <Select
-              label="Pemilik"
-              value={req.user_id}
-              onChange={(e) => setReq("user_id", e.currentTarget.value)}
-              disabled={isLoading()}
-            >
-              <option value="">Pilih Pemilik</option>
-              <For each={users()}>
-                {(item) => <option value={item.id as any}>{item.nama}</option>}
-              </For>
-            </Select>
             <FileInput
               label="Foto"
               title="Pilih Foto"
@@ -176,27 +171,11 @@ export function Save(props: SaveProps) {
                 <Img src={req.foto_url} alt="Foto Barang" class="w-24 h-24" />
               </div>
             </div>
-            <Input
-              type="number"
-              label="Hadiah"
-              required
-              placeholder="Masukkan Hadiah"
-              disabled={isLoading()}
-              value={req.hadiah}
-              prepend={
-                <div class="p-3 bg-gray-200 h-full flex items-center justify-center">
-                  Rp
-                </div>
-              }
-              onChange={(e) =>
-                setReq("hadiah", parseInt(e.currentTarget.value))
-              }
-            />
             <Show when={req.id}>
               <Select
                 label="Ditemukan"
-                value={req.ditemukan}
-                onChange={(e) => setReq("ditemukan", e.currentTarget.value)}
+                value={req.dikembalikan}
+                onChange={(e) => setReq("dikembalikan", e.currentTarget.value)}
                 disabled={isLoading()}
               >
                 <option value="">Pilih Status</option>
@@ -204,7 +183,7 @@ export function Save(props: SaveProps) {
                 <option value={"0"}>Belum Ditemukan</option>
               </Select>
               <Input
-                label="Tanggal Hilang"
+                label="Tanggal Temu"
                 value={formatDate(req.created_at as string)}
                 disabled
               />

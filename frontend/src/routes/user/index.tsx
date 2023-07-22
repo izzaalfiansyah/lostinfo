@@ -68,9 +68,13 @@ export default function () {
             lat: item.maps_lat,
             lng: item.maps_lng,
             text: item.nama,
-            color: (item as any).ditemukan ? "red" : "lime",
+            color: (item as any).hadiah ? "red" : "lime",
             onClick: () => {
-              nav("/user/barang-hilang/" + item.id);
+              nav(
+                "/user/" +
+                  ((item as any).hadiah ? "barang-hilang/" : "barang-temu/") +
+                  item.id
+              );
             },
           }))}
           class="!h-full grow"

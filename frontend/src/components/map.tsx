@@ -75,8 +75,8 @@ export default function (props: Props) {
       fillOpacity: 0.5,
       radius: 30,
     })
-      .bindPopup("Kamu berada di sini")
-      .openPopup();
+      .bindTooltip("Kamu berada di sini")
+      .openTooltip();
 
     if (!props.disabled) {
       circle.on("click", (e) => makeMarker(e.latlng));
@@ -116,30 +116,27 @@ export default function (props: Props) {
   createEffect((oldMarks) => {
     if (oldMarks != props.marks) {
       props.marks?.forEach((item) => {
-        const circle = L.circle(
-          {
-            lat: item.lat,
-            lng: item.lng,
-          },
-          {
-            color: item.color,
-            fillColor: item.color,
-            fillOpacity: 0.5,
-            radius: 20,
-          }
-        )
-          .bindPopup(item.text || `${item.lat},${item.lng}`)
-          .openPopup({
-            lat: item.lat,
-            lng: item.lng,
-          });
+        const latlng = {
+          lat: item.lat,
+          lng: item.lng,
+        };
+        const content = item.text || `${item.lat},${item.lng}`;
+
+        const tooltip = L.tooltip().setLatLng(latlng).setContent(content);
+        const circle = L.circle(latlng, {
+          color: item.color,
+          fillColor: item.color,
+          fillOpacity: 0.5,
+          radius: 20,
+        })
+          .bindTooltip(tooltip)
+          .openTooltip();
 
         if (item.onClick) {
           circle.on("click", item.onClick);
         }
 
         circle.addTo(map());
-        circle.openPopup();
       });
     }
 

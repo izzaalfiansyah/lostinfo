@@ -143,11 +143,6 @@ export function Save(props: SaveProps) {
             />
             <div class="mb-2">
               <label for="">Lokasi Maps</label>
-              <Input
-                value={[req.maps_lat, req.maps_lng].toString()}
-                placeholder="[lat,lng]"
-                disabled
-              />
               <Map
                 value={{
                   lat: req.maps_lat,

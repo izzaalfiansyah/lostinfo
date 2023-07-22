@@ -137,7 +137,7 @@ export default function (props: Props) {
                     @{item.user?.username}
                   </A>
                   <div class="text-gray-500 text-xs">
-                    {formatDate(item.created_at as string, true)}
+                    Hilang {formatDate(item.created_at as string, true)}
                   </div>
                   <div class="mt-2 flex items-center">
                     <A

@@ -140,7 +140,7 @@ export default function (props: Props) {
                     </A>
                   </div>
                   <div class="text-gray-500 text-xs">
-                    {formatDate(item.created_at as string, true)}
+                    Ditemukan {formatDate(item.created_at as string, true)}
                   </div>
                   <div class="mt-3 flex items-center">
                     <A

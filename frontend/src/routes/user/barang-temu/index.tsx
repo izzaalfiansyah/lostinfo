@@ -1,7 +1,7 @@
 import { For, Show, createEffect, createSignal, onMount } from "solid-js";
 import { createStore } from "solid-js/store";
 import { A } from "solid-start";
-import ModalDelete from "~/components/barang-hilang/modal-delete";
+import ModalDelete from "~/components/barang-temu/modal-delete";
 import Card from "~/components/card";
 import FloatingComponent from "~/components/floating-component";
 import { AddIcon, DeleteIcon, EditIcon, SearchIcon } from "~/components/icons";
@@ -12,7 +12,7 @@ import Skeleton from "~/components/skeleton";
 import Title from "~/components/title";
 import { useAuth } from "~/contexts/auth";
 import { useNotif } from "~/contexts/notif";
-import BarangHilang from "~/interfaces/barang-hilang";
+import BarangTemu from "~/interfaces/barang-temu";
 import formatDate from "~/libs/format-date";
 import http from "~/libs/http";
 
@@ -21,8 +21,8 @@ interface Props {
 }
 
 export default function (props: Props) {
-  const [items, setItems] = createSignal<BarangHilang[]>([]);
-  const [req, setReq] = createStore<BarangHilang>({});
+  const [items, setItems] = createSignal<BarangTemu[]>([]);
+  const [req, setReq] = createStore<BarangTemu>({});
   const [isLoading, setIsLoading] = createSignal(false);
   const [modal, setModal] = createStore({
     delete: false,
@@ -42,7 +42,7 @@ export default function (props: Props) {
   const get = async () => {
     setIsLoading(true);
     try {
-      const { data } = await http.get("/barang/hilang", {
+      const { data } = await http.get("/barang/temu", {
         params: filter,
       });
 
@@ -73,7 +73,7 @@ export default function (props: Props) {
 
   return (
     <>
-      <Title title="Barang Hilang"></Title>
+      <Title title="Barang Temu"></Title>
       <Input
         value={filter.search}
         onChange={(e) => setFilter("search", e.currentTarget.value)}
@@ -116,23 +116,24 @@ export default function (props: Props) {
                   >
                     {item.ditemukan_detail} ditemukan
                   </span> */}
-                  <div>
+                  <div class="text-xs">
+                    Oleh{" "}
                     <A
                       href={"/user/user/" + item.user_id}
-                      class="text-gray-500 text-xs text-primary"
+                      class="text-gray-500 text-primary"
                     >
                       @{item.user?.username}
                     </A>
                   </div>
                   <div class="text-gray-500 text-xs">
-                    Hilang {formatDate(item.created_at as string, true)}{" "}
+                    Ditemukan {formatDate(item.created_at as string, true)}{" "}
                   </div>
                   <div class="mt-2 flex items-center">
                     <Show
                       when={item.user_id == auth().id}
                       fallback={
                         <A
-                          href={"/user/barang-hilang/" + item.id}
+                          href={"/user/barang-temu/" + item.id}
                           class="text-sm text-green-500 border inline-block border-green-500 hover:text-white hover:bg-green-500 transition rounded-full px-3 p-1"
                         >
                           <SearchIcon class="w-4 h-4" />
@@ -140,7 +141,7 @@ export default function (props: Props) {
                       }
                     >
                       <A
-                        href={"/user/barang-hilang/" + item.id}
+                        href={"/user/barang-temu/" + item.id}
                         class="text-sm text-primary border inline-block border-primary hover:text-white hover:bg-primary transition rounded-full px-3 p-1"
                       >
                         <EditIcon class="w-4 h-4" />
@@ -186,7 +187,7 @@ export default function (props: Props) {
       <Show when={!props.user_id}>
         <FloatingComponent>
           <A
-            href="/user/barang-hilang/create"
+            href="/user/barang-temu/create"
             class="rounded-full bg-primary h-14 w-14 flex items-center justify-center text-white shadow-lg"
           >
             <AddIcon class="w-7 h-7" />

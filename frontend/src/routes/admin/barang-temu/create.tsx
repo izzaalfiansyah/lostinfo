@@ -126,7 +126,10 @@ export function Save(props: SaveProps) {
               placeholder="Masukkan Tempat Hilang"
               disabled={isLoading()}
               value={req.tempat_temu}
-              onChange={(e) => setReq("tempat_temu", e.currentTarget.value)}
+              onChange={(e) => {
+                setReq("tempat_temu", e.currentTarget.value);
+                handleCariTempat();
+              }}
               append={
                 <button
                   class="p-3 bg-primary text-white"
@@ -139,11 +142,6 @@ export function Save(props: SaveProps) {
             />
             <div class="mb-2">
               <label for="">Lokasi Maps</label>
-              <Input
-                value={[req.maps_lat, req.maps_lng].toString()}
-                placeholder="[lat,lng]"
-                disabled
-              />
               <Map
                 value={{
                   lat: req.maps_lat,
