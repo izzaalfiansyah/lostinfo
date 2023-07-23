@@ -115,10 +115,11 @@ export default function () {
           />
         </div>
         <Table
-          heads={["Nama", "Alamat", "Telepon", "Email", "Opsi"]}
+          heads={["Nama", "Alamat", "Telepon", "Email", "Status", "Opsi"]}
           items={
             isLoading()
               ? Array.from({ length: 5 }).map(() => [
+                  <Skeleton class="rounded-full p-2" />,
                   <Skeleton class="rounded-full p-2" />,
                   <Skeleton class="rounded-full p-2" />,
                   <Skeleton class="rounded-full p-2" />,
@@ -134,6 +135,20 @@ export default function () {
                   item.alamat,
                   item.telepon,
                   item.email,
+                  <>
+                    <span
+                      class={
+                        "rounded-full text-xs text-white px-2 " +
+                        {
+                          "1": "bg-green-500",
+                          "0": "bg-red-500",
+                          "9": "bg-orange-500",
+                        }[item.status as "1"]
+                      }
+                    >
+                      {item.status_detail}
+                    </span>
+                  </>,
                   <>
                     <button
                       class="mr-3"

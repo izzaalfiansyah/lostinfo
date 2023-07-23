@@ -6,6 +6,7 @@ import {
   EnvelopeIcon,
   MapPinIcon,
   PhoneIcon,
+  WarningIcon,
 } from "~/components/icons";
 import Img from "~/components/img";
 import Title from "~/components/title";
@@ -23,6 +24,7 @@ import { useDialogImg } from "~/contexts/dialog-img";
 import Button from "~/components/button";
 import { useAuth } from "~/contexts/auth";
 import FloatingComponent from "~/components/floating-component";
+import ModalReport from "~/components/user/modal-report";
 
 interface Props {
   id?: any;
@@ -32,6 +34,7 @@ export default function (props: Props) {
   const [req, setReq] = createStore<User>();
   const [selectedTab, setSelectedTab] = createSignal<number>(0);
   const [modalEdit, setModalEdit] = createSignal<boolean>(false);
+  const [modalReport, setModalReport] = createSignal<boolean>(false);
   const [isLoading, setIsLoading] = createSignal(false);
 
   const tabs = [
@@ -117,7 +120,20 @@ export default function (props: Props) {
                 <div class="text-2xl font-semibold">{req.nama}</div>
                 <div>@{req.username}</div>
                 <div class="mt-2 flex lg:justify-start justify-center">
-                  <Show when={req.id == auth().id}>
+                  <Show
+                    when={req.id == auth().id}
+                    fallback={
+                      <button
+                        type="button"
+                        class="text-sm text-orange-500 border block border-orange-500 hover:text-white hover:bg-orange-500 transition rounded-full px-3 p-1 flex items-center mr-2"
+                        onClick={() => {
+                          setModalReport(true);
+                        }}
+                      >
+                        <WarningIcon class="w-4 h-4 mr-2" /> Laporkan
+                      </button>
+                    }
+                  >
                     <button
                       type="button"
                       class="text-sm text-primary border block border-primary hover:text-white hover:bg-primary transition rounded-full px-3 p-1 flex items-center mr-2"
@@ -195,17 +211,6 @@ export default function (props: Props) {
         <FloatingComponent>
           <a
             target="_blank"
-            href={
-              "https://www.google.com/maps?saddr=My+Location&daddr=" +
-              req.alamat
-            }
-            class="rounded-full block bg-blue-500 h-12 w-12 flex items-center justify-center text-white shadow-lg"
-          >
-            <MapPinIcon class="w-5 h-5" />
-          </a>
-
-          <a
-            target="_blank"
             href={"mailto:" + req.email}
             class="rounded-full block bg-red-500 h-12 w-12 flex items-center justify-center text-white shadow-lg"
           >
@@ -219,6 +224,16 @@ export default function (props: Props) {
           >
             <PhoneIcon class="w-5 h-5" />
           </a>
+          <a
+            target="_blank"
+            href={
+              "https://www.google.com/maps?saddr=My+Location&daddr=" +
+              req.alamat
+            }
+            class="rounded-full block bg-blue-500 h-12 w-12 flex items-center justify-center text-white shadow-lg"
+          >
+            <MapPinIcon class="w-5 h-5" />
+          </a>
         </FloatingComponent>
       </Show>
 
@@ -231,6 +246,12 @@ export default function (props: Props) {
           req={[req, setReq]}
         />
       </Show>
+
+      <ModalReport
+        user_id={req.id as string}
+        onClose={() => setModalReport(false)}
+        show={modalReport()}
+      />
 
       <Show when={req.id && !props.id}>
         <div class="mt-5"></div>

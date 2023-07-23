@@ -6,6 +6,7 @@ use App\Http\Controllers\ChatController;
 use App\Http\Controllers\ChatDetailController;
 use App\Http\Controllers\GrafikController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\UserLaporController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -28,6 +29,7 @@ Route::prefix('/grafik')->group(function () {
 });
 
 Route::prefix('/user')->group(function () {
+    Route::resource('/lapor', UserLaporController::class);
     Route::get('/verifikasi/{id}', [UserController::class, 'verifikasi']);
     Route::post('/verifikasi/{id}', [UserController::class, 'sendVerifikasi']);
 });

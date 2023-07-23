@@ -89,7 +89,7 @@ export default function () {
       {/* </div> */}
       <FloatingComponent>
         <Card class="mt-4 !shadow-lg inline bg-opacity-75">
-          <ul class="list-disc pl-4">
+          <ul class="list-disc pl-4 text-sm">
             <li>
               <span class="text-[dodgerblue]">warna biru</span> adalah lokasi
               anda saat ini.
