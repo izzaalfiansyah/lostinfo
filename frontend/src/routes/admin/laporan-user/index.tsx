@@ -101,7 +101,7 @@ export default function () {
               })),
             ]}
             onAsync={getUser}
-            placeholder="Pilih Pemilik"
+            placeholder="Pilih User"
           />
           <div class="mt-5">
             <Button type="submit" variant="primary" class="flex items-center">

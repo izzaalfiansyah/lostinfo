@@ -106,45 +106,47 @@ export default function (props: Props) {
             value={filter.search}
             onChange={(e) => setFilter("search", e.currentTarget.value)}
           />
-          <div class="grid lg:grid-cols-2 grid-cols-1 gap-x-3">
-            <Autocomplete
-              label="Pemilik"
-              value={filter.user_id}
-              onChange={(val) => setFilter("user_id", val)}
-              options={[
-                {
-                  text: "Semua",
-                  value: "",
-                },
-                ...users().map((item) => ({
-                  text: item.nama,
-                  value: item.id,
-                })),
-              ]}
-              onAsync={getUser}
-              placeholder="Pilih Pemilik"
-            />
-            <Autocomplete
-              label="Status"
-              value={filter.ditemukan}
-              onChange={(val) => setFilter("ditemukan", val)}
-              placeholder="Pilih Status"
-              options={[
-                {
-                  text: "Semua",
-                  value: "",
-                },
-                {
-                  text: "Sudah Ditemukan",
-                  value: "1",
-                },
-                {
-                  text: "Belum Ditemukan",
-                  value: "0",
-                },
-              ]}
-            />
-          </div>
+          <Show when={!props.user_id}>
+            <div class="grid lg:grid-cols-2 grid-cols-1 gap-x-3">
+              <Autocomplete
+                label="Pemilik"
+                value={filter.user_id}
+                onChange={(val) => setFilter("user_id", val)}
+                options={[
+                  {
+                    text: "Semua",
+                    value: "",
+                  },
+                  ...users().map((item) => ({
+                    text: item.nama,
+                    value: item.id,
+                  })),
+                ]}
+                onAsync={getUser}
+                placeholder="Pilih Pemilik"
+              />
+              <Autocomplete
+                label="Status"
+                value={filter.ditemukan}
+                onChange={(val) => setFilter("ditemukan", val)}
+                placeholder="Pilih Status"
+                options={[
+                  {
+                    text: "Semua",
+                    value: "",
+                  },
+                  {
+                    text: "Sudah Ditemukan",
+                    value: "1",
+                  },
+                  {
+                    text: "Belum Ditemukan",
+                    value: "0",
+                  },
+                ]}
+              />
+            </div>
+          </Show>
           <div class="grid grid-cols-2 items-end gap-x-3">
             <Input
               type="number"

@@ -15,7 +15,7 @@ import User from "~/interfaces/user";
 import formatDate from "~/libs/format-date";
 import http from "~/libs/http";
 import BarangHilang from "../barang-hilang";
-import BarangTemu from "../barang-hilang";
+import BarangTemu from "../barang-temu";
 import { Dynamic } from "solid-js/web";
 import ModalSave from "~/components/user/modal-save";
 import Card from "~/components/card";
