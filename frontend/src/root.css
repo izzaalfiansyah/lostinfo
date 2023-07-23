@@ -23,16 +23,18 @@ body {
   padding: 0;
 }
 
+.tel-input[type="number"]::-webkit-inner-spin-button,
+.tel-input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
 .solid-select-container {
   @apply relative;
 }
 
 .solid-select-control {
   @apply relative !cursor-text;
-}
-
-.solid-select-input {
-  @apply w-full h-10 focus:ring-2 focus:border-primary focus:ring-primary focus:ring-opacity-10 border-gray-100 transition py-1.5 disabled:bg-gray-100 focus:outline-none;
 }
 
 .solid-select-control *:first-child {
@@ -44,9 +46,14 @@ body {
 }
 
 .solid-select-list {
-  @apply bg-white shadow absolute bottom-0 left-0 right-0 translate-y-full;
+  @apply bg-white shadow absolute bottom-0 left-0 right-0 z-[20] translate-y-full;
 }
 
 .solid-select-option {
-  @apply p-2 hover:bg-gray-100;
+  @apply p-2 hover:bg-gray-100 cursor-pointer;
+}
+
+.solid-input,
+.solid-select-input {
+  @apply w-full h-10 focus:ring-2 focus:border-primary focus:ring-primary focus:ring-opacity-10 border border-gray-100 transition py-1.5 px-3 disabled:bg-gray-100 focus:outline-none;
 }

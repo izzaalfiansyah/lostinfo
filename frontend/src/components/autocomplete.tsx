@@ -5,6 +5,7 @@ import {
   Component,
   createSignal,
   createEffect,
+  onMount,
 } from "solid-js";
 import { InputLabel } from "./input";
 import { Select } from "@thisbeyond/solid-select";
@@ -17,8 +18,9 @@ interface Props extends CreateSelectProps {
   hint?: string;
   options: Value[];
   value?: any;
-  onChange?: (item: any) => any;
+  onChange?: (val: any) => any;
   placeholder?: string;
+  required?: boolean;
 }
 
 export default function (props: Props) {
@@ -29,6 +31,8 @@ export default function (props: Props) {
     "value",
   ]);
   const [initialValue, setInitialValue] = createSignal<any>(null);
+
+  let el: HTMLDivElement | undefined;
 
   createEffect(() => {
     if (local.value) {
@@ -41,8 +45,14 @@ export default function (props: Props) {
     }
   });
 
+  onMount(() => {
+    const inputEl: HTMLInputElement = el?.children[1].children[0]
+      .children[1] as any;
+    inputEl.required = props.required || false;
+  });
+
   return (
-    <div class="mb-2">
+    <div class="mb-2" ref={el}>
       <InputLabel {...others}>{local.label}</InputLabel>
       <Select
         {...others}

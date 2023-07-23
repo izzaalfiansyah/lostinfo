@@ -26,19 +26,19 @@ export default function (props: Props) {
   };
 
   createEffect((oldVal) => {
-    if (oldVal != props.show) {
-      if (props.show == true) {
-        setSearchParams({ m: 1 });
-        window.addEventListener("keydown", handleKeyDown);
-        window.addEventListener("popstate", handlePopState);
-      } else {
-        if (searchParams.m) {
-          window.history.back();
-        }
-        window.removeEventListener("popstate", handlePopState);
-        window.removeEventListener("keydown", handleKeyDown);
-      }
-    }
+    // if (oldVal != props.show) {
+    //   if (props.show == true) {
+    //     setSearchParams({ m: 1 });
+    //     window.addEventListener("keydown", handleKeyDown);
+    //     window.addEventListener("popstate", handlePopState);
+    //   } else {
+    //     if (searchParams.m) {
+    //       window.history.back();
+    //     }
+    //     window.removeEventListener("popstate", handlePopState);
+    //     window.removeEventListener("keydown", handleKeyDown);
+    //   }
+    // }
 
     return props.show;
   });

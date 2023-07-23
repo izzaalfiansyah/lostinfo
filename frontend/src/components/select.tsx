@@ -12,10 +12,7 @@ export default function (props: Props) {
   return (
     <div class="mb-2">
       <InputLabel {...others}>{local.label}</InputLabel>
-      <select
-        class="w-full h-10 focus:ring-2 focus:border-primary focus:ring-primary focus:ring-opacity-10 border-gray-100 transition p-1.5 px-3 disabled:bg-gray-100 focus:outline-none"
-        {...others}
-      ></select>
+      <select class="solid-input" {...others}></select>
       <Show when={local.hint}>
         <div class="text-xs text-gray-400">{local.hint}</div>
       </Show>

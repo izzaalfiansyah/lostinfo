@@ -19,7 +19,7 @@ export default function (props: Props) {
         </div>
         <input
           type="file"
-          class="w-full h-10 border border-gray-100 file:h-10 file:w-10 file:mr-3 file:opacity-0 focus:outline-none focus:ring-2 focus:border-primary focus:ring-primary focus:ring-opacity-10 border-gray-100 transition disabled:bg-gray-100 cursor-pointer"
+          class="solid-input file:h-10 file:w-10 file:mr-3 file:opacity-0 cursor-pointer !py-0 !px-0"
           {...others}
         />
       </div>

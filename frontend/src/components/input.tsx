@@ -5,6 +5,7 @@ interface Props extends JSX.InputHTMLAttributes<HTMLInputElement> {
   hint?: string;
   prepend?: JSX.Element;
   append?: JSX.Element;
+  tel?: boolean;
 }
 
 export default function (props: Props) {
@@ -21,7 +22,8 @@ export default function (props: Props) {
       <div class="flex flex-row">
         <div class="h-10">{local.prepend}</div>
         <input
-          class="w-full h-10 focus:ring-2 focus:border-primary focus:ring-primary focus:ring-opacity-10 border-gray-100 transition py-1.5 disabled:bg-gray-100 focus:outline-none"
+          class="solid-input"
+          classList={{ "tel-input": props.tel }}
           {...others}
         />
         <div class="h-10">{local.append}</div>

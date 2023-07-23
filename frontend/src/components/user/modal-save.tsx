@@ -10,6 +10,7 @@ import fileReader from "~/libs/file-reader";
 import Img from "../img";
 import FileInput from "../file-input";
 import Button from "../button";
+import Autocomplete from "../autocomplete";
 
 interface Props {
   show: boolean;
@@ -90,39 +91,57 @@ export default function (props: Props) {
               onChange={(e) => setReq("email", e.currentTarget.value)}
             />
             <Input
+              tel
               label="Telepon"
-              type="tel"
+              type="number"
               placeholder="Masukkan Telepon"
               required
               value={req.telepon}
               onChange={(e) => setReq("telepon", e.currentTarget.value)}
             />
-            <Select
+            <Autocomplete
+              options={[
+                {
+                  value: "1",
+                  text: "Admin",
+                },
+                {
+                  value: "2",
+                  text: "Pengguna",
+                },
+              ]}
               label="Role"
+              placeholder="Pilih Role"
               value={req.role}
               required
-              onChange={(e) => setReq("role", e.currentTarget.value)}
-            >
-              <option value="">Pilih Role</option>
-              <option value="1">Admin</option>
-              <option value="2">Pengguna</option>
-            </Select>
-            <Select
+              onChange={(val) => setReq("role", val)}
+            />
+            <Autocomplete
+              options={[
+                {
+                  value: "1",
+                  text: "Aktif",
+                },
+                {
+                  value: "0",
+                  text: "Nonaktif",
+                },
+                {
+                  value: "9",
+                  text: "Banned",
+                },
+              ]}
               label="Status"
+              placeholder="Pilih Status"
               value={req.status}
-              onChange={(e) => setReq("status", e.currentTarget.value)}
-            >
-              <option value="">Pilih Status</option>
-              <option value="1">Aktif</option>
-              <option value="0">Nonaktif</option>
-              <option value="9">Banned</option>
-            </Select>
+              required
+              onChange={(val) => setReq("status", val)}
+            />
           </div>
           <div class="flex-1">
             <FileInput
               label="Foto"
               title="Pilih Foto"
-              required={!props.isEdit}
               onChange={handleFotoChange}
               accept="image/*"
               hint={
