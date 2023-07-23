@@ -22,6 +22,8 @@ class UserLaporResource extends JsonResource
             'alasan' => $this->alasan,
             'user' => new UserResource(User::find($this->user_id)),
             'pelapor' => new UserResource(User::find($this->pelapor_id)),
+            'created_at' => $this->created_at,
+            'updated_at' => $this->updated_at,
         ];
     }
 }

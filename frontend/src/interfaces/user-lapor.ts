@@ -7,6 +7,8 @@ interface UserLapor {
   alasan?: string;
   user?: User;
   pelapor?: User;
+  created_at?: string;
+  updated_at?: string;
 }
 
 export default UserLapor;

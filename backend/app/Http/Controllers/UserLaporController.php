@@ -17,7 +17,7 @@ class UserLaporController extends Controller
             $builder = $builder->where('user_id', $user_id);
         }
 
-        $items = $builder->get();
+        $items = $builder->paginate($req->limit ?: 10);
 
         return UserLaporResource::collection($items);
     }

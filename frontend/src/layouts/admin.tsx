@@ -10,6 +10,7 @@ import {
   LoveIcon,
   MenuIcon,
   UsersIcon,
+  WarningIcon,
 } from "~/components/icons";
 import Img from "~/components/img";
 import Modal from "~/components/modal";
@@ -42,6 +43,11 @@ export default function (props: Props) {
       icon: ArchiveIcon,
       title: "Data Barang Temu",
       path: "/admin/barang-temu",
+    },
+    {
+      icon: WarningIcon,
+      title: "Laporan User",
+      path: "/admin/laporan-user",
     },
     // {
     //   icon: StackIcon,
