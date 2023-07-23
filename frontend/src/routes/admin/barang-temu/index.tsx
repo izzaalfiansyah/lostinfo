@@ -107,7 +107,7 @@ export default function (props: Props) {
           />
           <div class="grid lg:grid-cols-2 grid-cols-1 gap-x-3">
             <Autocomplete
-              label="Pemilik"
+              label="Penemu"
               value={filter.user_id}
               onChange={(val) => setFilter("user_id", val)}
               options={[
@@ -121,7 +121,7 @@ export default function (props: Props) {
                 })),
               ]}
               onAsync={getUser}
-              placeholder="Pilih Pemilik"
+              placeholder="Pilih Penemu"
             />
             <Autocomplete
               label="Status"

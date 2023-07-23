@@ -1,8 +1,11 @@
 import { A } from "@solidjs/router";
 import { createEffect, createSignal, onMount } from "solid-js";
 import { createStore } from "solid-js/store";
+import Accordion from "~/components/accordion";
+import Autocomplete from "~/components/autocomplete";
+import Button from "~/components/button";
 import Card from "~/components/card";
-import { DeleteIcon, EditIcon } from "~/components/icons";
+import { DeleteIcon, EditIcon, SearchIcon } from "~/components/icons";
 import Input from "~/components/input";
 import Pagination from "~/components/pagination";
 import Skeleton from "~/components/skeleton";
@@ -18,6 +21,7 @@ import http from "~/libs/http";
 
 export default function () {
   const [items, setItems] = createSignal<UserLapor[]>([]);
+  const [users, setUsers] = createSignal<User[]>([]);
   const [req, setReq] = createStore<UserLapor>({});
   const [isEdit, setIsEdit] = createSignal<boolean>(false);
   const [isLoading, setIsLoading] = createSignal<boolean>(false);
@@ -26,14 +30,26 @@ export default function () {
     delete: false,
   });
   const [filter, setFilter] = createStore({
-    pageTotal: 0,
-    recordTotal: 0,
     limit: 10,
     page: 1,
     search: "",
+    user_id: "",
+  });
+  const [total, setTotal] = createStore({
+    page: 0,
+    record: 0,
   });
 
   const notif = useNotif();
+
+  const getUser = async (search: string = "") => {
+    const { data } = await http.get("/user", {
+      params: {
+        search,
+      },
+    });
+    setUsers(data.data);
+  };
 
   const get = async () => {
     setIsLoading(true);
@@ -43,27 +59,14 @@ export default function () {
       });
 
       const totalPage = Math.ceil(data.meta.total / filter.limit);
-      setFilter("recordTotal", data.meta.total);
-      setFilter("pageTotal", totalPage);
+      setTotal("record", data.meta.total);
+      setTotal("page", totalPage);
       setItems(data.data);
     } catch (e: any) {
       notif.show(e.response.data.message, false);
     }
     setIsLoading(false);
   };
-
-  createEffect((oldVal: any) => {
-    const val = {
-      page: filter.page,
-      search: filter.search,
-    };
-
-    if (oldVal) {
-      get();
-    }
-
-    return val;
-  });
 
   onMount(async () => {
     await get();
@@ -75,6 +78,39 @@ export default function () {
         title="Laporan User"
         subtitle="Menjelajahi dan menganalisis data pengguna"
       />
+
+      <Accordion title="Filter" class="mb-4">
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            get();
+          }}
+        >
+          <Autocomplete
+            label="User"
+            value={filter.user_id}
+            onChange={(val) => setFilter("user_id", val)}
+            options={[
+              {
+                text: "Semua",
+                value: "",
+              },
+              ...users().map((item) => ({
+                text: item.nama,
+                value: item.id,
+              })),
+            ]}
+            onAsync={getUser}
+            placeholder="Pilih Pemilik"
+          />
+          <div class="mt-5">
+            <Button type="submit" variant="primary" class="flex items-center">
+              <SearchIcon class="w-4 h-4 mr-2" />
+              Terapkan
+            </Button>
+          </div>
+        </form>
+      </Accordion>
 
       <Card>
         <Table
@@ -105,9 +141,9 @@ export default function () {
         <div class="mt-3"></div>
         <Pagination
           page={filter.page}
-          pageTotal={filter.pageTotal}
+          pageTotal={total.page}
           record={items().length}
-          recordTotal={filter.recordTotal}
+          recordTotal={total.record}
           onChange={(val) => {
             setFilter("page", val);
           }}
