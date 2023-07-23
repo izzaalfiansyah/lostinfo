@@ -104,7 +104,7 @@ export default function () {
                       </td>
                     </tr>
                     <tr>
-                      <td>Dikembalikan</td>
+                      <td>Status</td>
                       <td class="px-3">:</td>
                       <td>
                         <span

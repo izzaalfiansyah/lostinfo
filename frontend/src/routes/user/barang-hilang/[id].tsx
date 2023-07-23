@@ -109,7 +109,7 @@ export default function () {
                       <td>{formatMoney(req.hadiah)}</td>
                     </tr>
                     <tr>
-                      <td>Ditemukan</td>
+                      <td>Status</td>
                       <td class="px-3">:</td>
                       <td>
                         <span

@@ -1,7 +1,10 @@
 import { For, Show, createEffect, createSignal, onMount } from "solid-js";
 import { createStore } from "solid-js/store";
 import { A } from "solid-start";
+import Accordion from "~/components/accordion";
+import Autocomplete from "~/components/autocomplete";
 import ModalDelete from "~/components/barang-temu/modal-delete";
+import Button from "~/components/button";
 import Card from "~/components/card";
 import FloatingComponent from "~/components/floating-component";
 import { AddIcon, DeleteIcon, EditIcon, SearchIcon } from "~/components/icons";
@@ -13,6 +16,7 @@ import Title from "~/components/title";
 import { useAuth } from "~/contexts/auth";
 import { useNotif } from "~/contexts/notif";
 import BarangTemu from "~/interfaces/barang-temu";
+import User from "~/interfaces/user";
 import formatDate from "~/libs/format-date";
 import http from "~/libs/http";
 
@@ -22,6 +26,7 @@ interface Props {
 
 export default function (props: Props) {
   const [items, setItems] = createSignal<BarangTemu[]>([]);
+  const [users, setUsers] = createSignal<User[]>([]);
   const [req, setReq] = createStore<BarangTemu>({});
   const [isLoading, setIsLoading] = createSignal(false);
   const [modal, setModal] = createStore({
@@ -29,15 +34,27 @@ export default function (props: Props) {
   });
   const [filter, setFilter] = createStore({
     page: 1,
-    pageTotal: 0,
-    recordTotal: 0,
     limit: 9,
     search: "",
     user_id: props.user_id || "",
+    dikembalikan: "0",
+  });
+  const [total, setTotal] = createStore({
+    page: 0,
+    record: 0,
   });
 
   const notif = useNotif();
   const [auth] = useAuth();
+
+  const getUser = async (search: string = "") => {
+    const { data } = await http.get("/user", {
+      params: {
+        search,
+      },
+    });
+    setUsers(data.data);
+  };
 
   const get = async () => {
     setIsLoading(true);
@@ -47,25 +64,14 @@ export default function (props: Props) {
       });
 
       const pageTotal = Math.ceil(data.meta.total / filter.limit);
-      setFilter("pageTotal", pageTotal);
-      setFilter("recordTotal", data.data.length);
+      setTotal("page", pageTotal);
+      setTotal("record", data.data.length);
       setItems(data.data);
     } catch (e: any) {
       notif.show(e.response.data.message, false);
     }
     setIsLoading(false);
   };
-
-  createEffect((oldVal) => {
-    if (oldVal) {
-      get();
-    }
-
-    return {
-      page: filter.page,
-      search: filter.search,
-    };
-  });
 
   onMount(async () => {
     await get();
@@ -74,11 +80,71 @@ export default function (props: Props) {
   return (
     <>
       <Title title="Barang Temu"></Title>
-      <Input
-        value={filter.search}
-        onChange={(e) => setFilter("search", e.currentTarget.value)}
-        placeholder="Cari..."
-      />
+
+      <Accordion title="Filter" class="mb-4">
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            get();
+          }}
+        >
+          <Input
+            placeholder="Cari..."
+            value={filter.search}
+            onChange={(e) => setFilter("search", e.currentTarget.value)}
+          />
+          <div class="grid lg:grid-cols-2 grid-cols-1 gap-x-3">
+            <Autocomplete
+              label="Pemilik"
+              value={filter.user_id}
+              onChange={(val) => setFilter("user_id", val)}
+              options={[
+                {
+                  text: "Semua",
+                  value: "",
+                },
+                {
+                  text: "Milik Saya",
+                  value: auth().id,
+                },
+                ...users().map((item) => ({
+                  text: item.nama,
+                  value: item.id,
+                })),
+              ]}
+              onAsync={getUser}
+              placeholder="Pilih Pemilik"
+            />
+            <Autocomplete
+              label="Status"
+              value={filter.dikembalikan}
+              onChange={(val) => setFilter("dikembalikan", val)}
+              placeholder="Pilih Status"
+              options={[
+                {
+                  text: "Semua",
+                  value: "",
+                },
+                {
+                  text: "Sudah Ditemukan",
+                  value: "1",
+                },
+                {
+                  text: "Belum Ditemukan",
+                  value: "0",
+                },
+              ]}
+            />
+          </div>
+          <div class="mt-5">
+            <Button type="submit" variant="primary" class="flex items-center">
+              <SearchIcon class="w-4 h-4 mr-2" />
+              Terapkan
+            </Button>
+          </div>
+        </form>
+      </Accordion>
+
       <div class="mb-2"></div>
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
         <Show
@@ -101,7 +167,11 @@ export default function (props: Props) {
         >
           <For
             each={items()}
-            fallback={<div class="text-center p-5">Data tidak tersedia</div>}
+            fallback={
+              <div class="text-center p-5 lg:col-span-3">
+                Data tidak tersedia
+              </div>
+            }
           >
             {(item) => (
               <Card class="flex items-center space-x-3 !p-3 relative">
@@ -168,9 +238,9 @@ export default function (props: Props) {
       <Card class="mt-4">
         <Pagination
           record={items().length}
-          recordTotal={filter.recordTotal}
+          recordTotal={total.record}
           page={filter.page}
-          pageTotal={filter.pageTotal}
+          pageTotal={total.page}
           onChange={(val) => {
             setFilter("page", val);
           }}

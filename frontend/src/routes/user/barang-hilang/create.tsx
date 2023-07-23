@@ -1,6 +1,7 @@
 import { For, Show, createSignal, onMount } from "solid-js";
 import { SetStoreFunction, createStore } from "solid-js/store";
 import { useNavigate } from "solid-start";
+import Autocomplete from "~/components/autocomplete";
 import Button from "~/components/button";
 import Card from "~/components/card";
 import FileInput from "~/components/file-input";
@@ -185,16 +186,23 @@ export function Save(props: SaveProps) {
               }
             />
             <Show when={req.id}>
-              <Select
-                label="Ditemukan"
+              <Autocomplete
+                label="Status"
                 value={req.ditemukan}
-                onChange={(e) => setReq("ditemukan", e.currentTarget.value)}
+                onChange={(val) => setReq("ditemukan", val)}
                 disabled={isLoading()}
-              >
-                <option value="">Pilih Status</option>
-                <option value={"1"}>Sudah Ditemukan</option>
-                <option value={"0"}>Belum Ditemukan</option>
-              </Select>
+                placeholder="Pilih Status"
+                options={[
+                  {
+                    text: "Sudah Ditemukan",
+                    value: "1",
+                  },
+                  {
+                    text: "Belum Ditemukan",
+                    value: "0",
+                  },
+                ]}
+              />
               <Input
                 label="Tanggal Hilang"
                 value={formatDate(req.created_at as string)}
