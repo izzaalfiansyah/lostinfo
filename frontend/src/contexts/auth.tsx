@@ -107,7 +107,6 @@ export default function AuthProvider(props: Props) {
   onMount(async () => {
     setIsLoading(true);
     await getUser();
-    setIsLoading(false);
   });
 
   return (

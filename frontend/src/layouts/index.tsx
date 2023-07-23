@@ -7,11 +7,19 @@ import UserInterface from "~/interfaces/user";
 import NotifProvider from "~/contexts/notif";
 import DialogImgProvider from "~/contexts/dialog-img";
 import User from "./user";
+import { useLocation } from "solid-start";
+import Home from "./home";
 
 export default function (props: JSX.HTMLAttributes<HTMLDivElement>) {
   const [auth, setAuth] = createSignal<UserInterface>({});
 
+  const loc = useLocation();
+
   const getComponent = () => {
+    if (loc.pathname == "/") {
+      return Home;
+    }
+
     if (auth()?.id) {
       if (auth()?.status == "0") {
         return Auth;

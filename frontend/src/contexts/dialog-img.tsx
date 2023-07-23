@@ -45,20 +45,20 @@ export default function DialogImgProvider(props: { children: JSX.Element }) {
     }
   };
 
-  createEffect((oldVal) => {
-    if (oldVal != show()) {
-      if (show() == true) {
-        setSearchParams({ m: 1 });
-        window.addEventListener("keydown", handleKeyDown);
-        window.addEventListener("popstate", handlePopState);
-      } else {
-        window.removeEventListener("popstate", handlePopState);
-        window.removeEventListener("keydown", handleKeyDown);
-      }
-    }
+  // createEffect((oldVal) => {
+  //   if (oldVal != show()) {
+  //     if (show() == true) {
+  //       setSearchParams({ m: 1 });
+  //       window.addEventListener("keydown", handleKeyDown);
+  //       window.addEventListener("popstate", handlePopState);
+  //     } else {
+  //       window.removeEventListener("popstate", handlePopState);
+  //       window.removeEventListener("keydown", handleKeyDown);
+  //     }
+  //   }
 
-    return show();
-  });
+  //   return show();
+  // });
 
   return (
     <DialogImgContext.Provider value={value}>
@@ -69,7 +69,7 @@ export default function DialogImgProvider(props: { children: JSX.Element }) {
             class="absolute top-5 right-5 p-0.5 bg-white text-gray-700 rounded hover:bg-gray-100 transition"
             onClick={(e: Event) => {
               e.preventDefault();
-              window.history.back();
+              // window.history.back();
               handleClose();
             }}
           >

@@ -15,7 +15,7 @@ export default function (props: Props) {
         classList
       }
       classList={{
-        "!text-gray-900 bg-white border border-gray-200 focus:ring-gray-500 hover:bg-gray-100":
+        "!text-gray-900 bg-white border border-gray-200 focus:ring-gray-500 hover:bg-gray-100 hover:!bg-opacity-100":
           !others.variant,
         "bg-primary focus:ring-primary": others.variant == "primary",
         "bg-red-500 focus:ring-red-500": others.variant == "red",

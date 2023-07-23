@@ -87,7 +87,7 @@ export default function () {
         ></Map>
       </div>
       {/* </div> */}
-      <FloatingComponent>
+      <FloatingComponent class="!absolute">
         <Card class="mt-4 !shadow-lg inline bg-opacity-75">
           <ul class="list-disc pl-4 text-sm">
             <li>
@@ -95,12 +95,12 @@ export default function () {
               anda saat ini.
             </li>
             <li>
-              <span class="text-[red]">warna merah</span> adalah barang hilang
-              di sekitar anda.
+              <span class="text-[red]">warna merah</span> adalah lokasi barang
+              hilang di sekitar anda.
             </li>
             <li>
-              <span class="text-[lime]">warna hijau</span> adalah barang temuan
-              di sekitar anda.
+              <span class="text-[lime]">warna hijau</span> adalah lokasi barang
+              temuan di sekitar anda.
             </li>
           </ul>
         </Card>
