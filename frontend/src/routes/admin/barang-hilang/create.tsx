@@ -1,6 +1,7 @@
 import { For, Show, createSignal, onMount } from "solid-js";
 import { SetStoreFunction, createStore } from "solid-js/store";
 import { useNavigate } from "solid-start";
+import Autocomplete from "~/components/autocomplete";
 import Button from "~/components/button";
 import Card from "~/components/card";
 import FileInput from "~/components/file-input";
@@ -58,8 +59,12 @@ export function Save(props: SaveProps) {
 
   const notif = useNotif();
 
-  const getUser = async () => {
-    const { data } = await http.get("/user");
+  const getUser = async (search: string = "") => {
+    const { data } = await http.get("/user", {
+      params: {
+        search,
+      },
+    });
     setUsers(data.data);
   };
 
@@ -91,7 +96,6 @@ export function Save(props: SaveProps) {
 
   onMount(async () => {
     setIsLoading(true);
-    await getUser();
 
     if (props.onMount) {
       props.onMount();
@@ -153,17 +157,19 @@ export function Save(props: SaveProps) {
             </div>
           </div>
           <div>
-            <Select
+            <Autocomplete
               label="Pemilik"
               value={req.user_id}
-              onChange={(e) => setReq("user_id", e.currentTarget.value)}
+              text={req.user?.nama}
+              onChange={(val) => setReq("user_id", val)}
+              options={users().map((item) => ({
+                text: item.nama,
+                value: item.id,
+              }))}
+              onAsync={getUser}
+              placeholder="Pilih Pemilik"
               disabled={isLoading()}
-            >
-              <option value="">Pilih Pemilik</option>
-              <For each={users()}>
-                {(item) => <option value={item.id as any}>{item.nama}</option>}
-              </For>
-            </Select>
+            />
             <FileInput
               label="Foto"
               title="Pilih Foto"
@@ -193,16 +199,23 @@ export function Save(props: SaveProps) {
               }
             />
             <Show when={req.id}>
-              <Select
-                label="Ditemukan"
+              <Autocomplete
+                label="Status"
                 value={req.ditemukan}
-                onChange={(e) => setReq("ditemukan", e.currentTarget.value)}
+                onChange={(val) => setReq("ditemukan", val)}
                 disabled={isLoading()}
-              >
-                <option value="">Pilih Status</option>
-                <option value={"1"}>Sudah Ditemukan</option>
-                <option value={"0"}>Belum Ditemukan</option>
-              </Select>
+                placeholder="Pilih Status"
+                options={[
+                  {
+                    text: "Sudah Ditemukan",
+                    value: "1",
+                  },
+                  {
+                    text: "Belum Ditemukan",
+                    value: "0",
+                  },
+                ]}
+              />
               <Input
                 label="Tanggal Hilang"
                 value={formatDate(req.created_at as string)}

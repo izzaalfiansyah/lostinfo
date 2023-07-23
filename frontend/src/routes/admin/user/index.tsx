@@ -5,7 +5,12 @@ import Accordion from "~/components/accordion";
 import Autocomplete from "~/components/autocomplete";
 import Button from "~/components/button";
 import Card from "~/components/card";
-import { ChevronLeftIcon, DeleteIcon, EditIcon } from "~/components/icons";
+import {
+  ChevronLeftIcon,
+  DeleteIcon,
+  EditIcon,
+  SearchIcon,
+} from "~/components/icons";
 import Input from "~/components/input";
 import Pagination from "~/components/pagination";
 import Skeleton from "~/components/skeleton";
@@ -73,21 +78,6 @@ export default function () {
     setIsLoading(false);
   };
 
-  createEffect((oldVal: any) => {
-    const val = {
-      page: filter.page,
-      search: filter.search,
-      role: filter.role,
-      status: filter.status,
-    };
-
-    if (oldVal) {
-      get();
-    }
-
-    return val;
-  });
-
   onMount(async () => {
     await get();
   });
@@ -112,57 +102,73 @@ export default function () {
       />
 
       <Accordion title="Filter" class="mb-4">
-        <Input
-          placeholder="Cari..."
-          onChange={(e) => {
-            setFilter("search", e.currentTarget.value);
-            setFilter("page", 1);
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            get();
           }}
-        />
-        <div class="grid lg:grid-cols-2 grid-cols-1 gap-x-3">
-          <Autocomplete
-            label="Status"
-            placeholder="Pilih Status"
-            options={[
-              {
-                value: "",
-                text: "Semua Status",
-              },
-              {
-                value: "1",
-                text: "Aktif",
-              },
-              {
-                value: "0",
-                text: "Nonaktif",
-              },
-              {
-                value: "9",
-                text: "Banned",
-              },
-            ]}
-            onChange={(val) => setFilter("status", val)}
+        >
+          <Input
+            placeholder="Cari..."
+            value={filter.search}
+            onChange={(e) => {
+              setFilter("search", e.currentTarget.value);
+              setFilter("page", 1);
+            }}
           />
-          <Autocomplete
-            label="Role"
-            placeholder="Pilih Role"
-            options={[
-              {
-                value: "",
-                text: "Semua Role",
-              },
-              {
-                value: "1",
-                text: "Admin",
-              },
-              {
-                value: "2",
-                text: "Pengguna",
-              },
-            ]}
-            onChange={(val) => setFilter("role", val)}
-          />
-        </div>
+          <div class="grid lg:grid-cols-2 grid-cols-1 gap-x-3">
+            <Autocomplete
+              label="Status"
+              placeholder="Pilih Status"
+              options={[
+                {
+                  value: "",
+                  text: "Semua Status",
+                },
+                {
+                  value: "1",
+                  text: "Aktif",
+                },
+                {
+                  value: "0",
+                  text: "Nonaktif",
+                },
+                {
+                  value: "9",
+                  text: "Banned",
+                },
+              ]}
+              value={filter.status}
+              onChange={(val) => setFilter("status", val)}
+            />
+            <Autocomplete
+              label="Role"
+              placeholder="Pilih Role"
+              options={[
+                {
+                  value: "",
+                  text: "Semua Role",
+                },
+                {
+                  value: "1",
+                  text: "Admin",
+                },
+                {
+                  value: "2",
+                  text: "Pengguna",
+                },
+              ]}
+              value={filter.role}
+              onChange={(val) => setFilter("role", val)}
+            />
+          </div>
+          <div class="mt-5">
+            <Button type="submit" variant="primary" class="flex items-center">
+              <SearchIcon class="w-4 h-4 mr-2" />
+              Terapkan
+            </Button>
+          </div>
+        </form>
       </Accordion>
 
       <Card>

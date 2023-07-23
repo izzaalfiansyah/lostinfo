@@ -14,12 +14,20 @@ class BarangHilangController extends Controller
     {
         $builder = new BarangHilang();
 
-        if ($user_id = $req->user_id) {
-            $builder = $builder->where('user_id', $user_id);
+        if ($req->user_id != null) {
+            $builder = $builder->where('user_id', $req->user_id);
         }
 
-        if ($ditemukan = $req->ditemukan) {
-            $builder = $builder->where('ditemukan', $ditemukan);
+        if ($req->ditemukan != null) {
+            $builder = $builder->where('ditemukan', $req->ditemukan);
+        }
+
+        if ($req->hadiah_min != null) {
+            $builder = $builder->where('hadiah', '>=', $req->hadiah_min);
+        }
+
+        if ($req->hadiah_max != null) {
+            $builder = $builder->where('hadiah', '<=', $req->hadiah_max);
         }
 
         try {

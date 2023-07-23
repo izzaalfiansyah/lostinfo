@@ -12,7 +12,7 @@ export default function (props: Props) {
 
   return (
     <div class="mb-2">
-      <InputLabel {...others}>{local.label}</InputLabel>
+      <InputLabel required={props.required}>{local.label}</InputLabel>
       <div class="relative">
         <div class="absolute top-0 left-0 w-10 h-10 pointer-events-none bg-primary text-white flex items-center justify-center cursor-pointer">
           <LinkIcon class="w-5 h-5" />

@@ -18,7 +18,7 @@ export default function (props: Props) {
 
   return (
     <div class="mb-2">
-      <InputLabel {...others}>{local.label}</InputLabel>
+      <InputLabel required={props.required}>{local.label}</InputLabel>
       <div class="flex flex-row">
         <div class="h-10">{local.prepend}</div>
         <input

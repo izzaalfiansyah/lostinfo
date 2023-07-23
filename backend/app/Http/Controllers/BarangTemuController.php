@@ -14,12 +14,12 @@ class BarangTemuController extends Controller
     {
         $builder = new BarangTemu();
 
-        if ($user_id = $req->user_id) {
-            $builder = $builder->where('user_id', $user_id);
+        if ($req->user_id != null) {
+            $builder = $builder->where('user_id', $req->user_id);
         }
 
-        if ($ditemukan = $req->ditemukan) {
-            $builder = $builder->where('ditemukan', $ditemukan);
+        if ($req->dikembalikan != null) {
+            $builder = $builder->where('dikembalikan', $req->dikembalikan);
         }
 
         try {

@@ -11,7 +11,7 @@ export default function (props: Props) {
 
   return (
     <div class="mb-2">
-      <InputLabel {...others}>{local.label}</InputLabel>
+      <InputLabel required={props.required}>{local.label}</InputLabel>
       <select class="solid-input" {...others}></select>
       <Show when={local.hint}>
         <div class="text-xs text-gray-400">{local.hint}</div>
