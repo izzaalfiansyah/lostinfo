@@ -21,8 +21,4 @@ class BarangTemu extends Model
         'foto',
         'dikembalikan',
     ];
-
-    public $casts = [
-        'maps' => 'object',
-    ];
 }

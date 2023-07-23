@@ -22,8 +22,4 @@ class BarangHilang extends Model
         'hadiah',
         'ditemukan',
     ];
-
-    public $casts = [
-        'maps' => 'object',
-    ];
 }
