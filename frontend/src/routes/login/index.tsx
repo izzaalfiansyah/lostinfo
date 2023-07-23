@@ -39,6 +39,7 @@ export default function () {
           "Upss.. akun anda ter-banned. Silahkan hubungi admin",
           false
         );
+        setIsLoading(false);
         return null;
       }
 

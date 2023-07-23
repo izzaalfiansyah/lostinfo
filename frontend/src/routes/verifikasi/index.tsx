@@ -26,7 +26,7 @@ export default function () {
     setIsLoading(true);
     try {
       await http.post("/user/verifikasi/" + auth()?.id);
-      notif.show("Email verifikasi berhasil terkirim");
+      notif.show("Email verifikasi terkirim. Periksa email anda!");
     } catch (e: any) {
       notif.show(e.response.data.message, false);
     }

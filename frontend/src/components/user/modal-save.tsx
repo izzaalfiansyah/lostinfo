@@ -115,6 +115,7 @@ export default function (props: Props) {
               <option value="">Pilih Status</option>
               <option value="1">Aktif</option>
               <option value="0">Nonaktif</option>
+              <option value="9">Banned</option>
             </Select>
           </div>
           <div class="flex-1">

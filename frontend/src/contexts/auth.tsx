@@ -76,11 +76,11 @@ export default function AuthProvider(props: Props) {
     if (isLoading() == true) {
       setTimeout(() => {
         setIsLoading(false);
-      }, 800);
+      }, 1200);
     }
   });
 
-  createEffect(() => {
+  createEffect((oldId) => {
     const id = user()?.id;
     const role = user()?.role;
     const path = loc.pathname;
@@ -94,14 +94,14 @@ export default function AuthProvider(props: Props) {
         } else if (role == "2" && !path.includes("/user")) {
           nav("/user", { replace: true });
         }
-      }
-
-      if (!id) {
+      } else {
         if (path.includes("/admin") || path.includes("/user")) {
           nav("/login", { replace: true });
         }
       }
     }
+
+    return user().id;
   });
 
   onMount(async () => {
