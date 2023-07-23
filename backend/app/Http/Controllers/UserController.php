@@ -7,8 +7,6 @@ use App\Http\Resources\UserResource;
 use App\Mail\VerifyUser;
 use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
@@ -19,12 +17,12 @@ class UserController extends Controller
     {
         $builder = new User();
 
-        if ($role = $req->role) {
-            $builder = $builder->where('role', $role);
+        if ($req->role != null) {
+            $builder = $builder->where('role', $req->role);
         }
 
-        if ($status = $req->status) {
-            $builder = $builder->where('status', $status);
+        if ($req->status != null) {
+            $builder = $builder->where('status', $req->status);
         }
 
         if ($search = $req->search) {

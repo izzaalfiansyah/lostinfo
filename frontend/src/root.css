@@ -22,3 +22,31 @@ html {
 body {
   padding: 0;
 }
+
+.solid-select-container {
+  @apply relative;
+}
+
+.solid-select-control {
+  @apply relative !cursor-text;
+}
+
+.solid-select-input {
+  @apply w-full h-10 focus:ring-2 focus:border-primary focus:ring-primary focus:ring-opacity-10 border-gray-100 transition py-1.5 disabled:bg-gray-100 focus:outline-none;
+}
+
+.solid-select-control *:first-child {
+  @apply absolute top-0 left-0 bottom-0 right-0 flex items-center px-3;
+}
+
+.solid-select-placeholder {
+  @apply text-gray-500;
+}
+
+.solid-select-list {
+  @apply bg-white shadow absolute bottom-0 left-0 right-0 translate-y-full;
+}
+
+.solid-select-option {
+  @apply p-2 hover:bg-gray-100;
+}

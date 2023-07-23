@@ -8,18 +8,23 @@ interface Props extends JSX.InputHTMLAttributes<HTMLInputElement> {
 }
 
 export default function (props: Props) {
-  const [local, others] = splitProps(props, ["label", "hint"]);
+  const [local, others] = splitProps(props, [
+    "label",
+    "hint",
+    "prepend",
+    "append",
+  ]);
 
   return (
     <div class="mb-2">
       <InputLabel {...others}>{local.label}</InputLabel>
       <div class="flex flex-row">
-        <div class="h-10">{props.prepend}</div>
+        <div class="h-10">{local.prepend}</div>
         <input
           class="w-full h-10 focus:ring-2 focus:border-primary focus:ring-primary focus:ring-opacity-10 border-gray-100 transition py-1.5 disabled:bg-gray-100 focus:outline-none"
           {...others}
         />
-        <div class="h-10">{props.append}</div>
+        <div class="h-10">{local.append}</div>
       </div>
       <Show when={local.hint}>
         <div class="text-xs text-gray-400">{local.hint}</div>

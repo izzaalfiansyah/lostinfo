@@ -5,6 +5,7 @@ specifiers:
   '@solidjs/meta': ^0.28.2
   '@solidjs/router': ^0.8.2
   '@tailwindcss/forms': ^0.5.4
+  '@thisbeyond/solid-select': ^0.14.0
   '@types/leaflet': ^1.9.3
   autoprefixer: ^10.4.13
   axios: ^1.4.0
@@ -24,6 +25,7 @@ dependencies:
   '@solidjs/meta': 0.28.5_solid-js@1.7.8
   '@solidjs/router': 0.8.2_solid-js@1.7.8
   '@tailwindcss/forms': 0.5.4_tailwindcss@3.3.3
+  '@thisbeyond/solid-select': 0.14.0_solid-js@1.7.8
   '@types/leaflet': 1.9.3
   axios: 1.4.0
   chart.js: 4.3.0
@@ -1701,6 +1703,14 @@ packages:
     dependencies:
       mini-svg-data-uri: 1.4.4
       tailwindcss: 3.3.3
+    dev: false
+
+  /@thisbeyond/solid-select/0.14.0_solid-js@1.7.8:
+    resolution: {integrity: sha512-ecq4U3Vnc/nJbU84ARuPg2scNuYt994ljF5AmBlzuZW87x43mWiGJ5hEWufIJJMpDT6CcnCIx/xbrdDkaDEHQw==}
+    peerDependencies:
+      solid-js: ^1.5
+    dependencies:
+      solid-js: 1.7.8
     dev: false
 
   /@types/babel__core/7.20.1:

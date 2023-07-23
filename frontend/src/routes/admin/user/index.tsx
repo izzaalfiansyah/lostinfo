@@ -1,9 +1,11 @@
 import { createEffect, createSignal, onMount } from "solid-js";
 import { createStore } from "solid-js/store";
 import { A } from "solid-start";
+import Accordion from "~/components/accordion";
+import Autocomplete from "~/components/autocomplete";
 import Button from "~/components/button";
 import Card from "~/components/card";
-import { DeleteIcon, EditIcon } from "~/components/icons";
+import { ChevronLeftIcon, DeleteIcon, EditIcon } from "~/components/icons";
 import Input from "~/components/input";
 import Pagination from "~/components/pagination";
 import Skeleton from "~/components/skeleton";
@@ -25,11 +27,15 @@ export default function () {
     delete: false,
   });
   const [filter, setFilter] = createStore({
-    pageTotal: 0,
-    recordTotal: 0,
     limit: 10,
     page: 1,
     search: "",
+    status: "",
+    role: "",
+  });
+  const [total, setTotal] = createStore({
+    page: 0,
+    record: 0,
   });
 
   const notif = useNotif();
@@ -58,8 +64,8 @@ export default function () {
       });
 
       const totalPage = Math.ceil(data.meta.total / filter.limit);
-      setFilter("recordTotal", data.meta.total);
-      setFilter("pageTotal", totalPage);
+      setTotal("record", data.meta.total);
+      setTotal("page", totalPage);
       setItems(data.data);
     } catch (e: any) {
       notif.show(e.response.data.message, false);
@@ -71,6 +77,8 @@ export default function () {
     const val = {
       page: filter.page,
       search: filter.search,
+      role: filter.role,
+      status: filter.status,
     };
 
     if (oldVal) {
@@ -103,17 +111,61 @@ export default function () {
         }
       />
 
-      <Card>
-        <div class="mb-3">
-          <Input
-            placeholder="Cari..."
-            value={filter.search}
-            onChange={(e) => {
-              setFilter("search", e.currentTarget.value);
-              setFilter("page", 1);
-            }}
+      <Accordion title="Filter" class="mb-4">
+        <Input
+          placeholder="Cari..."
+          onChange={(e) => {
+            setFilter("search", e.currentTarget.value);
+            setFilter("page", 1);
+          }}
+        />
+        <div class="grid lg:grid-cols-2 grid-cols-1 gap-x-3">
+          <Autocomplete
+            label="Status"
+            placeholder="Pilih Status"
+            options={[
+              {
+                value: "",
+                text: "Semua Status",
+              },
+              {
+                value: "1",
+                text: "Aktif",
+              },
+              {
+                value: "0",
+                text: "Nonaktif",
+              },
+              {
+                value: "9",
+                text: "Banned",
+              },
+            ]}
+            onChange={(val) => setFilter("status", val)}
+          />
+          <Autocomplete
+            label="Role"
+            placeholder="Pilih Role"
+            options={[
+              {
+                value: "",
+                text: "Semua Role",
+              },
+              {
+                value: "1",
+                text: "Admin",
+              },
+              {
+                value: "2",
+                text: "Pengguna",
+              },
+            ]}
+            onChange={(val) => setFilter("role", val)}
           />
         </div>
+      </Accordion>
+
+      <Card>
         <Table
           heads={["Nama", "Alamat", "Telepon", "Email", "Status", "Opsi"]}
           items={
@@ -178,9 +230,9 @@ export default function () {
         <div class="mt-3"></div>
         <Pagination
           page={filter.page}
-          pageTotal={filter.pageTotal}
+          pageTotal={total.page}
           record={items().length}
-          recordTotal={filter.recordTotal}
+          recordTotal={total.record}
           onChange={(val) => {
             setFilter("page", val);
           }}
