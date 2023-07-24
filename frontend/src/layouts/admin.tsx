@@ -314,7 +314,7 @@ export default function (props: Props) {
                 class="block items-center inline-flex justify-end space-x-4 lg:bg-white lg:p-2 rounded lg:px-6 lg:shadow-sm"
               >
                 <div class="lg:block hidden">{auth()?.username}</div>
-                <Img
+                <img
                   src={auth().foto_url}
                   alt={auth().nama}
                   class="block rounded-full !w-10 !h-10 bg-gray-200"
