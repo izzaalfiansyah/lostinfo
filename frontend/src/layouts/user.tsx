@@ -1,5 +1,6 @@
 import { For, JSX, createSignal } from "solid-js";
 import { A, useLocation, useNavigate } from "solid-start";
+import Autocomplete from "~/components/autocomplete";
 import Button from "~/components/button";
 import {
   AccountIcon,
@@ -276,11 +277,19 @@ export default function (props: Props) {
             >
               <MenuIcon class="w-6 h-6" />
             </button>
-            <input
-              type="text"
-              class="bg-white rounded p-2.5 px-4 outline-none lg:flex-1 w-2/3 border-gray-100 transition focus:ring-primary focus:ring-opacity-10 focus:border-primary focus:ring-2 mr-5"
-              placeholder="Cari Sesuatu..."
-            />
+            <div class="lg:flex-1 w-2/3">
+              <Autocomplete
+                placeholder="Cari Sesuatu..."
+                classList={{ "mt-2 rounded": true }}
+                options={menus.map((item) => ({
+                  text: item.title,
+                  value: item.path,
+                  onClick: () => {
+                    nav(item.path);
+                  },
+                }))}
+              />
+            </div>
             <div class="flex-1 flex justify-between items-center">
               <div class="lg:grow"></div>
               <A
@@ -307,7 +316,7 @@ export default function (props: Props) {
               </div>
             </form>
           </Modal>
-          {props.children}
+          <div class="grow flex flex-col">{props.children}</div>
         </div>
       </div>
     </>

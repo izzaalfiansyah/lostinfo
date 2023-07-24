@@ -3,6 +3,7 @@ import L, { LatLng, LeafletMouseEvent } from "leaflet";
 import { createEffect, createSignal, onMount } from "solid-js";
 import { useNotif } from "~/contexts/notif";
 import axios from "axios";
+import { AccountIcon } from "./icons";
 
 interface Props {
   value?: {
@@ -20,11 +21,13 @@ interface Props {
   onLocationFound?: (latlng: LatLng) => any;
   class?: string;
   disabled?: boolean;
+  toMyLocation?: boolean;
 }
 
 export default function (props: Props) {
   const [map, setMap] = createSignal<L.Map>(undefined as any);
   const [marker, setMarker] = createSignal<L.Marker>(undefined as any);
+  const [myLocation, setMyLocation] = createSignal();
 
   const notif = useNotif();
 
@@ -39,6 +42,8 @@ export default function (props: Props) {
       // L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
       maxZoom: 20,
     }).addTo(map());
+
+    map().setZoom(15);
 
     map().on("locationfound", handleLocationFound);
     map().on("locationerror", handleLocationError);
@@ -63,9 +68,14 @@ export default function (props: Props) {
       marker().addTo(map());
 
       const latlng = L.latLng(e.lat, e.lng);
-
       map().setView(latlng).setZoom(17);
     }
+  };
+
+  const showMyLocation = () => {
+    map()
+      .setView(myLocation() as any)
+      .setZoom(15);
   };
 
   const handleLocationFound = (e: any) => {
@@ -83,8 +93,11 @@ export default function (props: Props) {
     }
 
     circle.addTo(map());
+    setMyLocation(e.latlng);
 
-    map().setView(e.latlng).setZoom(17);
+    if (props.toMyLocation) {
+      showMyLocation();
+    }
 
     if (props.onLocationFound) {
       props.onLocationFound(e.latlng);
@@ -148,10 +161,22 @@ export default function (props: Props) {
   });
 
   return (
-    <div
-      id="map"
-      class={"h-64 outline-none bg-gray-100 rounded " + props.class}
-    ></div>
+    <div class="relative grow flex flex-col">
+      <div class="border border-[2px] border-[rgba(0,0,0,0.2)] absolute top-[10px] right-[10px] rounded z-[800] ">
+        <button
+          class="block bg-white hover:bg-gray-100 h-[30px] w-[30px] flex items-center justify-center rounded"
+          type="button"
+          title="Tunjukkan Lokasi Saya"
+          onClick={showMyLocation}
+        >
+          <AccountIcon class="w-4 h-4 fill-gray-800" />
+        </button>
+      </div>
+      <div
+        id="map"
+        class={"h-64 outline-none bg-gray-100 rounded " + props.class}
+      ></div>
+    </div>
   );
 }
 

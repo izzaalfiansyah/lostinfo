@@ -11,7 +11,12 @@ import {
 import { InputLabel } from "./input";
 import { createStore } from "solid-js/store";
 
-type Value = { value: any; text: any; content?: (item: Value) => JSX.Element };
+type Value = {
+  value: any;
+  text: any;
+  content?: (item: Value) => JSX.Element;
+  onClick?: () => any;
+};
 
 interface Props extends JSX.InputHTMLAttributes<HTMLInputElement> {
   label?: string;
@@ -68,9 +73,10 @@ export default function (props: Props) {
 
     if (item) {
       setVal("text", item?.text || "");
-      console.log(val.text);
     } else if (text()) {
       setVal("text", text());
+    } else {
+      setVal("text", "");
     }
   };
 
@@ -153,7 +159,13 @@ export default function (props: Props) {
                     classList={{
                       "!bg-primary text-white": val.value == item.value,
                     }}
-                    onClick={() => selectOption(item)}
+                    onClick={(e) => {
+                      if (item.onClick) {
+                        item.onClick();
+                      } else {
+                        selectOption(item);
+                      }
+                    }}
                   >
                     <Show when={item.content} fallback={item.text}>
                       {(item.content as any)(item)}

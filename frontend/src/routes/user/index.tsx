@@ -70,6 +70,7 @@ export default function () {
             });
             getBarangTerdekat();
           }}
+          toMyLocation
           marks={barangTerdekat().map((item) => ({
             lat: item.maps_lat,
             lng: item.maps_lng,
