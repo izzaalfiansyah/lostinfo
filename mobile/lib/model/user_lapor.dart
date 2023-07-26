@@ -10,8 +10,16 @@ class UserLapor {
   String? created_at;
   String? updated_at;
 
-  UserLapor(this.id, this.user_id, this.pelapor_id, this.alasan, this.user,
-      this.pelapor, this.created_at, this.updated_at);
+  UserLapor(
+    this.id,
+    this.user_id,
+    this.pelapor_id,
+    this.alasan,
+    this.user,
+    this.pelapor,
+    this.created_at,
+    this.updated_at,
+  );
 
   factory UserLapor.fromJSON(data) {
     return UserLapor(

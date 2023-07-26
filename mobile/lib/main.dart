@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mobile/services/user_service.dart';
+import 'package:mobile/services/barang_hilang_service.dart';
 
 void main() {
   runApp(const MyApp());
@@ -20,8 +20,8 @@ class _MyAppState extends State<MyApp> {
   }
 
   void getRes() async {
-    final user = await UserService.find(id: 1);
-    print(user.username);
+    final data = await BarangHilangService.get();
+    print(data);
   }
 
   // This widget is the root of your application.
