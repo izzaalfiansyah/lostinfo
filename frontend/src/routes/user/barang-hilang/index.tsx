@@ -79,6 +79,12 @@ export default function (props: Props) {
     await get();
   });
 
+  createEffect(() => {
+    if (filter) {
+      get();
+    }
+  });
+
   return (
     <>
       <Title title="Barang Hilang"></Title>

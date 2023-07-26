@@ -72,6 +72,12 @@ export default function () {
     await get();
   });
 
+  createEffect(() => {
+    if (filter) {
+      get();
+    }
+  });
+
   return (
     <>
       <Title

@@ -82,6 +82,12 @@ export default function () {
     await get();
   });
 
+  createEffect(() => {
+    if (filter) {
+      get();
+    }
+  });
+
   return (
     <>
       <Title
@@ -240,6 +246,7 @@ export default function () {
           record={items().length}
           recordTotal={total.record}
           onChange={(val) => {
+            console.log(val);
             setFilter("page", val);
           }}
         />

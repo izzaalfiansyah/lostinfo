@@ -77,6 +77,12 @@ export default function (props: Props) {
     await get();
   });
 
+  createEffect(() => {
+    if (filter) {
+      get();
+    }
+  });
+
   return (
     <>
       <Show when={!props.user_id}>
