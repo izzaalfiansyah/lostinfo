@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/services/barang_hilang_service.dart';
+import 'package:mobile/services/privacy_service.dart';
 
 void main() {
   runApp(const MyApp());
@@ -20,7 +21,7 @@ class _MyAppState extends State<MyApp> {
   }
 
   void getRes() async {
-    final data = await BarangHilangService.get();
+    final data = await PrivacyService.get();
     print(data);
   }
 
