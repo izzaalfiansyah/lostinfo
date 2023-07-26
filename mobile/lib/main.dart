@@ -1,11 +1,28 @@
 import 'package:flutter/material.dart';
+import 'package:mobile/services/user_service.dart';
 
 void main() {
   runApp(const MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  @override
+  void initState() {
+    getRes();
+    super.initState();
+  }
+
+  void getRes() async {
+    final user = await UserService.find(id: 1);
+    print(user.username);
+  }
 
   // This widget is the root of your application.
   @override
@@ -28,7 +45,7 @@ class MyApp extends StatelessWidget {
         //
         // This works for code too, not just values: Most code changes can be
         // tested with just a hot reload.
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
         useMaterial3: true,
       ),
       home: const MyHomePage(title: 'Flutter Demo Home Page'),
