@@ -1,28 +1,46 @@
 import { createSignal, onMount } from "solid-js";
 import { createStore } from "solid-js/store";
+import { A, useNavigate, useParams } from "solid-start";
 import Button from "~/components/button";
 import Card from "~/components/card";
 import Input from "~/components/input";
 import { useNotif } from "~/contexts/notif";
+import User from "~/interfaces/user";
 import http from "~/libs/http";
 
 export default function () {
   const [req, setReq] = createStore({
-    email: "",
+    password: "",
+    konfirmasi_password: "",
   });
   const [isLoading, setIsLoading] = createSignal(false);
+
+  const nav = useNavigate();
   const notif = useNotif();
+  const params = useParams();
 
   const nullable = () => {
-    setReq("email", "");
+    setReq("password", "");
+    setReq("konfirmasi_password", "");
   };
 
   const resetPassword = async (e: SubmitEvent) => {
     e.preventDefault();
+
+    if (req.password != req.konfirmasi_password) {
+      notif.show("konfirmasi password salah", false);
+      return null;
+    }
+
     setIsLoading(true);
     try {
-      await http.post("/user/reset-password", req);
-      notif.show("Link reset password berhasil terkirim");
+      const md5id = params.md5id;
+      const { data } = await http.post("/user/reset-password/" + md5id, req);
+
+      notif.show("password anda berhasil direset");
+
+      nav("/login", { replace: true });
+      nullable();
     } catch (e: any) {
       notif.show(e.response.data.message, false);
     }
@@ -37,17 +55,26 @@ export default function () {
             <div class="font-semibold text-lg">Reset Password</div>
           </div>
           <Input
-            placeholder="Masukkan Email Anda"
-            type="email"
+            label="Password"
+            placeholder="********"
             required
-            value={req.email}
+            type="password"
+            value={req.password}
             disabled={isLoading()}
-            onChange={(e) => setReq("email", e.currentTarget.value)}
+            onChange={(e) => setReq("password", e.currentTarget.value)}
           />
-          <div>
-            Kami akan mengirimkan mengirimkan link untuk melakukan reset
-            password ke email aktif anda.
-          </div>
+          <Input
+            label="Konfirmasi Password"
+            type="password"
+            placeholder="********"
+            required
+            value={req.konfirmasi_password}
+            disabled={isLoading()}
+            onChange={(e) =>
+              setReq("konfirmasi_password", e.currentTarget.value)
+            }
+          />
+          <div class="mt-3">Pastikan anda selalu mengingat password anda.</div>
           <div class="mt-10">
             <Button
               type="submit"

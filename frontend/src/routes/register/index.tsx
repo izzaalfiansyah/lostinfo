@@ -53,13 +53,13 @@ export default function () {
       return null;
     }
 
+    if (req.password != req.konfirmasi_password) {
+      notif.show("konfirmasi password salah", false);
+      return null;
+    }
+
     setIsLoading(true);
     try {
-      if (req.password != req.konfirmasi_password) {
-        notif.show("konfirmasi password salah", false);
-        return null;
-      }
-
       setReq("role", "2");
       setReq("status", "0");
 

@@ -33,6 +33,7 @@ Route::prefix('/user')->group(function () {
     Route::get('/verifikasi/{id}', [UserController::class, 'verifikasi']);
     Route::post('/verifikasi/{id}', [UserController::class, 'sendVerifikasi']);
     Route::post('/reset-password', [UserController::class, 'sendResetPassword']);
+    Route::post('/reset-password/{id}', [UserController::class, 'resetPassword']);
 });
 
 Route::post('/login', [UserController::class, 'login']);

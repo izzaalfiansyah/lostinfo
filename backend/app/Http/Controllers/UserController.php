@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\UserRequest;
 use App\Http\Resources\UserResource;
+use App\Mail\ForgotPassword;
 use App\Mail\VerifyUser;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -158,6 +159,39 @@ class UserController extends Controller
     {
         $item = User::find($id);
         Mail::to($item)->send(new VerifyUser($item));
+
+        return new UserResource($item);
+    }
+
+    public function resetPassword(Request $req, $id)
+    {
+        $item = User::where(DB::raw('md5(id)'), base64_decode($id))->first();
+        $password = $req->password;
+
+        if ($item) {
+            $item->update(['password' => Hash::make($password)]);
+            return new UserResource($item);
+        } else {
+            return Response([
+                'data' => [],
+                'message' => 'password gagal di reset',
+            ]);
+        }
+    }
+
+    public function sendResetPassword(Request $req)
+    {
+        $email = $req->email;
+        $item = User::where('email', $email)->first();
+
+        if (!$item) {
+            return Response([
+                'data' => [],
+                'message' => 'akun tidak ditemukan',
+            ], 400);
+        }
+
+        Mail::to($item)->send(new ForgotPassword($item));
 
         return new UserResource($item);
     }
