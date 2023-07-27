@@ -7,9 +7,11 @@ use App\Http\Resources\UserResource;
 use App\Mail\VerifyUser;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\View;
 
 class UserController extends Controller
 {
@@ -33,7 +35,7 @@ class UserController extends Controller
             });
         }
 
-        $items = $builder->paginate($req->limit ?: 10);
+        $items = $builder->orderBy('created_at', 'desc')->paginate($req->limit ?: 10);
 
         return UserResource::collection($items);
     }
@@ -119,7 +121,7 @@ class UserController extends Controller
             ], 400);
         }
 
-        $items = User::where('username', $req->username)->get();
+        $items = User::where('username', $req->username)->orWhere('email', $req->email)->get();
 
         if (count($items) > 0) {
             foreach ($items as $key => $item) {
@@ -140,20 +142,16 @@ class UserController extends Controller
         }
     }
 
-    public function verifikasi(Request $req, $id)
+    public function verifikasi($id)
     {
-        $token = $req->token;
-        $item = User::find($id);
+        $item = User::where(DB::raw('md5(id)'), base64_decode($id))->first();
 
-        echo '<script>';
-        if ($token == $item->remember_token) {
+        if ($item) {
             $item->update(['status' => '1']);
-            echo "alert('Akun anda berhasil diverifikasi.');";
+            return view('user.verifikasi_sukses', ['user' => $item]);
         } else {
-            echo "alert('Terjadi kesalahan! Akun tidak valid.');";
+            return view('user.verifikasi_gagal');
         }
-        echo 'window.close();';
-        echo '</script>';
     }
 
     public function sendVerifikasi($id)

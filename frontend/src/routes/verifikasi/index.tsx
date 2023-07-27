@@ -12,14 +12,18 @@ export default function () {
   const notif = useNotif();
 
   const getUser = async () => {
+    setIsLoading(true);
     try {
       const { data } = await http.get("/user/" + auth()?.id);
       if (data.data.status == "1") {
         setAuth.login(data.data);
+        return;
       }
+      await sendVerification();
     } catch (e: any) {
       notif.show(e.response.data.message, false);
     }
+    setIsLoading(false);
   };
 
   const sendVerification = async () => {

@@ -32,6 +32,7 @@ Route::prefix('/user')->group(function () {
     Route::resource('/lapor', UserLaporController::class);
     Route::get('/verifikasi/{id}', [UserController::class, 'verifikasi']);
     Route::post('/verifikasi/{id}', [UserController::class, 'sendVerifikasi']);
+    Route::post('/reset-password', [UserController::class, 'sendResetPassword']);
 });
 
 Route::post('/login', [UserController::class, 'login']);

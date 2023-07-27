@@ -60,8 +60,8 @@ export default function () {
             <div class="font-semibold text-lg">Login</div>
           </div>
           <Input
-            label="Username"
-            placeholder="Masukkan Username"
+            label="Username atau Email"
+            placeholder="Masukkan Username atau Email"
             required
             value={req.username}
             disabled={isLoading()}
@@ -76,6 +76,11 @@ export default function () {
             disabled={isLoading()}
             onChange={(e) => setReq("password", e.currentTarget.value)}
           />
+          <div class="flex justify-end">
+            <A href="/lupa-password" class="text-primary">
+              Lupa password?
+            </A>
+          </div>
           <div class="mt-10">
             <Button
               type="submit"

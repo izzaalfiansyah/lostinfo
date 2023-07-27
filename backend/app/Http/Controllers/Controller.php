@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\View;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Routing\Controller as BaseController;
@@ -10,6 +11,11 @@ use Nette\Utils\Random;
 class Controller extends BaseController
 {
     use AuthorizesRequests, ValidatesRequests;
+
+    function __construct()
+    {
+        View::share('app_client_url', 'http://localhost:3000');
+    }
 
     public function uploadBase64($encode, $path, $extension)
     {
