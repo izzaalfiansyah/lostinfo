@@ -2,8 +2,8 @@ import 'package:mobile/libs/http.dart';
 import 'package:mobile/model/barang_temu.dart';
 
 class BarangTemuService {
-  static Future<List<BarangTemu>> get() async {
-    final res = await http.get('/barang/temu');
+  static Future<List<BarangTemu>> get({Map<String, dynamic>? filter}) async {
+    final res = await http.get('/barang/temu', queryParameters: filter);
     List<BarangTemu> items = (res.data['data'] as List)
         .map((item) => BarangTemu.fromJSON(item))
         .toList();

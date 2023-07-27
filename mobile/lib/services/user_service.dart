@@ -2,8 +2,8 @@ import 'package:mobile/libs/http.dart';
 import 'package:mobile/model/user.dart';
 
 class UserService {
-  static Future<List<User>> get() async {
-    final res = await http.get('/user');
+  static Future<List<User>> get({Map<String, dynamic>? filter}) async {
+    final res = await http.get('/user', queryParameters: filter);
     List<User> items =
         (res.data['data'] as List).map((item) => User.fromJSON(item)).toList();
     return items;

@@ -2,8 +2,8 @@ import 'package:mobile/libs/http.dart';
 import 'package:mobile/model/barang_hilang.dart';
 
 class BarangHilangService {
-  static Future<List<BarangHilang>> get() async {
-    final res = await http.get('/barang/hilang');
+  static Future<List<BarangHilang>> get({Map<String, dynamic>? filter}) async {
+    final res = await http.get('/barang/hilang', queryParameters: filter);
     List<BarangHilang> items = (res.data['data'] as List)
         .map((item) => BarangHilang.fromJSON(item))
         .toList();
