@@ -48,6 +48,13 @@ class UserController extends Controller
         return new UserResource($item);
     }
 
+    function showByMd5Id($id)
+    {
+        $item = User::where(DB::raw('md5(id)'), base64_decode($id))->first();
+
+        return new UserResource($item);
+    }
+
     public function store(UserRequest $req)
     {
         $data = $req->validated();

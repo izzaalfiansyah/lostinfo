@@ -29,6 +29,7 @@ Route::prefix('/grafik')->group(function () {
 });
 
 Route::prefix('/user')->group(function () {
+    Route::get('/{id}/md5', [UserController::class, 'showByMd5Id']);
     Route::resource('/lapor', UserLaporController::class);
     Route::get('/verifikasi/{id}', [UserController::class, 'verifikasi']);
     Route::post('/verifikasi/{id}', [UserController::class, 'sendVerifikasi']);

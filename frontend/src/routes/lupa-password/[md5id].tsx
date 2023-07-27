@@ -10,6 +10,7 @@ import http from "~/libs/http";
 
 export default function () {
   const [req, setReq] = createStore({
+    username: "",
     password: "",
     konfirmasi_password: "",
   });
@@ -22,6 +23,17 @@ export default function () {
   const nullable = () => {
     setReq("password", "");
     setReq("konfirmasi_password", "");
+  };
+
+  const getUser = async () => {
+    setIsLoading(true);
+    try {
+      const { data } = await http.get("/user/" + params.md5id + "/md5");
+      setReq("username", data.data.username);
+    } catch (e: any) {
+      nav("/login", { replace: true });
+    }
+    setIsLoading(false);
   };
 
   const resetPassword = async (e: SubmitEvent) => {
@@ -47,6 +59,10 @@ export default function () {
     setIsLoading(false);
   };
 
+  onMount(async () => {
+    await getUser();
+  });
+
   return (
     <div class="max-w-full w-[500px]">
       <Card class="py-10 rounded-xl">
@@ -54,6 +70,7 @@ export default function () {
           <div class="mb-5">
             <div class="font-semibold text-lg">Reset Password</div>
           </div>
+          <div class="mb-5">Untuk user @{req.username}</div>
           <Input
             label="Password"
             placeholder="********"
