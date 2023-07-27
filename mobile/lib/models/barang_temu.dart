@@ -1,55 +1,52 @@
-import 'package:mobile/model/user.dart';
+import 'package:mobile/models/user.dart';
 
-class BarangHilang {
+class BarangTemu {
   dynamic id;
   dynamic user_id;
   User? user;
   String? nama;
   String? deskripsi;
-  String? tempat_hilang;
+  String? tempat_temu;
   double? maps_lat;
   double? maps_lng;
   String? foto;
   String? foto_url;
-  int? hadiah;
-  String? ditemukan;
-  String? ditemukan_detail;
+  String? dikembalikan;
+  String? dikembalikan_detail;
   String? created_at;
   String? updated_at;
 
-  BarangHilang(
+  BarangTemu(
     this.id,
     this.user_id,
     this.user,
     this.nama,
     this.deskripsi,
-    this.tempat_hilang,
+    this.tempat_temu,
     this.maps_lat,
     this.maps_lng,
     this.foto,
     this.foto_url,
-    this.hadiah,
-    this.ditemukan,
-    this.ditemukan_detail,
+    this.dikembalikan,
+    this.dikembalikan_detail,
     this.created_at,
     this.updated_at,
   );
 
-  factory BarangHilang.fromJSON(data) {
-    return BarangHilang(
+  factory BarangTemu.fromJSON(data) {
+    return BarangTemu(
       data['id'],
       data['user_id'],
       User.fromJSON(data['user']),
       data['nama'],
       data['deskripsi'],
-      data['tempat_hilang'],
+      data['tempat_temu'],
       data['maps_lat'],
       data['maps_lng'],
       data['foto'],
       data['foto_url'],
-      data['hadiah'],
-      data['ditemukan'],
-      data['ditemukan_detail'],
+      data['dikembalikan'],
+      data['dikembalikan_detail'],
       data['created_at'],
       data['updated_at'],
     );
@@ -61,12 +58,11 @@ class BarangHilang {
       'user_id': user_id,
       'nama': nama,
       'deskripsi': deskripsi,
-      'tempat_hilang': tempat_hilang,
+      'tempat_temu': tempat_temu,
       'maps_lat': maps_lat,
       'maps_lng': maps_lng,
       'foto': foto,
-      'hadiah': hadiah,
-      'ditemukan': ditemukan,
+      'dikembalikan': dikembalikan,
       'created_at': created_at,
       'updated_at': updated_at,
     };

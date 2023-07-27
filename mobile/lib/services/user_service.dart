@@ -1,5 +1,5 @@
 import 'package:mobile/libs/http.dart';
-import 'package:mobile/model/user.dart';
+import 'package:mobile/models/user.dart';
 
 class UserService {
   static Future<List<User>> get({Map<String, dynamic>? filter}) async {

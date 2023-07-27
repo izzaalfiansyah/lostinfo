@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'package:mobile/libs/http.dart';
-import 'package:mobile/model/user.dart';
+import 'package:mobile/models/user.dart';
 import 'package:mobile/services/user_service.dart';
 
 class AuthService {

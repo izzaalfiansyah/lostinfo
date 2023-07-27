@@ -1,4 +1,4 @@
-import 'package:mobile/model/user.dart';
+import 'package:mobile/models/user.dart';
 
 class UserLapor {
   dynamic id;

@@ -1,5 +1,5 @@
 import 'package:mobile/libs/http.dart';
-import 'package:mobile/model/barang_hilang.dart';
+import 'package:mobile/models/barang_hilang.dart';
 
 class BarangHilangService {
   static Future<List<BarangHilang>> get({Map<String, dynamic>? filter}) async {
