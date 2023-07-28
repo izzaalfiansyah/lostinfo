@@ -1,7 +1,7 @@
 import Title from "~/components/title";
 import UserDetail from "../../user/user/[id]";
 import { useAuth } from "~/contexts/auth";
-import { Show, createEffect, createSignal, onMount } from "solid-js";
+import { For, Show, createEffect, createSignal, onMount } from "solid-js";
 import Card from "~/components/card";
 import Input from "~/components/input";
 import Textarea from "~/components/textarea";
@@ -13,10 +13,26 @@ import { useNotif } from "~/contexts/notif";
 import http from "~/libs/http";
 import fileReader from "~/libs/file-reader";
 import Button from "~/components/button";
+import Accordion from "~/components/accordion";
+import { Dynamic } from "solid-js/web";
+import BarangHilang from "../barang-hilang";
+import BarangTemu from "../barang-temu";
 
 export default function () {
   const [req, setReq] = createStore<User>();
   const [isLoading, setIsLoading] = createSignal(false);
+  const [selectedTab, setSelectedTab] = createSignal<number>(0);
+
+  const tabs = [
+    {
+      title: "Barang Hilang",
+      component: BarangHilang,
+    },
+    {
+      title: "Barang Temu",
+      component: BarangTemu,
+    },
+  ];
 
   const [auth, setAuth] = useAuth();
   const notif = useNotif();
@@ -80,8 +96,8 @@ export default function () {
       <Show when={auth()?.id}>
         <UserDetail id={auth().id} />
       </Show>
-      <div class="mt-3"></div>
-      <Card title="Edit Akun">
+      <div class="mb-3"></div>
+      <Accordion title="Edit Akun">
         <form onSubmit={update}>
           <div class="flex lg:flex-row justify-between flex-col gap-3">
             <div class="flex-1">
@@ -202,7 +218,25 @@ export default function () {
             </Button>
           </div>
         </form>
+      </Accordion>
+      <div class="mb-3"></div>
+      <Card class="flex items-center justify-between !p-2 gap-x-2">
+        <For each={tabs}>
+          {(item, index) => (
+            <Button
+              variant="primary"
+              class="w-full text-center"
+              disabled={selectedTab() == index()}
+              onClick={() => setSelectedTab(index())}
+            >
+              {item.title}
+            </Button>
+          )}
+        </For>
       </Card>
+      <div class="mt-5">
+        <Dynamic component={tabs[selectedTab()].component} user_id={req.id} />
+      </div>
     </>
   );
 }

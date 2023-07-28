@@ -33,7 +33,6 @@ interface Props {
 export default function (props: Props) {
   const [req, setReq] = createStore<User>();
   const [selectedTab, setSelectedTab] = createSignal<number>(0);
-  const [modalEdit, setModalEdit] = createSignal<boolean>(false);
   const [modalReport, setModalReport] = createSignal<boolean>(false);
   const [isLoading, setIsLoading] = createSignal(false);
 
@@ -236,11 +235,12 @@ export default function (props: Props) {
 
       <Show when={req.id && !props.id}>
         <div class="mt-5"></div>
-        <div class="flex space-x-3 lg:justify-start justify-center">
+        <Card class="flex items-center justify-between !p-2 gap-x-2">
           <For each={tabs}>
             {(item, index) => (
               <Button
                 variant="primary"
+                class="w-full text-center"
                 disabled={selectedTab() == index()}
                 onClick={() => setSelectedTab(index())}
               >
@@ -248,7 +248,7 @@ export default function (props: Props) {
               </Button>
             )}
           </For>
-        </div>
+        </Card>
         <div class="mt-5">
           <Dynamic component={tabs[selectedTab()].component} user_id={req.id} />
         </div>
