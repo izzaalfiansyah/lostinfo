@@ -33,6 +33,7 @@ const AuthContext = createContext();
 export default function AuthProvider(props: Props) {
   const [user, setUser] = props.value;
   const [isLoading, setIsLoading] = createSignal<boolean>(true);
+  const [isGetUser, setIsGetUser] = createSignal(true);
 
   const loc = useLocation();
   const nav = useNavigate();
@@ -56,6 +57,8 @@ export default function AuthProvider(props: Props) {
   ];
 
   const getUser = async () => {
+    setIsLoading(true);
+    setIsGetUser(true);
     const id = localStorage.getItem("xid") as string;
 
     setUser({
@@ -70,15 +73,12 @@ export default function AuthProvider(props: Props) {
     } catch (e) {
       setUser({ id: undefined });
     }
-  };
 
-  createEffect(() => {
-    if (isLoading() == true) {
-      setTimeout(() => {
-        setIsLoading(false);
-      }, 1200);
-    }
-  });
+    setTimeout(() => {
+      setIsGetUser(false);
+      setIsLoading(false);
+    }, 1000);
+  };
 
   createEffect((oldId) => {
     const id = user()?.id;
@@ -105,8 +105,17 @@ export default function AuthProvider(props: Props) {
   });
 
   onMount(async () => {
-    setIsLoading(true);
     await getUser();
+
+    createEffect(() => {
+      if (isLoading() == true) {
+        if (!isGetUser()) {
+          setTimeout(() => {
+            setIsLoading(false);
+          }, 1000);
+        }
+      }
+    });
   });
 
   return (
