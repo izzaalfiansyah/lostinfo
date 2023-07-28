@@ -31,7 +31,7 @@ export default function () {
       const { data } = await http.get("/user/" + params.md5id + "/md5");
       setReq("username", data.data.username);
     } catch (e: any) {
-      nav("/login", { replace: true });
+      nav("/lupa-password", { replace: true });
     }
     setIsLoading(false);
   };
