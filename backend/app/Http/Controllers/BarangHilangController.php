@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\BarangHilangRequest;
 use App\Http\Resources\BarangHilangResource;
 use App\Models\BarangHilang;
+use App\Models\BarangTemu;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
 
@@ -28,6 +29,50 @@ class BarangHilangController extends Controller
 
         if ($req->hadiah_max != null) {
             $builder = $builder->where('hadiah', '<=', $req->hadiah_max);
+        }
+
+        if ($req->barang_temu_id != null) {
+            $barang_temu = BarangTemu::find($req->barang_temu_id);
+
+            if ($barang_temu) {
+                $list_nama = explode(' ', $barang_temu->nama);
+                $list_deskripsi = explode(' ', $barang_temu->deskripsi);
+                $list_tempat_temu = explode(' ', $barang_temu->tempat_temu);
+
+                $builder = $builder->where(function ($query) use ($list_nama) {
+                    foreach ($list_nama as $nama) {
+                        if (strlen($nama) > 2) {
+                            $query = $query->orWhere('nama', 'like', "%$nama%");
+                        }
+                    }
+
+                    return $query;
+                });
+
+                $builder = $builder->orWhere(function ($query) use ($list_deskripsi) {
+                    foreach ($list_deskripsi as $deskripsi) {
+                        if (strlen($deskripsi) > 2) {
+                            $query = $query->orWhere('deskripsi', 'like', "%$deskripsi%");
+                        }
+                    }
+
+                    return $query;
+                });
+
+                $builder = $builder->where(function ($query) use ($list_tempat_temu) {
+                    foreach ($list_tempat_temu as $tempat_temu) {
+                        if (strlen($tempat_temu) > 2) {
+                            $query = $query->orWhere('tempat_hilang', 'like', "%$tempat_temu%");
+                        }
+                    }
+
+                    return $query;
+                });
+
+                if ($barang_temu->maps_lat != null) {
+                    $req->merge(['terdekat' => "$barang_temu->maps_lat,$barang_temu->maps_lng"]);
+                }
+            }
         }
 
         try {

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\BarangTemuRequest;
 use App\Http\Resources\BarangTemuResource;
+use App\Models\BarangHilang;
 use App\Models\BarangTemu;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
@@ -20,6 +21,50 @@ class BarangTemuController extends Controller
 
         if ($req->dikembalikan != null) {
             $builder = $builder->where('dikembalikan', $req->dikembalikan);
+        }
+
+        if ($req->barang_hilang_id != null) {
+            $barang_hilang = BarangHilang::find($req->barang_hilang_id);
+
+            if ($barang_hilang) {
+                $list_nama = explode(' ', $barang_hilang->nama);
+                $list_deskripsi = explode(' ', $barang_hilang->deskripsi);
+                $list_tempat_hilang = explode(' ', $barang_hilang->tempat_hilang);
+
+                $builder = $builder->where(function ($query) use ($list_nama) {
+                    foreach ($list_nama as $nama) {
+                        if (strlen($nama) > 2) {
+                            $query = $query->orWhere('nama', 'like', "%$nama%");
+                        }
+                    }
+
+                    return $query;
+                });
+
+                $builder = $builder->orWhere(function ($query) use ($list_deskripsi) {
+                    foreach ($list_deskripsi as $deskripsi) {
+                        if (strlen($deskripsi) > 2) {
+                            $query = $query->orWhere('deskripsi', 'like', "%$deskripsi%");
+                        }
+                    }
+
+                    return $query;
+                });
+
+                $builder = $builder->where(function ($query) use ($list_tempat_hilang) {
+                    foreach ($list_tempat_hilang as $tempat_hilang) {
+                        if (strlen($tempat_hilang) > 2) {
+                            $query = $query->orWhere('tempat_temu', 'like', "%$tempat_hilang%");
+                        }
+                    }
+
+                    return $query;
+                });
+
+                if ($barang_hilang->maps_lat != null) {
+                    $req->merge(['terdekat' => "$barang_hilang->maps_lat,$barang_hilang->maps_lng"]);
+                }
+            }
         }
 
         try {
