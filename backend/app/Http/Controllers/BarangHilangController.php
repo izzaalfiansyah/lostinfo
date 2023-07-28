@@ -65,7 +65,7 @@ class BarangHilangController extends Controller
         }
 
         try {
-            $orderBy = explode($req->orderBy, ',');
+            $orderBy = @explode(',', $req->orderBy);
             $builder = $builder->orderBy($orderBy[0], $orderBy[1]);
         } catch (\Exception $e) {
             $builder = $builder->orderBy('created_at', 'desc');
