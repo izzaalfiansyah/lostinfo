@@ -141,6 +141,16 @@ export default function () {
               </Show>
             </Card>
 
+            <Show when={req.user_id == auth().id}>
+              <div class="mt-3"></div>
+
+              <Card title="Barang Hilang yang Serupa">
+                <div class="text-red-500 text-lg bg-gray-50 p-5">
+                  Maaf... Fitur hanya tersedia pada versi mobile.
+                </div>
+              </Card>
+            </Show>
+
             <div class="mt-3"></div>
 
             <Card title="Tempat Temu">
