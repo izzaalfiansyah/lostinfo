@@ -1,6 +1,7 @@
 import { For, createSignal, onMount } from "solid-js";
 import { createStore } from "solid-js/store";
 import { A, useNavigate } from "solid-start";
+import AuthTitle from "~/components/auth-title";
 import Button from "~/components/button";
 import Card from "~/components/card";
 import Checkbox from "~/components/checkbox";
@@ -82,9 +83,7 @@ export default function () {
     <div class="max-w-full w-[900px]">
       <Card class="py-10 rounded-xl">
         <form onSubmit={store}>
-          <div class="mb-5">
-            <div class="font-semibold text-lg">Register</div>
-          </div>
+          <AuthTitle title="Register" />
           <div class="flex lg:flex-row flex-col gap-3">
             <div class="flex-1">
               <Input

@@ -1,4 +1,5 @@
 import { createEffect, createSignal, onMount } from "solid-js";
+import AuthTitle from "~/components/auth-title";
 import Button from "~/components/button";
 import Card from "~/components/card";
 import { useAuth } from "~/contexts/auth";
@@ -46,9 +47,7 @@ export default function () {
   return (
     <div class="max-w-full w-[500px]">
       <Card class="py-10 rounded-xl">
-        <div class="mb-5">
-          <div class="font-semibold text-lg">Verifikasi Akun</div>
-        </div>
+        <AuthTitle title="Verifikasi Akun" />
 
         <p>
           Kami telah mengirimkan link verifikasi akun. Periksa email anda! Klik

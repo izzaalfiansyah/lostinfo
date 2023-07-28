@@ -1,6 +1,7 @@
 import { createSignal, onMount } from "solid-js";
 import { createStore } from "solid-js/store";
 import { A, useNavigate, useParams } from "solid-start";
+import AuthTitle from "~/components/auth-title";
 import Button from "~/components/button";
 import Card from "~/components/card";
 import Input from "~/components/input";
@@ -67,9 +68,7 @@ export default function () {
     <div class="max-w-full w-[500px]">
       <Card class="py-10 rounded-xl">
         <form onSubmit={resetPassword}>
-          <div class="mb-5">
-            <div class="font-semibold text-lg">Reset Password</div>
-          </div>
+          <AuthTitle title="Reset Password" />
           <div class="mb-5">Untuk user @{req.username}</div>
           <Input
             label="Password"
