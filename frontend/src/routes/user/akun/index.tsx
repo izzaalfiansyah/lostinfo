@@ -1,5 +1,5 @@
 import Title from "~/components/title";
-import UserDetail from "../../admin/user/[id]";
+import UserDetail from "../../user/user/[id]";
 import { useAuth } from "~/contexts/auth";
 import { Show, createEffect, createSignal, onMount } from "solid-js";
 import Card from "~/components/card";

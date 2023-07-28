@@ -1,6 +1,6 @@
 import { For, Show, createEffect, createSignal, onMount } from "solid-js";
 import { createStore } from "solid-js/store";
-import { useParams } from "solid-start";
+import { useNavigate, useParams } from "solid-start";
 import {
   EditIcon,
   EnvelopeIcon,
@@ -52,11 +52,16 @@ export default function (props: Props) {
   const params = useParams();
   const dialogImg = useDialogImg();
   const [auth] = useAuth();
+  const nav = useNavigate();
 
   const get = async () => {
     setIsLoading(true);
     try {
       const id = props.id ? props.id : params.id;
+
+      if (id == auth().id) {
+        nav("/user/akun", { replace: true });
+      }
       const { data } = await http.get("/user/" + id);
       setReq(data.data);
       setReq("password", "");
@@ -134,7 +139,7 @@ export default function (props: Props) {
                       </button>
                     }
                   >
-                    <button
+                    {/* <button
                       type="button"
                       class="text-sm text-primary border block border-primary hover:text-white hover:bg-primary transition rounded-full px-3 p-1 flex items-center mr-2"
                       onClick={() => {
@@ -142,7 +147,7 @@ export default function (props: Props) {
                       }}
                     >
                       <EditIcon class="w-4 h-4 mr-2" /> Edit
-                    </button>
+                    </button> */}
 
                     <button
                       type="button"
@@ -159,40 +164,19 @@ export default function (props: Props) {
                   <tbody>
                     <tr>
                       <td class="pr-4">
-                        <a
-                          href={
-                            "https://www.google.com/maps?saddr=My+Location&daddr=" +
-                            req.alamat
-                          }
-                          // class="rounded-full p-1 border inline-block border-gray-800"
-                          target="_blank"
-                        >
-                          <MapPinIcon class="w-5 h-5" />
-                        </a>
+                        <MapPinIcon class="w-5 h-5" />
                       </td>
                       <td>{req.alamat}</td>
                     </tr>
                     <tr>
                       <td>
-                        <a
-                          href={"mailto:" + req.email}
-                          // class="rounded-full p-1 border inline-block border-gray-800"
-                          target="_blank"
-                        >
-                          <EnvelopeIcon class="w-5 h-5" />
-                        </a>
+                        <EnvelopeIcon class="w-5 h-5" />
                       </td>
                       <td>{req.email}</td>
                     </tr>
                     <tr>
                       <td>
-                        <a
-                          href={"https://wa.me/" + req.whatsapp}
-                          // class="rounded-full p-1 border inline-block border-gray-800"
-                          target="_blank"
-                        >
-                          <PhoneIcon class="w-5 h-5" />
-                        </a>
+                        <PhoneIcon class="w-5 h-5" />
                       </td>
                       <td>{req.telepon}</td>
                     </tr>
@@ -226,10 +210,7 @@ export default function (props: Props) {
           </a>
           <a
             target="_blank"
-            href={
-              "https://www.google.com/maps?saddr=My+Location&daddr=" +
-              req.alamat
-            }
+            href={"https://www.google.com/maps/dir/My+Location/" + req.alamat}
             class="rounded-full block bg-blue-500 h-12 w-12 flex items-center justify-center text-white shadow-lg"
           >
             <MapPinIcon class="w-5 h-5" />
@@ -237,7 +218,7 @@ export default function (props: Props) {
         </FloatingComponent>
       </Show>
 
-      <Show when={req.id == auth().id}>
+      {/* <Show when={req.id == auth().id}>
         <ModalSave
           show={modalEdit()}
           onClose={() => setModalEdit(false)}
@@ -245,7 +226,7 @@ export default function (props: Props) {
           isEdit={true}
           req={[req, setReq]}
         />
-      </Show>
+      </Show> */}
 
       <ModalReport
         user_id={req.id as string}

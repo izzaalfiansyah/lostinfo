@@ -1,5 +1,11 @@
 import { createStore } from "solid-js/store";
-import { A, useParams } from "solid-start";
+import {
+  A,
+  useLocation,
+  useNavigate,
+  useParams,
+  useSearchParams,
+} from "solid-start";
 import Title from "~/components/title";
 import { useNotif } from "~/contexts/notif";
 import BarangHilang from "~/interfaces/barang-hilang";
@@ -25,6 +31,7 @@ export default function () {
   const notif = useNotif();
   const params = useParams();
   const [auth] = useAuth();
+  const [searchParams, setSearchParams] = useSearchParams();
 
   const get = async () => {
     setIsLoading(true);
@@ -54,11 +61,23 @@ export default function () {
   return (
     <>
       <Title
-        title="Detail Barang Hilang"
+        title={`${
+          auth().id == req.user_id && searchParams.edit ? "Edit" : "Detail"
+        } Barang Hilang`}
         subtitle="Informasi lanjutan mengenai barang hilang"
+        action={
+          auth().id == req.user_id && !searchParams.edit ? (
+            <Button
+              onClick={() => setSearchParams({ edit: true })}
+              variant="primary"
+            >
+              Edit
+            </Button>
+          ) : null
+        }
       ></Title>
       <Show
-        when={auth().id == req.user_id}
+        when={auth().id == req.user_id && searchParams.edit}
         fallback={
           <>
             <Card title="Detail Barang">
@@ -150,7 +169,9 @@ export default function () {
                     variant="primary"
                     onClick={() => {
                       openWindow(
-                        `https://www.google.com/maps?saddr=My+Location&daddr=${req.maps_lat},${req.maps_lng}`
+                        req.maps_lat
+                          ? `http://www.google.com/maps/dir/My+Location/${req.maps_lat},${req.maps_lng}`
+                          : `http://www.google.com/maps/dir/My+Location/${req.tempat_hilang}`
                       );
                     }}
                   >

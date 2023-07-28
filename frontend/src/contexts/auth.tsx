@@ -104,18 +104,18 @@ export default function AuthProvider(props: Props) {
     return user().id;
   });
 
+  createEffect(() => {
+    if (isLoading() == true) {
+      if (!isGetUser()) {
+        setTimeout(() => {
+          setIsLoading(false);
+        }, 1000);
+      }
+    }
+  });
+
   onMount(async () => {
     await getUser();
-
-    createEffect(() => {
-      if (isLoading() == true) {
-        if (!isGetUser()) {
-          setTimeout(() => {
-            setIsLoading(false);
-          }, 1000);
-        }
-      }
-    });
   });
 
   return (

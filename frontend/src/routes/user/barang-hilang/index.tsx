@@ -223,23 +223,19 @@ export default function (props: Props) {
                     Hilang {formatDate(item.created_at as string, true)}{" "}
                   </div>
                   <div class="mt-2 flex items-center">
-                    <Show
-                      when={item.user_id == auth().id}
-                      fallback={
-                        <A
-                          href={"/user/barang-hilang/" + item.id}
-                          class="text-sm text-green-500 border inline-block border-green-500 hover:text-white hover:bg-green-500 transition rounded-full px-3 p-1"
-                        >
-                          <SearchIcon class="w-4 h-4" />
-                        </A>
-                      }
+                    <A
+                      href={"/user/barang-hilang/" + item.id}
+                      class="text-sm text-green-500 border inline-block border-green-500 hover:text-white hover:bg-green-500 transition rounded-full px-3 p-1 text-sm"
                     >
-                      <A
+                      Detail
+                    </A>
+                    <Show when={item.user_id == auth().id}>
+                      {/* <A
                         href={"/user/barang-hilang/" + item.id}
                         class="text-sm text-primary border inline-block border-primary hover:text-white hover:bg-primary transition rounded-full px-3 p-1"
                       >
                         <EditIcon class="w-4 h-4" />
-                      </A>
+                      </A> */}
                       <button
                         type="button"
                         class="ml-1 text-sm text-red-500 border inline-block border-red-500 hover:text-white hover:bg-red-500 transition rounded-full px-3 p-1"

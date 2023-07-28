@@ -1,4 +1,4 @@
-import { Show, createSignal } from "solid-js";
+import { Show, createSignal, onMount } from "solid-js";
 import { useNavigate } from "solid-start";
 import Card from "~/components/card";
 import FloatingComponent from "~/components/floating-component";
