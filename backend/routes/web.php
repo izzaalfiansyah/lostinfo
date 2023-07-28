@@ -24,6 +24,12 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::prefix('/total')->group(function () {
+    Route::get('/user', [UserController::class, 'total']);
+    Route::get('/barang/hilang', [BarangHilangController::class, 'total']);
+    Route::get('/barang/temu', [BarangTemuController::class, 'total']);
+});
+
 Route::prefix('/grafik')->group(function () {
     Route::get('/barang', [GrafikController::class, 'barang']);
 });

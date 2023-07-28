@@ -72,25 +72,25 @@
                                         [
                                             'path' => '/login',
                                             'method' => 'POST',
-                                            'parameter' => 'username: string, password: string',
+                                            'parameter' => 'username: string; password: string',
                                             'deskripsi' => 'Login ke akun user',
                                         ],
                                         [
                                             'path' => '/user',
                                             'method' => 'GET',
-                                            'parameter' => "role?: '1' | '2' | '9', status?: '1' | '0', search?: string, limit: number, page: number",
+                                            'parameter' => "role?: '1' | '2' | '9'; status?: '1' | '0'; search?: string; limit: number; page: number",
                                             'deskripsi' => 'Menampilkan data user',
                                         ],
                                         [
                                             'path' => '/user',
                                             'method' => 'POST',
-                                            'parameter' => "username: string, password: string, nama: string, alamat: string, email: string, telepon: string, foto: numeric, ktp: data_uri, role: '1' | '2', status: '1' | '0' | '9'",
+                                            'parameter' => "username: string; password: string; nama: string; alamat: string; email: string; telepon: string; foto: numeric; ktp: data_uri; role: '1' | '2'; status: '1' | '0' | '9'",
                                             'deskripsi' => 'Menambah data user',
                                         ],
                                         [
                                             'path' => '/user/{id}',
                                             'method' => 'PUT',
-                                            'parameter' => "username: string, password?: string, nama: string, alamat: string, email: string, telepon: string, foto?: numeric, ktp?: data_uri, role: '1' | '2', status: '1' | '0' | '9'",
+                                            'parameter' => "username: string; password?: string; nama: string; alamat: string; email: string; telepon: string; foto?: numeric; ktp?: data_uri; role: '1' | '2'; status: '1' | '0' | '9'",
                                             'deskripsi' => 'Mengedit data user',
                                         ],
                                         [
@@ -114,7 +114,7 @@
                                         [
                                             'path' => '/user/lapor',
                                             'method' => 'POST',
-                                            'parameter' => 'user_id: number, alasan: string',
+                                            'parameter' => 'user_id: number; alasan: string',
                                             'deskripsi' => 'Melakukan lapor untuk user',
                                         ],
                                         [
@@ -144,19 +144,19 @@
                                         [
                                             'path' => '/barang/hilang',
                                             'method' => 'GET',
-                                            'parameter' => "user_id?: number, ditemukan?: '1' | '0', hadiah_min: number, hadiah_max: number, terdekat: maps_lat,maps_lng, search?: string, limit: number, page: number",
+                                            'parameter' => "user_id?: number; ditemukan?: '1' | '0'; hadiah_min: number; hadiah_max: number; terdekat: maps_lat,maps_lng; search?: string; limit: number; page: number; orderBy?: string,'asc' | 'desc'",
                                             'deskripsi' => 'Menampilkan data barang hilang',
                                         ],
                                         [
                                             'path' => '/barang/hilang',
                                             'method' => 'POST',
-                                            'parameter' => "user_id: integer, nama: string, deskripsi?: string, tempat_hilang: string, maps_lat?: float, maps_lng?: float, foto: data_uri, hadiah: number, ditemukan?: '1' | '0'",
+                                            'parameter' => "user_id: integer; nama: string; deskripsi?: string; tempat_hilang: string; maps_lat?: float; maps_lng?: float; foto: data_uri; hadiah: number; ditemukan?: '1' | '0'",
                                             'deskripsi' => 'Menambah data barang hilang',
                                         ],
                                         [
                                             'path' => '/barang/hilang/{id}',
                                             'method' => 'PUT',
-                                            'parameter' => "user_id: integer, nama: string, deskripsi?: string, tempat_hilang: string, maps_lat?: float, maps_lng?: float, foto: data_uri, hadiah: number, ditemukan?: '1' | '0'",
+                                            'parameter' => "user_id: integer; nama: string; deskripsi?: string; tempat_hilang: string; maps_lat?: float; maps_lng?: float; foto: data_uri; hadiah: number; ditemukan?: '1' | '0'",
                                             'deskripsi' => 'Mengedit data barang hilang',
                                         ],
                                         [
@@ -168,19 +168,19 @@
                                         [
                                             'path' => '/barang/temu',
                                             'method' => 'GET',
-                                            'parameter' => "user_id?: number, dikembalikan?: '1' | '0', terdekat: maps_lat,maps_lng, search?: string, limit: number, page: number",
+                                            'parameter' => "user_id?: number; dikembalikan?: '1' | '0'; terdekat: maps_lat,maps_lng; search?: string; limit: number; page: number",
                                             'deskripsi' => 'Menampilkan data barang temu',
                                         ],
                                         [
                                             'path' => '/barang/temu',
                                             'method' => 'POST',
-                                            'parameter' => "user_id: integer, nama: string, deskripsi?: string, tempat_temu: string, maps_lat?: float, maps_lng?: float, foto: data_uri, dikembalikan?: '1' | '0'",
+                                            'parameter' => "user_id: integer; nama: string; deskripsi?: string; tempat_temu: string; maps_lat?: float; maps_lng?: float; foto: data_uri; dikembalikan?: '1' | '0'",
                                             'deskripsi' => 'Menambah data barang temu',
                                         ],
                                         [
                                             'path' => '/barang/temu/{id}',
                                             'method' => 'PUT',
-                                            'parameter' => "user_id: integer, nama: string, deskripsi?: string, tempat_temu: string, maps_lat?: float, maps_lng?: float, foto: data_uri, dikembalikan?: '1' | '0'",
+                                            'parameter' => "user_id: integer; nama: string; deskripsi?: string; tempat_temu: string; maps_lat?: float; maps_lng?: float; foto: data_uri; dikembalikan?: '1' | '0'",
                                             'deskripsi' => 'Mengedit data barang temu',
                                         ],
                                         [
@@ -194,6 +194,24 @@
                                             'method' => 'GET',
                                             'parameter' => 'tahun?: year',
                                             'deskripsi' => 'Menampilkan grafik data barang hilang dan temuan per tahun',
+                                        ],
+                                        [
+                                            'path' => '/total/user',
+                                            'method' => 'GET',
+                                            'parameter' => 'tahun?: year',
+                                            'deskripsi' => 'Menampilkan total pengguna',
+                                        ],
+                                        [
+                                            'path' => '/total/barang/hilang',
+                                            'method' => 'GET',
+                                            'parameter' => 'tahun?: year',
+                                            'deskripsi' => 'Menampilkan total barang hilang',
+                                        ],
+                                        [
+                                            'path' => '/total/barang/temu',
+                                            'method' => 'GET',
+                                            'parameter' => 'tahun?: year',
+                                            'deskripsi' => 'Menampilkan total barang temu',
                                         ],
                                     ];
                                 @endphp
@@ -209,7 +227,7 @@
                                     <tbody>
                                         @foreach ($routes as $item)
                                             <tr class="border-t border-gray-600">
-                                                <td class="px-4 p-2">{{ $item['path'] }}</td>
+                                                <td class="px-4 p-2 text-red-700">{{ $item['path'] }}</td>
                                                 <td class="px-4 p-2">{{ $item['method'] }}</td>
                                                 <td class="px-4 p-2">{{ $item['parameter'] }}</td>
                                                 <td class="px-4 p-2">{{ $item['deskripsi'] }}</td>

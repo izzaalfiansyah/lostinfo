@@ -26,13 +26,15 @@ export default function () {
 
   const getData = async () => {
     try {
-      const user = await http.get("/user");
-      const barangHilang = await http.get("/barang/hilang");
-      const barangTemu = await http.get("/barang/temu");
+      const [user, barangHilang, barangTemu] = await Promise.all([
+        http.get("/total/user"),
+        http.get("/total/barang/hilang"),
+        http.get("/total/barang/temu"),
+      ]);
 
-      setTotal("user", user.data.data.length);
-      setTotal("barangHilang", barangHilang.data.data.length);
-      setTotal("barangTemu", barangTemu.data.data.length);
+      setTotal("user", user.data.data);
+      setTotal("barangHilang", barangHilang.data.data);
+      setTotal("barangTemu", barangTemu.data.data);
     } catch (e: any) {
       notif.show(e.response.data.message, false);
     }
@@ -123,6 +125,19 @@ export default function () {
         title="Dashboard"
         subtitle={`Halo ${auth()?.nama}, Selamat datang di Aplikasi LostInfo`}
       />
+      <Card class="mb-4">
+        <div class="flex lg:flex-row flex-col items-center gap-x-5">
+          <div>Filter Tahun :</div>
+          <div class="grow">
+            <Input
+              type="number"
+              value={tahun()}
+              onChange={(e) => setTahun(parseInt(e.currentTarget.value))}
+              max={new Date().getFullYear()}
+            />
+          </div>
+        </div>
+      </Card>
       <div class="grid lg:grid-cols-3 grid-cols-1 gap-3 mb-3">
         <Show
           when={!isLoading()}
@@ -178,17 +193,6 @@ export default function () {
         </Show>
       </div>
       <Card title="Grafik Barang Hilang dan Temuan">
-        <div class="flex lg:flex-row flex-col items-center gap-x-5 mb-5">
-          <div>Filter Tahun :</div>
-          <div class="grow">
-            <Input
-              type="number"
-              value={tahun()}
-              onChange={(e) => setTahun(parseInt(e.currentTarget.value))}
-              max={new Date().getFullYear()}
-            />
-          </div>
-        </div>
         <Show when={isLoading()}>
           <Skeleton class="h-80 rounded-lg" />
         </Show>

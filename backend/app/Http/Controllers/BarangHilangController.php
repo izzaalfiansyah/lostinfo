@@ -64,9 +64,10 @@ class BarangHilangController extends Controller
             });
         }
 
-        if ($orderBy = $req->orderBy) {
-            $builder = $builder->orderBy($orderBy);
-        } else {
+        try {
+            $orderBy = explode($req->orderBy, ',');
+            $builder = $builder->orderBy($orderBy[0], $orderBy[1]);
+        } catch (\Exception $e) {
             $builder = $builder->orderBy('created_at', 'desc');
         }
 
@@ -120,5 +121,20 @@ class BarangHilangController extends Controller
         $item?->delete();
 
         return new BarangHilangResource($item);
+    }
+
+    function total(Request $req)
+    {
+        $tahun = date('Y');
+
+        if ($req->tahun != null) {
+            $tahun = $req->tahun;
+        }
+
+        $total = BarangHilang::whereYear('created_at', $tahun)->count();
+
+        return [
+            'data' => $total,
+        ];
     }
 }

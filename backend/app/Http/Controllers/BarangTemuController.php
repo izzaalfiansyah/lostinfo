@@ -106,4 +106,19 @@ class BarangTemuController extends Controller
 
         return new BarangTemuResource($item);
     }
+
+    function total(Request $req)
+    {
+        $tahun = date('Y');
+
+        if ($req->tahun != null) {
+            $tahun = $req->tahun;
+        }
+
+        $total = BarangTemu::whereYear('created_at', $tahun)->count();
+
+        return [
+            'data' => $total,
+        ];
+    }
 }

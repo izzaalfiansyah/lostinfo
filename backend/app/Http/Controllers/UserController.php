@@ -202,4 +202,19 @@ class UserController extends Controller
 
         return new UserResource($item);
     }
+
+    function total(Request $req)
+    {
+        $tahun = date('Y');
+
+        if ($req->tahun != null) {
+            $tahun = $req->tahun;
+        }
+
+        $total = User::whereYear('created_at', $tahun)->count();
+
+        return [
+            'data' => $total,
+        ];
+    }
 }
