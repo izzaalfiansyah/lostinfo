@@ -23,6 +23,16 @@ body {
   padding: 0;
 }
 
+/* .content-yield > * {
+  animation: fromRight 0.5s;
+} */
+
+@keyframes fromRight {
+  0% {
+    transform: translateX(100vh);
+  }
+}
+
 .tel-input[type="number"]::-webkit-inner-spin-button,
 .tel-input[type="number"]::-webkit-outer-spin-button {
   -webkit-appearance: none;

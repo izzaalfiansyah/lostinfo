@@ -14,7 +14,6 @@ import {
   UsersIcon,
   WarningIcon,
 } from "~/components/icons";
-import Img from "~/components/img";
 import Modal from "~/components/modal";
 import { useAuth } from "~/contexts/auth";
 
@@ -92,123 +91,6 @@ export default function (props: Props) {
 
   return (
     <>
-      {/* <div class="bg-blue-400 min-h-screen text-gray-700 overflow-x-hidden">
-        <div
-          class="z-[99999] bg-black bg-opacity-25 fixed top-0 left-0 right-0 bottom-0 lg:hidden"
-          classList={{
-            hidden: !showSidebar(),
-          }}
-          onClick={toggleSidebar}
-        ></div>
-        <div
-          class="fixed top-0 bottom-0 left-0 w-80 bg-white z-[99999] p-10 px-8 flex flex-col justify-between transform transition lg:translate-x-0"
-          classList={{
-            "-translate-x-full": !showSidebar(),
-          }}
-        >
-          <div>
-            <div class="text-4xl font-extrabold">
-              LostInfo<span class="text-primary">.</span>
-            </div>
-            <div class="text-sm text-gray-300">
-              Platform Informasi Barang Hilang
-            </div>
-            <div class="mt-10 -mx-8">
-              <ul>
-                <For each={menus}>
-                  {(item) => (
-                    <li class="mb-1 relative px-8">
-                      <A
-                        href={item.path}
-                        class="p-2 px-3 block rounded flex items-center transition"
-                        classList={{
-                          "text-primary mb-1 bg-primary bg-opacity-25":
-                            checkActive(item.path),
-                        }}
-                        onClick={toggleSidebar}
-                      >
-                        <item.icon class="w-5 h-5 mr-3" />
-                        {item.title}
-                      </A>
-                      <div
-                        class="h-full w-1 bg-primary rounded-r absolute top-0 left-0 bottom-0 transform origin-left transition"
-                        classList={{
-                          "scale-100": checkActive(item.path),
-                          "scale-0": !checkActive(item.path),
-                        }}
-                      ></div>
-                    </li>
-                  )}
-                </For>
-                <li class="mb-1 relative px-8">
-                  <button
-                    type="button"
-                    class="p-2 px-3 block rounded flex items-center space-x-3 w-full"
-                    onClick={() => setModalLogout(true)}
-                  >
-                    <LogoutIcon class="w-5 h-5 mr-3" />
-                    Logout
-                  </button>
-                </li>
-              </ul>
-            </div>
-          </div>
-          <div>
-            <div class="text-sm">
-              Made with <LoveIcon class="w-4 h-4 text-red-500 inline" /> by
-              HockGuan
-            </div>
-            <div class="font-semibold mt-2 text-sm">
-              LostInfo - 2023 &copy; All rights reserved.
-            </div>
-          </div>
-        </div>
-        <div class="lg:ml-80 p-5">
-          <div class="flex justify-between mb-5 items-center">
-            <button
-              class="lg:hidden mr-4 bg-white p-2 rounded"
-              onClick={toggleSidebar}
-            >
-              <MenuIcon class="w-6 h-6" />
-            </button>
-            <input
-              type="text"
-              class="bg-white rounded p-2.5 px-4 outline-none lg:flex-1 w-2/3 border-gray-200 transition focus:ring-purple-300 focus:ring-2 mr-5"
-              placeholder="Cari Sesuatu..."
-            />
-            <div class="flex-1 flex justify-between items-center">
-              <div class="lg:flex-1"></div>
-              <A
-                href="/admin/akun"
-                class="block grow items-center flex justify-end space-x-4 lg:border-l-2"
-              >
-                <div class="lg:block hidden text-white">{auth()?.username}</div>
-                <img
-                  src={auth().foto_url}
-                  alt={auth().nama}
-                  class="block rounded-full !w-12 !h-12 bg-gray-200"
-                />
-              </A>
-            </div>
-          </div>
-          <Modal show={modalLogout()} onClose={() => setModalLogout(false)}>
-            <form onSubmit={logout} class="max-w-full w-[500px]">
-              <div class="font-semibold mb-3">Logout</div>
-              <p>Anda yakin akan logout? Sesi anda akan berakhir!</p>
-              <div class="mt-8 flex items-center justify-end">
-                <button
-                  type="submit"
-                  class="px-4 py-2 bg-red-500 rounded shadow-sm text-white"
-                >
-                  Keluar
-                </button>
-              </div>
-            </form>
-          </Modal>
-          {props.children}
-        </div>
-      </div> */}
-
       <div class="bg-gray-50 bg-opacity-25 min-h-screen text-gray-700 overflow-x-hidden">
         <div
           class="z-[99999] bg-black bg-opacity-25 fixed top-0 left-0 right-0 bottom-0 lg:hidden"
@@ -333,7 +215,7 @@ export default function (props: Props) {
               </div>
             </form>
           </Modal>
-          <div class="grow flex flex-col">{props.children}</div>
+          <div class="grow flex flex-col content-yield">{props.children}</div>
         </div>
       </div>
     </>
