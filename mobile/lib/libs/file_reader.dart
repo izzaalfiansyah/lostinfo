@@ -19,6 +19,6 @@ fileReader({bool isImage = true}) async {
 
     return base64File;
   } else {
-    return false;
+    return null;
   }
 }

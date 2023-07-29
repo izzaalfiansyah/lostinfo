@@ -34,7 +34,7 @@ class _MyAppState extends State<MyApp> {
           inputDecorationTheme: InputDecorationTheme(
             floatingLabelBehavior: FloatingLabelBehavior.always,
             isDense: true,
-            fillColor: Colors.white,
+            fillColor: Colors.grey.shade50,
             filled: true,
             contentPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 8),
             border: UnderlineInputBorder(

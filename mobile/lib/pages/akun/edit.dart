@@ -1,10 +1,14 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:mobile/components/card.dart';
+import 'package:mobile/components/file_picker.dart';
 import 'package:mobile/components/form_group.dart';
 import 'package:mobile/layouts/user.dart';
+import 'package:mobile/libs/base64_image.dart';
 import 'package:mobile/libs/constant.dart';
+import 'package:mobile/libs/file_reader.dart';
 
 class AkunEditPage extends StatefulWidget {
   const AkunEditPage({super.key});
@@ -46,7 +50,7 @@ class _AkunEditPageState extends State<AkunEditPage> {
                   FormGroup(
                     child: TextFormField(
                       decoration: InputDecoration(
-                        prefixIcon: Icon(Icons.email),
+                        suffixIcon: Icon(Icons.email),
                         hintText: 'Masukkan Email',
                         labelText: 'Email',
                       ),
@@ -55,7 +59,7 @@ class _AkunEditPageState extends State<AkunEditPage> {
                   FormGroup(
                     child: TextFormField(
                       decoration: InputDecoration(
-                        prefixIcon: Icon(Icons.phone),
+                        suffixIcon: Icon(Icons.phone),
                         hintText: 'Masukkan Nomor Telepon',
                         labelText: 'Nomor Telepon',
                       ),
@@ -64,44 +68,26 @@ class _AkunEditPageState extends State<AkunEditPage> {
                   FormGroup(
                     child: Column(
                       children: [
-                        ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.blue.shade50,
-                            foregroundColor: Colors.blue,
+                        FilePicker(
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(Icons.file_upload_outlined),
+                              SizedBox(width: 8),
+                              Text('Ganti Foto Profil'),
+                            ],
                           ),
-                          child: Container(
-                            width: double.infinity,
-                            alignment: Alignment.center,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Icon(Icons.file_upload_outlined),
-                                SizedBox(width: 8),
-                                Text('Ganti Foto Profil'),
-                              ],
-                            ),
-                          ),
-                          onPressed: () {},
                         ),
-                        ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.blue.shade50,
-                            foregroundColor: Colors.blue,
-                          ),
-                          child: Container(
-                            width: double.infinity,
-                            alignment: Alignment.center,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Icon(Icons.file_upload_outlined),
-                                SizedBox(width: 8),
-                                Text('Ganti Foto KTP'),
-                              ],
-                            ),
-                          ),
-                          onPressed: () {},
-                        )
+                        // FilePicker(
+                        //   child: Row(
+                        //     mainAxisAlignment: MainAxisAlignment.center,
+                        //     children: [
+                        //       Icon(Icons.file_upload_outlined),
+                        //       SizedBox(width: 8),
+                        //       Text('Ganti Foto KTP'),
+                        //     ],
+                        //   ),
+                        // )
                       ],
                     ),
                   ),
@@ -161,6 +147,67 @@ class _AkunEditPageState extends State<AkunEditPage> {
           ],
         ),
       ),
+    );
+  }
+}
+
+class FileInput extends StatelessWidget {
+  const FileInput({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return ElevatedButton(
+      style: ElevatedButton.styleFrom(
+        backgroundColor: Colors.blue.shade50,
+        foregroundColor: Colors.blue,
+      ),
+      child: Container(
+        width: double.infinity,
+        alignment: Alignment.center,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(Icons.file_upload_outlined),
+            SizedBox(width: 8),
+            Text('Ganti Foto Profil'),
+          ],
+        ),
+      ),
+      onPressed: () async {
+        final res = await fileReader();
+        if (res != null) {
+          Get.bottomSheet(
+            Container(
+              padding: EdgeInsets.all(20),
+              width: double.infinity,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(5),
+                    child: Base64Image(res),
+                  ),
+                  SizedBox(height: 10),
+                  ElevatedButton(
+                    onPressed: () {
+                      // change photo
+                      Get.back();
+                    },
+                    child: Container(
+                      width: double.infinity,
+                      alignment: Alignment.center,
+                      child: Text('Ganti Foto'),
+                    ),
+                  )
+                ],
+              ),
+            ),
+            backgroundColor: Colors.white,
+          );
+        }
+      },
     );
   }
 }
