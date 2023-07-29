@@ -19,7 +19,7 @@ class User {
   String? created_at;
   String? updated_at;
 
-  User(
+  User({
     this.id,
     this.username,
     this.nama,
@@ -37,27 +37,27 @@ class User {
     this.status_detail,
     this.created_at,
     this.updated_at,
-  );
+  });
 
   factory User.fromJSON(data) {
     return User(
-      data['id'],
-      data['username'],
-      data['nama'],
-      data['alamat'],
-      data['email'],
-      data['telepon'],
-      data['whatsapp'],
-      data['foto'],
-      data['foto_url'],
-      data['ktp'],
-      data['ktp_url'],
-      data['role'],
-      data['role_detail'],
-      data['status'],
-      data['status_detail'],
-      data['created_at'],
-      data['updated_at'],
+      id: data['id'],
+      username: data['username'],
+      nama: data['nama'],
+      alamat: data['alamat'],
+      email: data['email'],
+      telepon: data['telepon'],
+      whatsapp: data['whatsapp'],
+      foto: data['foto'],
+      foto_url: data['foto_url'],
+      ktp: data['ktp'],
+      ktp_url: data['ktp_url'],
+      role: data['role'],
+      role_detail: data['role_detail'],
+      status: data['status'],
+      status_detail: data['status_detail'],
+      created_at: data['created_at'],
+      updated_at: data['updated_at'],
     );
   }
 

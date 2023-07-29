@@ -4,10 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mobile/libs/constant.dart';
 import 'package:mobile/pages/akun/index.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+// import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
-  SharedPreferences.setMockInitialValues({'id': '5'});
+  // SharedPreferences.setMockInitialValues({'id': '5'});
   runApp(const MyApp());
 }
 
@@ -50,7 +50,7 @@ class _MyAppState extends State<MyApp> {
             backgroundColor: colorPrimary,
             foregroundColor: Colors.white,
           ))),
-      home: AkunPage(),
+      home: AkunPage(userId: '3'),
     );
   }
 }

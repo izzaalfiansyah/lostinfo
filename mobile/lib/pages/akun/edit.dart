@@ -1,14 +1,15 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:mobile/components/card.dart';
 import 'package:mobile/components/file_picker.dart';
 import 'package:mobile/components/form_group.dart';
+import 'package:mobile/contexts/auth_context.dart';
 import 'package:mobile/layouts/user.dart';
 import 'package:mobile/libs/constant.dart';
 import 'package:mobile/libs/notif.dart';
 import 'package:mobile/models/user.dart';
-import 'package:mobile/services/auth_service.dart';
 import 'package:mobile/services/user_service.dart';
 
 class AkunEditPage extends StatefulWidget {
@@ -38,50 +39,43 @@ class _AkunEditPageState extends State<AkunEditPage> {
 
   bool isLoading = true;
 
+  final auth = Get.put(AuthContext());
+
   getUser() async {
     setState(() {
       isLoading = true;
     });
 
-    final userId = await AuthService.get();
-    final user = await UserService.find(id: userId);
+    final userId = auth.get();
+    final res = await UserService.find(id: userId);
 
-    nama.text = user.nama.toString();
-    alamat.text = user.alamat.toString();
-    email.text = user.email.toString();
-    telepon.text = user.telepon.toString();
-    username.text = user.username.toString();
+    nama.text = res.nama.toString();
+    alamat.text = res.alamat.toString();
+    email.text = res.email.toString();
+    telepon.text = res.telepon.toString();
+    username.text = res.username.toString();
 
     setState(() {
       id = userId;
-      status = user.status.toString();
-      role = user.status.toString();
+      status = res.status.toString();
+      role = res.status.toString();
       isLoading = false;
     });
   }
 
   handleSave() async {
     User user = User(
-      id,
-      username.text,
-      nama.text,
-      alamat.text,
-      email.text,
-      telepon.text,
-      null,
-      foto,
-      null,
-      null,
-      null,
-      role,
-      null,
-      status,
-      null,
-      null,
-      null,
+      id: id,
+      username: username.text,
+      nama: nama.text,
+      alamat: alamat.text,
+      email: email.text,
+      telepon: telepon.text,
+      foto: foto,
+      role: role,
+      status: status,
     );
 
-    // print(id.toString());
     setState(() {
       isLoading = true;
     });
@@ -102,7 +96,7 @@ class _AkunEditPageState extends State<AkunEditPage> {
   Widget build(BuildContext context) {
     return UserLayout(
       title: 'Edit Akun',
-      children: SingleChildScrollView(
+      child: SingleChildScrollView(
         padding: EdgeInsets.all(5),
         child: Column(
           children: [
@@ -165,7 +159,11 @@ class _AkunEditPageState extends State<AkunEditPage> {
                               Text('Ganti Foto Profil'),
                             ],
                           ),
-                          onChange: (res) {},
+                          onChange: (res) {
+                            setState(() {
+                              foto = res;
+                            });
+                          },
                         ),
                         // FilePicker(
                         //   child: Row(

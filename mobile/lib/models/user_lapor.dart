@@ -10,7 +10,7 @@ class UserLapor {
   String? created_at;
   String? updated_at;
 
-  UserLapor(
+  UserLapor({
     this.id,
     this.user_id,
     this.pelapor_id,
@@ -19,18 +19,18 @@ class UserLapor {
     this.pelapor,
     this.created_at,
     this.updated_at,
-  );
+  });
 
   factory UserLapor.fromJSON(data) {
     return UserLapor(
-      data['id'],
-      data['user_id'],
-      data['pelapor_id'],
-      data['alasan'],
-      User.fromJSON(data['user']),
-      User.fromJSON(data['pelapor']),
-      data['created_at'],
-      data['updated_at'],
+      id: data['id'],
+      user_id: data['user_id'],
+      pelapor_id: data['pelapor_id'],
+      alasan: data['alasan'],
+      user: User.fromJSON(data['user']),
+      pelapor: User.fromJSON(data['pelapor']),
+      created_at: data['created_at'],
+      updated_at: data['updated_at'],
     );
   }
 

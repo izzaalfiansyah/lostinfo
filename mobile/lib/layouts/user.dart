@@ -7,10 +7,12 @@ import 'package:mobile/pages/akun/index.dart';
 import 'package:mobile/services/auth_service.dart';
 
 class UserLayout extends StatefulWidget {
-  const UserLayout({super.key, required this.children, required this.title});
+  const UserLayout(
+      {super.key, required this.child, required this.title, this.bottomNavBar});
 
-  final Widget children;
+  final Widget child;
   final String title;
+  final Widget? bottomNavBar;
 
   @override
   State<UserLayout> createState() => _UserLayoutState();
@@ -55,7 +57,8 @@ class _UserLayoutState extends State<UserLayout> {
         ],
       ),
       drawer: Drawer(),
-      body: widget.children,
+      body: widget.child,
+      bottomNavigationBar: widget.bottomNavBar,
     );
   }
 }
