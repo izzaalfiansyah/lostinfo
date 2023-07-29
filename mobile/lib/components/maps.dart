@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_map_location_marker/flutter_map_location_marker.dart';
+import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:mobile/components/skeleton.dart';
@@ -16,10 +17,12 @@ class MapsComponent extends StatefulWidget {
       this.onChange,
       this.onLocationFound,
       this.barangHilang,
-      this.barangTemu});
+      this.barangTemu,
+      this.alamat});
 
   final Function(LatLng)? onChange;
   final Function(LatLng)? onLocationFound;
+  final String? alamat;
   final List<BarangHilang>? barangHilang;
   final List<BarangTemu>? barangTemu;
 
@@ -29,22 +32,28 @@ class MapsComponent extends StatefulWidget {
 
 class _MapsComponentState extends State<MapsComponent> {
   final mapController = MapController();
+  LatLng center = LatLng(-8.168959596070266, 113.70214465744915);
   List markers = [];
   bool isLoading = false;
-  Position pos = Position(
-      latitude: -8.168959596070266,
-      longitude: 113.70214465744915,
-      timestamp: DateTime.now(),
-      accuracy: 0,
-      altitude: 0,
-      heading: 0,
-      speed: 0,
-      speedAccuracy: 0);
+  Position? pos;
 
   @override
   initState() {
     super.initState();
     _determinePosition();
+    if (widget.alamat != null) {
+      getKordinatByAlamat();
+    }
+  }
+
+  getKordinatByAlamat() async {
+    List<Location> locations =
+        await locationFromAddress(widget.alamat.toString());
+    final location = locations[0];
+
+    setState(() {
+      center = LatLng(location.latitude, location.longitude);
+    });
   }
 
   _determinePosition() async {
@@ -77,15 +86,19 @@ class _MapsComponentState extends State<MapsComponent> {
 
     // When we reach here, permissions are granted and we can
     // continue accessing the position of the device.
-    // final position = await Geolocator.getCurrentPosition();
 
     setState(() {
-      // pos = position;
       isLoading = false;
     });
 
+    final position = await Geolocator.getCurrentPosition();
+
+    setState(() {
+      pos = position;
+    });
+
     if (widget.onLocationFound != null) {
-      widget.onLocationFound!(LatLng(pos.latitude, pos.longitude));
+      widget.onLocationFound!(LatLng(pos!.latitude, pos!.longitude));
     }
   }
 
@@ -97,7 +110,7 @@ class _MapsComponentState extends State<MapsComponent> {
           ? FlutterMap(
               mapController: mapController,
               options: MapOptions(
-                center: LatLng(-8.168959596070266, 113.70214465744915),
+                center: center,
                 zoom: 15,
                 onTap: (tapPosition, point) {
                   if (widget.onChange != null) {
@@ -118,18 +131,7 @@ class _MapsComponentState extends State<MapsComponent> {
                       'https://tileserver.memomaps.de/tilegen/{z}/{x}/{y}.png',
                   userAgentPackageName: 'com.lostinfo.polije',
                 ),
-                CurrentLocationLayer(
-                  style: LocationMarkerStyle(
-                    marker: const DefaultLocationMarker(
-                      child: Icon(
-                        Icons.navigation,
-                        color: Colors.white,
-                      ),
-                    ),
-                    markerSize: const Size(40, 40),
-                    markerDirection: MarkerDirection.heading,
-                  ),
-                ),
+                // CurrentLocationLayer(),
                 MarkerLayer(
                   markers: List.generate(markers.length, (index) {
                     final marker = markers[index];

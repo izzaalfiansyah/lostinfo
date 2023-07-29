@@ -41,12 +41,12 @@ class _UserLayoutState extends State<UserLayout> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: colorPrimary,
-        foregroundColor: Colors.white,
+        backgroundColor: colorPrimary.withOpacity(.05),
+        // foregroundColor: Colors.white,
         title: Text(widget.title),
         actions: [
           TextButton(
-            style: TextButton.styleFrom(iconColor: Colors.white),
+            style: TextButton.styleFrom(iconColor: Colors.black),
             onPressed: () {
               Get.to(AkunPage());
             },

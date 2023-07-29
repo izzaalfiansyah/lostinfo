@@ -43,6 +43,7 @@ dependencies:
   shimmer: ^3.0.0
   flutter_map_location_marker: ^7.0.2
   geolocator: ^9.0.2
+  geocoding: ^2.1.0
 
 dev_dependencies:
   flutter_test:

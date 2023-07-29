@@ -33,9 +33,6 @@ class _BerandaPageState extends State<BerandaPage> {
       barangHilang = hilang;
       barangTemu = temu;
     });
-
-    print(barangHilang);
-    print(barangTemu);
   }
 
   @override
@@ -48,6 +45,7 @@ class _BerandaPageState extends State<BerandaPage> {
           child: MapsComponent(
             barangHilang: barangHilang,
             barangTemu: barangTemu,
+            alamat: 'Gumukmas',
             onLocationFound: (val) async {
               await getBarangTerdekat(val);
             },
