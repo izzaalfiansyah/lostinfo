@@ -165,7 +165,7 @@ export default function () {
                 label="Foto"
                 title="Pilih Foto"
                 onChange={handleFotoChange}
-                accept="iamge/*"
+                accept="image/*"
                 hint={"Kosongkan jika tidak ingin mengganti foto"}
               />
               <div class="mb-2">

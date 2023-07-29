@@ -1,7 +1,9 @@
 // ignore_for_file: prefer_const_constructors
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter/material.dart';
-import 'package:mobile/pages/akun.dart';
+import 'package:get/get.dart';
+import 'package:mobile/libs/constant.dart';
+import 'package:mobile/pages/akun/index.dart';
 
 void main() {
   runApp(const MyApp());
@@ -23,29 +25,34 @@ class _MyAppState extends State<MyApp> {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return GetMaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // TRY THIS: Try running your application with "flutter run". You'll see
-        // the application has a blue toolbar. Then, without quitting the app,
-        // try changing the seedColor in the colorScheme below to Colors.green
-        // and then invoke "hot reload" (save your changes or press the "hot
-        // reload" button in a Flutter-supported IDE, or press "r" if you used
-        // the command line to start the app).
-        //
-        // Notice that the counter didn't reset back to zero; the application
-        // state is not lost during the reload. To reset the state, use hot
-        // restart instead.
-        //
-        // This works for code too, not just values: Most code changes can be
-        // tested with just a hot reload.
-        textTheme: GoogleFonts.poppinsTextTheme(),
-        colorScheme: ColorScheme.fromSwatch(
-          primarySwatch: Colors.blue,
-        ),
-      ),
+          textTheme: GoogleFonts.poppinsTextTheme(),
+          useMaterial3: true,
+          colorScheme: ColorScheme.fromSeed(seedColor: colorPrimary),
+          inputDecorationTheme: InputDecorationTheme(
+            floatingLabelBehavior: FloatingLabelBehavior.always,
+            isDense: true,
+            fillColor: Colors.white,
+            filled: true,
+            contentPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+            border: UnderlineInputBorder(
+              borderSide: BorderSide(width: 1),
+            ),
+            enabledBorder: UnderlineInputBorder(
+              borderSide: BorderSide(color: Colors.grey.shade300),
+            ),
+            focusedBorder: UnderlineInputBorder(
+              borderSide: BorderSide(color: colorPrimary),
+            ),
+            alignLabelWithHint: true,
+          ),
+          elevatedButtonTheme: ElevatedButtonThemeData(
+              style: ElevatedButton.styleFrom(
+            backgroundColor: colorPrimary,
+            foregroundColor: Colors.white,
+          ))),
       home: AkunPage(),
     );
   }
