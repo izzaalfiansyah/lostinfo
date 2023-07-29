@@ -1,5 +1,5 @@
 import 'package:dio/dio.dart';
 
 final http = Dio(BaseOptions(
-  baseUrl: 'http://10.10.7.158:8000',
+  baseUrl: 'http://192.168.139.31:8000',
 ));

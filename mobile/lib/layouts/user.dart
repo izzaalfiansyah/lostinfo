@@ -4,12 +4,36 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mobile/libs/constant.dart';
 import 'package:mobile/pages/akun/index.dart';
+import 'package:mobile/services/auth_service.dart';
 
-class UserLayout extends StatelessWidget {
+class UserLayout extends StatefulWidget {
   const UserLayout({super.key, required this.children, required this.title});
 
   final Widget children;
   final String title;
+
+  @override
+  State<UserLayout> createState() => _UserLayoutState();
+}
+
+class _UserLayoutState extends State<UserLayout> {
+  bool isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    getAuthUser();
+  }
+
+  getAuthUser() async {
+    setState(() {
+      isLoading = true;
+    });
+    await AuthService.set('5');
+    setState(() {
+      isLoading = false;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +41,7 @@ class UserLayout extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: colorPrimary,
         foregroundColor: Colors.white,
-        title: Text(title),
+        title: Text(widget.title),
         actions: [
           TextButton(
             style: TextButton.styleFrom(iconColor: Colors.white),
@@ -31,7 +55,7 @@ class UserLayout extends StatelessWidget {
         ],
       ),
       drawer: Drawer(),
-      body: children,
+      body: widget.children,
     );
   }
 }

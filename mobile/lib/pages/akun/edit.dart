@@ -9,6 +9,8 @@ import 'package:mobile/layouts/user.dart';
 import 'package:mobile/libs/base64_image.dart';
 import 'package:mobile/libs/constant.dart';
 import 'package:mobile/libs/file_reader.dart';
+import 'package:mobile/services/auth_service.dart';
+import 'package:mobile/services/user_service.dart';
 
 class AkunEditPage extends StatefulWidget {
   const AkunEditPage({super.key});
@@ -18,133 +20,149 @@ class AkunEditPage extends StatefulWidget {
 }
 
 class _AkunEditPageState extends State<AkunEditPage> {
+  final _nama = TextEditingController();
+  final _alamat = TextEditingController();
+  final _email = TextEditingController();
+  final _telepon = TextEditingController();
+  final _username = TextEditingController();
+  final _password = TextEditingController();
+  String foto = '';
+
   @override
   Widget build(BuildContext context) {
     return UserLayout(
       title: 'Edit Akun',
       children: SingleChildScrollView(
         padding: EdgeInsets.all(5),
-        child: Column(
-          children: [
-            CardComponent(
-              title: 'Pengaturan Akun',
-              child: Column(
-                children: [
-                  FormGroup(
-                    child: TextFormField(
-                      decoration: InputDecoration(
-                        hintText: 'Masukkan Nama',
-                        labelText: 'Nama',
-                      ),
-                    ),
-                  ),
-                  FormGroup(
-                    child: TextFormField(
-                      maxLines: 2,
-                      decoration: InputDecoration(
-                        hintText: 'Masukkan Alamat',
-                        labelText: 'Alamat',
-                      ),
-                    ),
-                  ),
-                  FormGroup(
-                    child: TextFormField(
-                      decoration: InputDecoration(
-                        suffixIcon: Icon(Icons.email),
-                        hintText: 'Masukkan Email',
-                        labelText: 'Email',
-                      ),
-                    ),
-                  ),
-                  FormGroup(
-                    child: TextFormField(
-                      decoration: InputDecoration(
-                        suffixIcon: Icon(Icons.phone),
-                        hintText: 'Masukkan Nomor Telepon',
-                        labelText: 'Nomor Telepon',
-                      ),
-                    ),
-                  ),
-                  FormGroup(
-                    child: Column(
-                      children: [
-                        FilePicker(
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Icon(Icons.file_upload_outlined),
-                              SizedBox(width: 8),
-                              Text('Ganti Foto Profil'),
-                            ],
+        child: FutureBuilder(
+          future: () async {
+            final userId = await AuthService.get();
+            return await UserService.find(id: userId);
+          }(),
+          builder: (context, snapshot) {
+            return Column(
+              children: [
+                CardComponent(
+                  title: 'Pengaturan Akun',
+                  child: Column(
+                    children: [
+                      FormGroup(
+                        child: TextFormField(
+                          decoration: InputDecoration(
+                            hintText: 'Masukkan Nama',
+                            labelText: 'Nama',
                           ),
                         ),
-                        // FilePicker(
-                        //   child: Row(
-                        //     mainAxisAlignment: MainAxisAlignment.center,
-                        //     children: [
-                        //       Icon(Icons.file_upload_outlined),
-                        //       SizedBox(width: 8),
-                        //       Text('Ganti Foto KTP'),
-                        //     ],
-                        //   ),
-                        // )
-                      ],
-                    ),
-                  ),
-                  SizedBox(height: 10),
-                  ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: colorPrimary,
-                      foregroundColor: Colors.white,
-                    ),
-                    onPressed: () {},
-                    child: Container(
-                      width: double.infinity,
-                      alignment: Alignment.center,
-                      child: Text('Simpan'),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            CardComponent(
-              title: 'Autentikasi Akun',
-              child: Column(
-                children: [
-                  FormGroup(
-                    child: TextFormField(
-                      decoration: InputDecoration(
-                        labelText: 'Username',
-                        hintText: 'Masukkan Username',
                       ),
-                    ),
-                  ),
-                  FormGroup(
-                    child: TextFormField(
-                      obscureText: true,
-                      decoration: InputDecoration(
-                        labelText: 'Password',
-                        hintText: '********',
+                      FormGroup(
+                        child: TextFormField(
+                          maxLines: 2,
+                          decoration: InputDecoration(
+                            hintText: 'Masukkan Alamat',
+                            labelText: 'Alamat',
+                          ),
+                        ),
                       ),
-                    ),
+                      FormGroup(
+                        child: TextFormField(
+                          decoration: InputDecoration(
+                            suffixIcon: Icon(Icons.email),
+                            hintText: 'Masukkan Email',
+                            labelText: 'Email',
+                          ),
+                        ),
+                      ),
+                      FormGroup(
+                        child: TextFormField(
+                          decoration: InputDecoration(
+                            suffixIcon: Icon(Icons.phone),
+                            hintText: 'Masukkan Nomor Telepon',
+                            labelText: 'Nomor Telepon',
+                          ),
+                        ),
+                      ),
+                      FormGroup(
+                        child: Column(
+                          children: [
+                            FilePicker(
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Icon(Icons.file_upload_outlined),
+                                  SizedBox(width: 8),
+                                  Text('Ganti Foto Profil'),
+                                ],
+                              ),
+                            ),
+                            // FilePicker(
+                            //   child: Row(
+                            //     mainAxisAlignment: MainAxisAlignment.center,
+                            //     children: [
+                            //       Icon(Icons.file_upload_outlined),
+                            //       SizedBox(width: 8),
+                            //       Text('Ganti Foto KTP'),
+                            //     ],
+                            //   ),
+                            // )
+                          ],
+                        ),
+                      ),
+                      SizedBox(height: 10),
+                      ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: colorPrimary,
+                          foregroundColor: Colors.white,
+                        ),
+                        onPressed: () {},
+                        child: Container(
+                          width: double.infinity,
+                          alignment: Alignment.center,
+                          child: Text('Simpan'),
+                        ),
+                      ),
+                    ],
                   ),
-                  SizedBox(height: 10),
-                  ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: colorPrimary,
-                      foregroundColor: Colors.white,
-                    ),
-                    onPressed: () {},
-                    child: Container(
-                      width: double.infinity,
-                      alignment: Alignment.center,
-                      child: Text('Simpan'),
-                    ),
-                  )
-                ],
-              ),
-            )
-          ],
+                ),
+                CardComponent(
+                  title: 'Autentikasi Akun',
+                  child: Column(
+                    children: [
+                      FormGroup(
+                        child: TextFormField(
+                          decoration: InputDecoration(
+                            labelText: 'Username',
+                            hintText: 'Masukkan Username',
+                          ),
+                        ),
+                      ),
+                      FormGroup(
+                        child: TextFormField(
+                          obscureText: true,
+                          decoration: InputDecoration(
+                            labelText: 'Password',
+                            hintText: '********',
+                          ),
+                        ),
+                      ),
+                      SizedBox(height: 10),
+                      ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: colorPrimary,
+                          foregroundColor: Colors.white,
+                        ),
+                        onPressed: () {},
+                        child: Container(
+                          width: double.infinity,
+                          alignment: Alignment.center,
+                          child: Text('Simpan'),
+                        ),
+                      )
+                    ],
+                  ),
+                )
+              ],
+            );
+          },
         ),
       ),
     );
