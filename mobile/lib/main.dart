@@ -3,7 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mobile/libs/constant.dart';
-import 'package:mobile/pages/akun/index.dart';
+import 'package:mobile/pages/beranda/index.dart';
 // import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
@@ -50,7 +50,7 @@ class _MyAppState extends State<MyApp> {
             backgroundColor: colorPrimary,
             foregroundColor: Colors.white,
           ))),
-      home: AkunPage(userId: '3'),
+      home: BerandaPage(),
     );
   }
 }

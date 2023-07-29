@@ -16,7 +16,7 @@ class BarangTemu {
   String? created_at;
   String? updated_at;
 
-  BarangTemu(
+  BarangTemu({
     this.id,
     this.user_id,
     this.user,
@@ -31,24 +31,24 @@ class BarangTemu {
     this.dikembalikan_detail,
     this.created_at,
     this.updated_at,
-  );
+  });
 
   factory BarangTemu.fromJSON(data) {
     return BarangTemu(
-      data['id'],
-      data['user_id'],
-      User.fromJSON(data['user']),
-      data['nama'],
-      data['deskripsi'],
-      data['tempat_temu'],
-      data['maps_lat'],
-      data['maps_lng'],
-      data['foto'],
-      data['foto_url'],
-      data['dikembalikan'],
-      data['dikembalikan_detail'],
-      data['created_at'],
-      data['updated_at'],
+      id: data['id'],
+      user_id: data['user_id'],
+      user: User.fromJSON(data['user']),
+      nama: data['nama'],
+      deskripsi: data['deskripsi'],
+      tempat_temu: data['tempat_temu'],
+      maps_lat: data['maps_lat'],
+      maps_lng: data['maps_lng'],
+      foto: data['foto'],
+      foto_url: data['foto_url'],
+      dikembalikan: data['dikembalikan'],
+      dikembalikan_detail: data['dikembalikan_detail'],
+      created_at: data['created_at'],
+      updated_at: data['updated_at'],
     );
   }
 

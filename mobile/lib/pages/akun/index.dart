@@ -112,7 +112,7 @@ class _AkunPageState extends State<AkunPage> {
   @override
   Widget build(BuildContext context) {
     return UserLayout(
-      title: 'Akun',
+      title: isMe ? 'Akun' : 'Detail User',
       bottomNavBar: !isMe
           ? BottomNavigationBar(
               items: [

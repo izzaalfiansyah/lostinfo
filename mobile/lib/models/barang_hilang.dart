@@ -17,7 +17,7 @@ class BarangHilang {
   String? created_at;
   String? updated_at;
 
-  BarangHilang(
+  BarangHilang({
     this.id,
     this.user_id,
     this.user,
@@ -33,25 +33,25 @@ class BarangHilang {
     this.ditemukan_detail,
     this.created_at,
     this.updated_at,
-  );
+  });
 
   factory BarangHilang.fromJSON(data) {
     return BarangHilang(
-      data['id'],
-      data['user_id'],
-      User.fromJSON(data['user']),
-      data['nama'],
-      data['deskripsi'],
-      data['tempat_hilang'],
-      data['maps_lat'],
-      data['maps_lng'],
-      data['foto'],
-      data['foto_url'],
-      data['hadiah'],
-      data['ditemukan'],
-      data['ditemukan_detail'],
-      data['created_at'],
-      data['updated_at'],
+      id: data['id'],
+      user_id: data['user_id'],
+      user: User.fromJSON(data['user']),
+      nama: data['nama'],
+      deskripsi: data['deskripsi'],
+      tempat_hilang: data['tempat_hilang'],
+      maps_lat: data['maps_lat'],
+      maps_lng: data['maps_lng'],
+      foto: data['foto'],
+      foto_url: data['foto_url'],
+      hadiah: data['hadiah'],
+      ditemukan: data['ditemukan'],
+      ditemukan_detail: data['ditemukan_detail'],
+      created_at: data['created_at'],
+      updated_at: data['updated_at'],
     );
   }
 
