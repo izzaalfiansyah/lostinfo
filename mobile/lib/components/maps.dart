@@ -199,7 +199,57 @@ class _MapsComponentState extends State<MapsComponent> {
                       );
                     },
                   ),
-                )
+                ),
+                MarkerLayer(
+                  markers: List.generate(
+                    widget.barangTemu != null
+                        ? widget.barangTemu?.length as int
+                        : 0,
+                    (index) {
+                      final item = widget.barangTemu![index];
+                      return Marker(
+                        width: 50,
+                        height: 20,
+                        point: LatLng(
+                            item.maps_lat as double, item.maps_lng as double),
+                        builder: (_) {
+                          return ClipRRect(
+                            borderRadius: BorderRadius.circular(10),
+                            child: Container(
+                              height: double.infinity,
+                              width: double.infinity,
+                              alignment: Alignment.center,
+                              decoration: BoxDecoration(
+                                color: Colors.green.withOpacity(.75),
+                              ),
+                              child: Material(
+                                color: Colors.transparent,
+                                child: InkWell(
+                                  onTap: () {
+                                    // change page
+                                  },
+                                  child: Container(
+                                    alignment: Alignment.center,
+                                    padding:
+                                        EdgeInsets.symmetric(horizontal: 5),
+                                    child: Text(
+                                      item.nama.toString(),
+                                      overflow: TextOverflow.ellipsis,
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 10,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          );
+                        },
+                      );
+                    },
+                  ),
+                ),
               ],
             )
           : SkeletonComponent(
