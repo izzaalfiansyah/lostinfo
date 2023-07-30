@@ -129,7 +129,7 @@ class UserController extends Controller
             ], 400);
         }
 
-        $items = User::where('username', $req->username)->orWhere('email', $req->email)->get();
+        $items = User::where('username', $req->username)->orWhere('email', $req->username)->get();
 
         if (count($items) > 0) {
             foreach ($items as $key => $item) {
@@ -145,7 +145,7 @@ class UserController extends Controller
         } else {
             return Response([
                 'data' => [],
-                'message' => 'username tidak ditemukan',
+                'message' => 'username atau email tidak ditemukan',
             ], 400);
         }
     }

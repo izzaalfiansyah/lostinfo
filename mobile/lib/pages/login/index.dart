@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mobile/libs/notif.dart';
 import 'package:mobile/pages/beranda/index.dart';
+import 'package:mobile/pages/lupa_password/index.dart';
 import 'package:mobile/pages/register.dart/index.dart';
 import 'package:mobile/pages/verifikasi/index.dart';
 import 'package:mobile/services/auth_service.dart';
@@ -187,7 +188,10 @@ class _LoginPageState extends State<LoginPage> {
                                 });
                               }),
                           TextButton(
-                              onPressed: () {}, child: Text("Lupa password?")),
+                              onPressed: () {
+                                Get.to(() => LupaPasswordPage());
+                              },
+                              child: Text("Lupa password?")),
                         ],
                       ),
                       ElevatedButton(
@@ -279,7 +283,7 @@ class _LoginPageState extends State<LoginPage> {
                           ),
                           TextButton(
                             onPressed: () {
-                              Get.offAll(() => RegisterPage());
+                              Get.to(() => RegisterPage());
                             },
                             child: Text(
                               'Daftar disini',

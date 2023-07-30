@@ -27,6 +27,12 @@ class AuthService {
     return await http.post('/user/verifikasi/$userId');
   }
 
+  static Future sendResetPassword({required String email}) async {
+    return await http.post('/user/reset-password', data: {
+      'email': email,
+    });
+  }
+
   static Future<void> set({required dynamic id, required String status}) async {
     // SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     // sharedPreferences.setString('id', id);
