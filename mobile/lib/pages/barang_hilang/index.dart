@@ -11,6 +11,7 @@ import 'package:mobile/libs/notif.dart';
 import 'package:mobile/models/barang_hilang.dart';
 import 'package:mobile/pages/akun/index.dart';
 import 'package:mobile/pages/barang_hilang/detail.dart';
+import 'package:mobile/pages/barang_hilang/save.dart';
 import 'package:mobile/services/auth_service.dart';
 import 'package:mobile/services/barang_hilang_service.dart';
 
@@ -209,7 +210,9 @@ class _BarangHilangPageState extends State<BarangHilangPage> {
           SizedBox(height: 10),
           FloatingActionButton(
             heroTag: 'btn2',
-            onPressed: () {},
+            onPressed: () {
+              Get.to(() => BarangHilangSavePage());
+            },
             child: Icon(
               Icons.add,
             ),

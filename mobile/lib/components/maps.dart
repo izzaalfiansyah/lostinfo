@@ -20,6 +20,7 @@ class MapsComponent extends StatefulWidget {
     this.barangTemu,
     this.alamat,
     this.initialValue,
+    this.height,
   });
 
   final Function(LatLng)? onChange;
@@ -28,6 +29,7 @@ class MapsComponent extends StatefulWidget {
   final List<BarangHilang>? barangHilang;
   final List<BarangTemu>? barangTemu;
   final LatLng? initialValue;
+  final double? height;
 
   @override
   State<MapsComponent> createState() => _MapsComponentState();
@@ -106,25 +108,28 @@ class _MapsComponentState extends State<MapsComponent> {
     // When we reach here, permissions are granted and we can
     // continue accessing the position of the device.
 
-    setState(() {
-      isLoading = false;
-    });
+    if (permission == LocationPermission.always ||
+        permission == LocationPermission.whileInUse) {
+      final position = await Geolocator.getCurrentPosition();
 
-    final position = await Geolocator.getCurrentPosition();
-
-    setState(() {
-      pos = position;
-    });
+      setState(() {
+        pos = position;
+      });
+    }
 
     if (widget.onLocationFound != null) {
       widget.onLocationFound!(LatLng(pos!.latitude, pos!.longitude));
     }
+
+    setState(() {
+      isLoading = false;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 400,
+      height: widget.height ?? 400,
       child: !isLoading
           ? FlutterMap(
               mapController: mapController,
@@ -147,7 +152,8 @@ class _MapsComponentState extends State<MapsComponent> {
               children: [
                 TileLayer(
                   urlTemplate:
-                      'https://tileserver.memomaps.de/tilegen/{z}/{x}/{y}.png',
+                      'http://mt1.google.com/vt/lyrs=m&x={x}&y={y}&z={z}',
+                  // 'https://tileserver.memomaps.de/tilegen/{z}/{x}/{y}.png',
                   userAgentPackageName: 'com.lostinfo.polije',
                 ),
                 CurrentLocationLayer(),

@@ -13,6 +13,7 @@ import 'package:mobile/libs/format_money.dart';
 import 'package:mobile/libs/go_url.dart';
 import 'package:mobile/models/barang_hilang.dart';
 import 'package:mobile/pages/akun/index.dart';
+import 'package:mobile/pages/barang_hilang/save.dart';
 import 'package:mobile/services/auth_service.dart';
 import 'package:mobile/services/barang_hilang_service.dart';
 
@@ -204,8 +205,11 @@ class _BarangHilangDetailPageState extends State<BarangHilangDetailPage> {
                           ],
                         ),
                       ),
-                      SizedBox(
-                        height: 20,
+                      CardComponent(
+                        title: 'Deskripsi Barang',
+                        child: Text(
+                          barang.deskripsi.toString(),
+                        ),
                       ),
                       CardComponent(
                         title: 'Tempat Hilang',
@@ -250,7 +254,7 @@ class _BarangHilangDetailPageState extends State<BarangHilangDetailPage> {
       floatingActionButton: barang.user_id.toString() == authId
           ? FloatingActionButton(
               onPressed: () {
-                //
+                Get.to(() => BarangHilangSavePage(id: barang.id.toString()));
               },
               child: Icon(
                 Icons.edit,

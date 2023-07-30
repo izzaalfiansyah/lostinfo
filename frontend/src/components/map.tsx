@@ -38,7 +38,7 @@ export default function (props: Props) {
         .locate({ setView: true })
     );
 
-    L.tileLayer("https://tileserver.memomaps.de/tilegen/{z}/{x}/{y}.png", {
+    L.tileLayer("http://mt1.google.com/vt/lyrs=m&x={x}&y={y}&z={z}", {
       // L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
       maxZoom: 20,
     }).addTo(map());

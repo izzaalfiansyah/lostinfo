@@ -189,8 +189,11 @@ class _BarangTemuDetailPageState extends State<BarangTemuDetailPage> {
                           ],
                         ),
                       ),
-                      SizedBox(
-                        height: 20,
+                      CardComponent(
+                        title: 'Deskripsi Barang',
+                        child: Text(
+                          barang.deskripsi.toString(),
+                        ),
                       ),
                       CardComponent(
                         title: 'Tempat Hilang',
