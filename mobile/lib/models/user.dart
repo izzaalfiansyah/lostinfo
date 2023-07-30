@@ -18,6 +18,8 @@ class User {
   String? status_detail;
   String? created_at;
   String? updated_at;
+  String? password;
+  String? konfirmasi_password;
 
   User({
     this.id,
@@ -37,6 +39,8 @@ class User {
     this.status_detail,
     this.created_at,
     this.updated_at,
+    this.password,
+    this.konfirmasi_password,
   });
 
   factory User.fromJSON(data) {
@@ -74,6 +78,7 @@ class User {
       'ktp': ktp,
       'role': role,
       'status': status,
+      'password': password,
     });
   }
 }

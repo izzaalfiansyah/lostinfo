@@ -1,11 +1,13 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:mobile/components/card.dart';
 import 'package:mobile/components/maps.dart';
 import 'package:mobile/layouts/user.dart';
+import 'package:mobile/libs/notif.dart';
 import 'package:mobile/models/barang_hilang.dart';
 import 'package:mobile/models/barang_temu.dart';
 import 'package:mobile/services/barang_hilang_service.dart';
@@ -23,17 +25,23 @@ class _BerandaPageState extends State<BerandaPage> {
   List<BarangTemu> barangTemu = [];
 
   getBarangTerdekat(LatLng val) async {
-    final hilang = await BarangHilangService.get(filter: {
-      'terdekat': "${val.latitude},${val.longitude}",
-    });
-    final temu = await BarangTemuService.get(filter: {
-      'terdekat': "${val.latitude},${val.longitude}",
-    });
+    try {
+      final hilang = await BarangHilangService.get(filter: {
+        'terdekat': "${val.latitude},${val.longitude}",
+      });
+      final temu = await BarangTemuService.get(filter: {
+        'terdekat': "${val.latitude},${val.longitude}",
+      });
 
-    setState(() {
-      barangHilang = hilang;
-      barangTemu = temu;
-    });
+      setState(() {
+        barangHilang = hilang;
+        barangTemu = temu;
+      });
+    } on DioException catch (e) {
+      notif(e.response!.data['message'], success: false);
+    } catch (e) {
+      notif(e.toString(), success: false);
+    }
   }
 
   @override

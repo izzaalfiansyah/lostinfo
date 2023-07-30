@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mobile/layouts/user.dart';
@@ -75,6 +76,8 @@ class _AkunPageState extends State<AkunPage> {
       setState(() {
         user = res;
       });
+    } on DioException catch (e) {
+      notif(e.response!.data['message'], success: false);
     } catch (e) {
       notif(e.toString(), success: false);
     }
@@ -99,6 +102,8 @@ class _AkunPageState extends State<AkunPage> {
       await UserLaporService.create(params: userLapor);
       Get.back();
       notif('pengguna telah dilaporkan');
+    } on DioException catch (e) {
+      notif(e.response!.data['message'], success: false);
     } catch (e) {
       notif(e.toString(), success: false);
     }

@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile/components/card.dart';
 import 'package:mobile/components/file_picker.dart';
@@ -79,6 +80,8 @@ class _AkunEditPageState extends State<AkunEditPage> {
     try {
       await UserService.update(params: user, id: id);
       notif('Berhasil menyimpan data');
+    } on DioException catch (e) {
+      notif(e.response!.data['message'], success: false);
     } catch (e) {
       notif(e.toString(), success: false);
     }

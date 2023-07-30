@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_const_constructors, avoid_unnecessary_containers, prefer_const_literals_to_create_immutables
 
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:latlong2/latlong.dart';
@@ -75,6 +76,8 @@ class _BarangTemuSavePageState extends State<BarangTemuSavePage> {
         barangId = b.id;
       }
       Get.off(() => BarangTemuDetailPage(id: barangId));
+    } on DioException catch (e) {
+      notif(e.response!.data['message'], success: false);
     } catch (e) {
       notif(e.toString(), success: false);
     }
