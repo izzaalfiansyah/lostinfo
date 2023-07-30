@@ -29,9 +29,8 @@ class BarangHilangService {
     return item;
   }
 
-  static Future<BarangHilang> destroy(
-      {required BarangHilang params, required dynamic id}) async {
-    final res = await http.delete('/barang/hilang/$id', data: params.toJSON());
+  static Future<BarangHilang> destroy({required dynamic id}) async {
+    final res = await http.delete('/barang/hilang/$id');
     BarangHilang item = BarangHilang.fromJSON(res.data['data']);
     return item;
   }

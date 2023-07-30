@@ -8,11 +8,16 @@ import 'package:mobile/services/auth_service.dart';
 
 class UserLayout extends StatefulWidget {
   const UserLayout(
-      {super.key, required this.child, required this.title, this.bottomNavBar});
+      {super.key,
+      required this.child,
+      required this.title,
+      this.bottomNavBar,
+      this.floatingActionButton});
 
   final Widget child;
   final String title;
   final Widget? bottomNavBar;
+  final Widget? floatingActionButton;
 
   @override
   State<UserLayout> createState() => _UserLayoutState();
@@ -41,14 +46,14 @@ class _UserLayoutState extends State<UserLayout> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: colorPrimary.withOpacity(.05),
+        backgroundColor: colorPrimary,
         // foregroundColor: Colors.white,
         title: Text(widget.title),
         actions: [
           TextButton(
-            style: TextButton.styleFrom(iconColor: Colors.black),
+            style: TextButton.styleFrom(iconColor: Colors.white),
             onPressed: () {
-              Get.to(AkunPage());
+              Get.to(() => AkunPage());
             },
             child: Icon(
               Icons.account_circle,
@@ -59,6 +64,7 @@ class _UserLayoutState extends State<UserLayout> {
       drawer: Drawer(),
       body: widget.child,
       bottomNavigationBar: widget.bottomNavBar,
+      floatingActionButton: widget.floatingActionButton,
     );
   }
 }

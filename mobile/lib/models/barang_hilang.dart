@@ -12,7 +12,7 @@ class BarangHilang {
   String? foto;
   String? foto_url;
   int? hadiah;
-  String? ditemukan;
+  dynamic? ditemukan;
   String? ditemukan_detail;
   String? created_at;
   String? updated_at;

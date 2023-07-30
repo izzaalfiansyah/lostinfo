@@ -113,7 +113,7 @@ class _AkunPageState extends State<AkunPage> {
   @override
   Widget build(BuildContext context) {
     return UserLayout(
-      title: isMe ? 'Akun' : 'Detail User',
+      title: isMe ? 'Akun Saya' : 'Detail User',
       bottomNavBar: !isMe
           ? BottomNavigationBar(
               onTap: (index) async {
@@ -212,11 +212,14 @@ class _AkunPageState extends State<AkunPage> {
                               children: [
                                 TextButton(
                                   onPressed: () {
-                                    Get.to(AkunEditPage());
+                                    Get.to(() => AkunEditPage());
                                   },
                                   style: TextButton.styleFrom(
-                                    padding:
-                                        EdgeInsets.symmetric(horizontal: 20),
+                                    padding: EdgeInsets.zero,
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(50)),
+                                    minimumSize: Size(90, 30),
                                     backgroundColor: Colors.blue.shade100,
                                   ),
                                   child: Text(
@@ -250,8 +253,11 @@ class _AkunPageState extends State<AkunPage> {
                                   style: OutlinedButton.styleFrom(
                                     foregroundColor: Colors.red,
                                     backgroundColor: Colors.red.shade100,
-                                    padding:
-                                        EdgeInsets.symmetric(horizontal: 20),
+                                    padding: EdgeInsets.zero,
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(50)),
+                                    minimumSize: Size(90, 30),
                                   ),
                                   child: Text(
                                     'Lihat KTP',
@@ -404,6 +410,9 @@ class _AkunPageState extends State<AkunPage> {
               ),
             ),
             Card(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(50),
+              ),
               child: GridView(
                 padding: EdgeInsets.all(8),
                 shrinkWrap: true,

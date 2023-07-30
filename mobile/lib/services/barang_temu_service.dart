@@ -29,9 +29,8 @@ class BarangTemuService {
     return item;
   }
 
-  static Future<BarangTemu> destroy(
-      {required BarangTemu params, required dynamic id}) async {
-    final res = await http.delete('/barang/temu/$id', data: params.toJSON());
+  static Future<BarangTemu> destroy({required dynamic id}) async {
+    final res = await http.delete('/barang/temu/$id');
     BarangTemu item = BarangTemu.fromJSON(res.data['data']);
     return item;
   }

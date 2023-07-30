@@ -29,9 +29,8 @@ class UserLaporService {
     return item;
   }
 
-  static Future<UserLapor> destroy(
-      {required UserLapor params, required dynamic id}) async {
-    final res = await http.delete('/user/lapor/$id', data: params.toJSON());
+  static Future<UserLapor> destroy({required dynamic id}) async {
+    final res = await http.delete('/user/lapor/$id');
     UserLapor item = UserLapor.fromJSON(res.data['data']);
     return item;
   }

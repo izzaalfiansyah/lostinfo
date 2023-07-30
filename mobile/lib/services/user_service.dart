@@ -28,9 +28,8 @@ class UserService {
     return item;
   }
 
-  static Future<User> destroy(
-      {required User params, required dynamic id}) async {
-    final res = await http.delete('/user/$id', data: params.toJSON());
+  static Future<User> destroy({required dynamic id}) async {
+    final res = await http.delete('/user/$id');
     User item = User.fromJSON(res.data['data']);
     return item;
   }

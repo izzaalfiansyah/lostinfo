@@ -15,7 +15,10 @@ class CardComponent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      margin: EdgeInsets.all(8),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10),
+      ),
+      margin: EdgeInsets.all(5),
       color: Colors.white,
       child: Padding(
         padding: EdgeInsets.all(20),

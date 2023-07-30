@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mobile/libs/constant.dart';
 import 'package:mobile/pages/akun/index.dart';
+import 'package:mobile/pages/barang_hilang/index.dart';
+import 'package:mobile/pages/barang_temu/index.dart';
 import 'package:mobile/pages/beranda/index.dart';
 // import 'package:shared_preferences/shared_preferences.dart';
 
@@ -26,32 +28,38 @@ class _MyAppState extends State<MyApp> {
     return GetMaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
-          textTheme: GoogleFonts.poppinsTextTheme(),
-          useMaterial3: true,
-          colorScheme: ColorScheme.fromSeed(seedColor: colorPrimary),
-          inputDecorationTheme: InputDecorationTheme(
-            floatingLabelBehavior: FloatingLabelBehavior.always,
-            isDense: true,
-            fillColor: Colors.grey.shade50,
-            filled: true,
-            contentPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 8),
-            border: UnderlineInputBorder(
-              borderSide: BorderSide(width: 1),
-            ),
-            enabledBorder: UnderlineInputBorder(
-              borderSide: BorderSide(color: Colors.grey.shade300),
-            ),
-            focusedBorder: UnderlineInputBorder(
-              borderSide: BorderSide(color: colorPrimary),
-            ),
-            alignLabelWithHint: true,
+        textTheme: GoogleFonts.poppinsTextTheme(),
+        // useMaterial3: true,
+        // colorScheme: ColorScheme.fromSeed(seedColor: colorPrimary),
+        primarySwatch: Colors.blue,
+        inputDecorationTheme: InputDecorationTheme(
+          floatingLabelBehavior: FloatingLabelBehavior.always,
+          isDense: true,
+          fillColor: Colors.grey.shade50,
+          filled: true,
+          contentPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+          border: UnderlineInputBorder(
+            borderSide: BorderSide(width: 1),
           ),
-          elevatedButtonTheme: ElevatedButtonThemeData(
-              style: ElevatedButton.styleFrom(
+          enabledBorder: UnderlineInputBorder(
+            borderSide: BorderSide(color: Colors.grey.shade300),
+          ),
+          focusedBorder: UnderlineInputBorder(
+            borderSide: BorderSide(color: colorPrimary),
+          ),
+          alignLabelWithHint: true,
+        ),
+        elevatedButtonTheme: ElevatedButtonThemeData(
+          style: ElevatedButton.styleFrom(
             backgroundColor: colorPrimary,
             foregroundColor: Colors.white,
-          ))),
-      home: AkunPage(userId: '3'),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(100),
+            ),
+          ),
+        ),
+      ),
+      home: BarangTemuPage(),
     );
   }
 }
