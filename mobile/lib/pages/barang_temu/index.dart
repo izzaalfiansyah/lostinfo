@@ -5,13 +5,13 @@ import 'package:get/get.dart';
 import 'package:mobile/components/card.dart';
 import 'package:mobile/components/form_group.dart';
 import 'package:mobile/components/skeleton.dart';
-import 'package:mobile/contexts/auth_context.dart';
 import 'package:mobile/layouts/user.dart';
 import 'package:mobile/libs/constant.dart';
 import 'package:mobile/libs/format_date.dart';
 import 'package:mobile/libs/notif.dart';
 import 'package:mobile/models/barang_temu.dart';
 import 'package:mobile/pages/akun/index.dart';
+import 'package:mobile/services/auth_service.dart';
 import 'package:mobile/services/barang_temu_service.dart';
 
 class BarangTemuPage extends StatefulWidget {
@@ -29,14 +29,26 @@ class _BarangTemuPageState extends State<BarangTemuPage> {
   };
   List<BarangTemu> barangTemu = [];
   bool isLoading = true;
+  String authId = '';
 
   @override
   void initState() {
     super.initState();
-    getBarangTemu();
+
+    getUser().then((value) {
+      getBarangTemu();
+    });
   }
 
-  void getBarangTemu() async {
+  Future getUser() async {
+    final auth = await AuthService.get();
+    setState(() {
+      authId = auth;
+    });
+    return auth;
+  }
+
+  Future getBarangTemu() async {
     setState(() {
       isLoading = true;
     });
@@ -141,8 +153,6 @@ class _BarangTemuPageState extends State<BarangTemuPage> {
 
   @override
   Widget build(BuildContext context) {
-    final auth = AuthContext();
-
     return UserLayout(
       title: 'Barang Temu',
       floatingActionButton: Column(
@@ -168,6 +178,13 @@ class _BarangTemuPageState extends State<BarangTemuPage> {
       child: SingleChildScrollView(
         child: Column(
           children: [
+            !isLoading && barangTemu.isEmpty
+                ? CardComponent(
+                    child: Center(
+                      child: Text('data barang tidak tersedia'),
+                    ),
+                  )
+                : SizedBox(),
             Column(
               mainAxisSize: MainAxisSize.min,
               children: List.generate(barangTemu.length, (index) {
@@ -250,7 +267,7 @@ class _BarangTemuPageState extends State<BarangTemuPage> {
                                     ),
                                   ),
                                 ),
-                                auth.get() == item.user_id.toString()
+                                authId == item.user_id.toString()
                                     ? TextButton(
                                         onPressed: () => handleDelete(item),
                                         style: TextButton.styleFrom(
@@ -291,15 +308,17 @@ class _BarangTemuPageState extends State<BarangTemuPage> {
                   )
                 : SizedBox(),
             // SizedBox(height: 5),
-            ElevatedButton(
-              onPressed: () {
-                setState(() {
-                  filter['page'] = filter['page'] + 1;
-                  getBarangTemu();
-                });
-              },
-              child: Text('Tampilkan Lainnya'),
-            ),
+            barangTemu.isEmpty
+                ? SizedBox()
+                : ElevatedButton(
+                    onPressed: () {
+                      setState(() {
+                        filter['page'] = filter['page'] + 1;
+                        getBarangTemu();
+                      });
+                    },
+                    child: Text('Tampilkan Lainnya'),
+                  ),
           ],
         ),
       ),

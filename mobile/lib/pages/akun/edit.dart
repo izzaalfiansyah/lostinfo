@@ -1,15 +1,14 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:mobile/components/card.dart';
 import 'package:mobile/components/file_picker.dart';
 import 'package:mobile/components/form_group.dart';
-import 'package:mobile/contexts/auth_context.dart';
 import 'package:mobile/layouts/user.dart';
 import 'package:mobile/libs/constant.dart';
 import 'package:mobile/libs/notif.dart';
 import 'package:mobile/models/user.dart';
+import 'package:mobile/services/auth_service.dart';
 import 'package:mobile/services/user_service.dart';
 
 class AkunEditPage extends StatefulWidget {
@@ -39,14 +38,12 @@ class _AkunEditPageState extends State<AkunEditPage> {
 
   bool isLoading = true;
 
-  final auth = Get.put(AuthContext());
-
   getUser() async {
     setState(() {
       isLoading = true;
     });
 
-    final userId = auth.get();
+    final userId = await AuthService.get();
     final res = await UserService.find(id: userId);
 
     nama.text = res.nama.toString();

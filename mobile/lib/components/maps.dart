@@ -131,7 +131,7 @@ class _MapsComponentState extends State<MapsComponent> {
                       'https://tileserver.memomaps.de/tilegen/{z}/{x}/{y}.png',
                   userAgentPackageName: 'com.lostinfo.polije',
                 ),
-                // CurrentLocationLayer(),
+                CurrentLocationLayer(),
                 MarkerLayer(
                   markers: List.generate(markers.length, (index) {
                     final marker = markers[index];

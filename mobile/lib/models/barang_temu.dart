@@ -11,7 +11,7 @@ class BarangTemu {
   double? maps_lng;
   String? foto;
   String? foto_url;
-  dynamic? dikembalikan;
+  dynamic dikembalikan;
   String? dikembalikan_detail;
   String? created_at;
   String? updated_at;

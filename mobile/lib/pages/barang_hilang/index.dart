@@ -5,13 +5,13 @@ import 'package:get/get.dart';
 import 'package:mobile/components/card.dart';
 import 'package:mobile/components/form_group.dart';
 import 'package:mobile/components/skeleton.dart';
-import 'package:mobile/contexts/auth_context.dart';
 import 'package:mobile/layouts/user.dart';
 import 'package:mobile/libs/constant.dart';
 import 'package:mobile/libs/format_date.dart';
 import 'package:mobile/libs/notif.dart';
 import 'package:mobile/models/barang_hilang.dart';
 import 'package:mobile/pages/akun/index.dart';
+import 'package:mobile/services/auth_service.dart';
 import 'package:mobile/services/barang_hilang_service.dart';
 
 class BarangHilangPage extends StatefulWidget {
@@ -29,6 +29,7 @@ class _BarangHilangPageState extends State<BarangHilangPage> {
   };
   List<BarangHilang> barangHilang = [];
   bool isLoading = true;
+  String authId = '';
 
   @override
   void initState() {
@@ -36,7 +37,15 @@ class _BarangHilangPageState extends State<BarangHilangPage> {
     getBarangHilang();
   }
 
-  void getBarangHilang() async {
+  Future getUser() async {
+    final auth = await AuthService.get();
+    setState(() {
+      authId = auth;
+    });
+    return auth;
+  }
+
+  Future getBarangHilang() async {
     setState(() {
       isLoading = true;
     });
@@ -182,8 +191,6 @@ class _BarangHilangPageState extends State<BarangHilangPage> {
 
   @override
   Widget build(BuildContext context) {
-    final auth = AuthContext();
-
     return UserLayout(
       title: 'Barang Hilang',
       floatingActionButton: Column(
@@ -209,6 +216,13 @@ class _BarangHilangPageState extends State<BarangHilangPage> {
       child: SingleChildScrollView(
         child: Column(
           children: [
+            !isLoading && barangHilang.isEmpty
+                ? CardComponent(
+                    child: Center(
+                      child: Text('data barang tidak tersedia'),
+                    ),
+                  )
+                : SizedBox(),
             Column(
               mainAxisSize: MainAxisSize.min,
               children: List.generate(barangHilang.length, (index) {
@@ -279,7 +293,7 @@ class _BarangHilangPageState extends State<BarangHilangPage> {
                                     ),
                                   ),
                                 ),
-                                auth.get() == item.user_id.toString()
+                                authId == item.user_id.toString()
                                     ? TextButton(
                                         onPressed: () => handleDelete(item),
                                         style: TextButton.styleFrom(
@@ -320,15 +334,17 @@ class _BarangHilangPageState extends State<BarangHilangPage> {
                   )
                 : SizedBox(),
             // SizedBox(height: 10),
-            ElevatedButton(
-              onPressed: () {
-                setState(() {
-                  filter['page'] = filter['page'] + 1;
-                  getBarangHilang();
-                });
-              },
-              child: Text('Tampilkan Lainnya'),
-            ),
+            barangHilang.isEmpty
+                ? SizedBox()
+                : ElevatedButton(
+                    onPressed: () {
+                      setState(() {
+                        filter['page'] = filter['page'] + 1;
+                        getBarangHilang();
+                      });
+                    },
+                    child: Text('Tampilkan Lainnya'),
+                  ),
           ],
         ),
       ),

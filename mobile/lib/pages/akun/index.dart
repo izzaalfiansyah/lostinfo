@@ -2,7 +2,6 @@
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:mobile/contexts/auth_context.dart';
 import 'package:mobile/layouts/user.dart';
 import 'package:mobile/libs/base64_image.dart';
 import 'package:mobile/libs/format_date.dart';
@@ -61,8 +60,8 @@ class _AkunPageState extends State<AkunPage> {
     });
 
     try {
-      final auth = Get.put(AuthContext());
-      String? userId = auth.get();
+      final auth = await AuthService.get();
+      String? userId = auth;
 
       if (widget.userId != null) {
         userId = widget.userId;
@@ -70,7 +69,7 @@ class _AkunPageState extends State<AkunPage> {
 
       final res = await UserService.find(id: userId);
 
-      if (res.id.toString() == auth.get()) {
+      if (res.id.toString() == auth) {
         setState(() {
           isMe = true;
         });
