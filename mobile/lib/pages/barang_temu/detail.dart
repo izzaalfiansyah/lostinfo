@@ -12,6 +12,7 @@ import 'package:mobile/libs/format_date.dart';
 import 'package:mobile/libs/go_url.dart';
 import 'package:mobile/models/barang_temu.dart';
 import 'package:mobile/pages/akun/index.dart';
+import 'package:mobile/pages/barang_temu/save.dart';
 import 'package:mobile/services/auth_service.dart';
 import 'package:mobile/services/barang_temu_service.dart';
 
@@ -238,7 +239,7 @@ class _BarangTemuDetailPageState extends State<BarangTemuDetailPage> {
       floatingActionButton: barang.user_id.toString() == authId
           ? FloatingActionButton(
               onPressed: () {
-                //
+                Get.to(() => BarangTemuSavePage(id: barang.id.toString()));
               },
               child: Icon(
                 Icons.edit,

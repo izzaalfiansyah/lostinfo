@@ -9,22 +9,22 @@ import 'package:mobile/components/skeleton.dart';
 import 'package:mobile/libs/constant.dart';
 import 'package:mobile/libs/format_date.dart';
 import 'package:mobile/libs/notif.dart';
-import 'package:mobile/models/barang_hilang.dart';
-import 'package:mobile/pages/barang_hilang/detail.dart';
+import 'package:mobile/models/barang_temu.dart';
+import 'package:mobile/pages/barang_temu/detail.dart';
 import 'package:mobile/services/auth_service.dart';
-import 'package:mobile/services/barang_hilang_service.dart';
+import 'package:mobile/services/barang_temu_service.dart';
 
-class BarangHilangSavePage extends StatefulWidget {
-  const BarangHilangSavePage({super.key, this.id});
+class BarangTemuSavePage extends StatefulWidget {
+  const BarangTemuSavePage({super.key, this.id});
 
   final String? id;
 
   @override
-  State<BarangHilangSavePage> createState() => _BarangHilangSavePageState();
+  State<BarangTemuSavePage> createState() => _BarangTemuSavePageState();
 }
 
-class _BarangHilangSavePageState extends State<BarangHilangSavePage> {
-  BarangHilang barang = BarangHilang(hadiah: 0);
+class _BarangTemuSavePageState extends State<BarangTemuSavePage> {
+  BarangTemu barang = BarangTemu();
   bool isLoading = true;
 
   @override
@@ -45,7 +45,7 @@ class _BarangHilangSavePageState extends State<BarangHilangSavePage> {
     });
 
     try {
-      final res = await BarangHilangService.find(id: widget.id);
+      final res = await BarangTemuService.find(id: widget.id);
       setState(() {
         barang = res;
         barang.foto = '';
@@ -66,16 +66,14 @@ class _BarangHilangSavePageState extends State<BarangHilangSavePage> {
       dynamic barangId = '';
 
       if (widget.id != null) {
-        final b =
-            await BarangHilangService.update(params: barang, id: widget.id);
+        final b = await BarangTemuService.update(params: barang, id: widget.id);
         barangId = b.id;
       } else {
-        barang.ditemukan = '0';
-        final b = await BarangHilangService.create(params: barang);
+        barang.dikembalikan = '0';
+        final b = await BarangTemuService.create(params: barang);
         barangId = b.id;
       }
-      Get.off(() => BarangHilangDetailPage(id: barangId));
-      notif('data barang hilang berhasil disimpan');
+      Get.off(() => BarangTemuDetailPage(id: barangId));
     } catch (e) {
       notif(e.toString(), success: false);
     }
@@ -86,7 +84,7 @@ class _BarangHilangSavePageState extends State<BarangHilangSavePage> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: colorPrimary,
-        title: Text('${widget.id == null ? 'Tambah' : 'Edit'} Barang Hilang'),
+        title: Text('${widget.id == null ? 'Tambah' : 'Edit'} Barang Temu'),
       ),
       body: SingleChildScrollView(
         padding: EdgeInsets.all(10),
@@ -149,7 +147,7 @@ class _BarangHilangSavePageState extends State<BarangHilangSavePage> {
                         Container(
                           child: Row(
                             children: [
-                              Text('Tempat Hilang'),
+                              Text('Tempat Temu'),
                               Text(
                                 '*',
                                 style: TextStyle(color: Colors.red),
@@ -159,20 +157,20 @@ class _BarangHilangSavePageState extends State<BarangHilangSavePage> {
                         ),
                         SizedBox(height: 5),
                         TextFormField(
-                          initialValue: barang.tempat_hilang,
+                          initialValue: barang.tempat_temu,
                           onChanged: (val) {
                             setState(() {
-                              barang.tempat_hilang = val;
+                              barang.tempat_temu = val;
                             });
                           },
-                          decoration: InputDecoration(
-                              hintText: 'Masukkan Lokasi Hilang'),
+                          decoration:
+                              InputDecoration(hintText: 'Masukkan Lokasi Temu'),
                         ),
                         SizedBox(height: 10),
                         Container(
                           child: Row(
                             children: [
-                              Text('Maps Hilang'),
+                              Text('Maps Temu'),
                             ],
                           ),
                         ),
@@ -180,19 +178,21 @@ class _BarangHilangSavePageState extends State<BarangHilangSavePage> {
                         ElevatedButton(
                           onPressed: () {
                             Get.bottomSheet(
-                              Container(
-                                padding: EdgeInsets.all(20),
-                                child: MapsComponent(
-                                  height: Get.height / 2,
-                                  alamat: barang.tempat_hilang,
-                                  onChange: (val) {
-                                    setState(() {
-                                      barang.maps_lat = val.latitude;
-                                      barang.maps_lng = val.longitude;
-                                    });
-                                  },
+                              SafeArea(
+                                child: Container(
+                                  padding: EdgeInsets.all(20),
+                                  child: MapsComponent(
+                                    alamat: barang.tempat_temu,
+                                    onChange: (val) {
+                                      setState(() {
+                                        barang.maps_lat = val.latitude;
+                                        barang.maps_lng = val.longitude;
+                                      });
+                                    },
+                                  ),
                                 ),
                               ),
+                              ignoreSafeArea: true,
                               backgroundColor: Colors.white,
                             );
                           },
@@ -229,32 +229,6 @@ class _BarangHilangSavePageState extends State<BarangHilangSavePage> {
                             ],
                           ),
                         ),
-                        SizedBox(height: 10),
-                        Container(
-                          child: Row(
-                            children: [
-                              Text('Hadiah'),
-                              Text(
-                                '*',
-                                style: TextStyle(color: Colors.red),
-                              )
-                            ],
-                          ),
-                        ),
-                        SizedBox(height: 10),
-                        TextFormField(
-                          initialValue: barang.hadiah.toString(),
-                          onChanged: (val) {
-                            setState(() {
-                              barang.hadiah = int.parse(val);
-                            });
-                          },
-                          keyboardType: TextInputType.number,
-                          decoration: InputDecoration(
-                            hintText: '0',
-                            prefixText: 'Rp ',
-                          ),
-                        ),
                         widget.id != null
                             ? Column(
                                 children: [
@@ -273,29 +247,32 @@ class _BarangHilangSavePageState extends State<BarangHilangSavePage> {
                                   SizedBox(height: 5),
                                   DropdownButtonFormField(
                                       // ignore: prefer_null_aware_operators
-                                      value: barang.ditemukan != null
-                                          ? barang.ditemukan.toString()
+                                      value: barang.dikembalikan != null
+                                          ? barang.dikembalikan.toString()
                                           : null,
+                                      decoration: InputDecoration(
+                                        hintText: 'Pilih Status',
+                                      ),
                                       items: [
                                         DropdownMenuItem(
                                           value: '1',
-                                          child: Text('Sudah Ditemukan'),
+                                          child: Text('Sudah Dikembalikan'),
                                         ),
                                         DropdownMenuItem(
                                           value: '0',
-                                          child: Text('Belum Ditemukan'),
+                                          child: Text('Belum Dikembalikan'),
                                         ),
                                       ],
                                       onChanged: (val) {
                                         setState(() {
-                                          barang.ditemukan = val;
+                                          barang.dikembalikan = val;
                                         });
                                       }),
                                   SizedBox(height: 10),
                                   Container(
                                     child: Row(
                                       children: [
-                                        Text('Tanggal Hilang'),
+                                        Text('Tanggal Temu'),
                                         Text(
                                           '*',
                                           style: TextStyle(color: Colors.red),
@@ -311,7 +288,7 @@ class _BarangHilangSavePageState extends State<BarangHilangSavePage> {
                                         : null,
                                     enabled: false,
                                     decoration: InputDecoration(
-                                        hintText: 'Tanggal Hilang'),
+                                        hintText: 'Tanggal Temu'),
                                   ),
                                 ],
                               )

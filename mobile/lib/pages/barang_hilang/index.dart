@@ -6,6 +6,7 @@ import 'package:mobile/components/card.dart';
 import 'package:mobile/components/form_group.dart';
 import 'package:mobile/components/skeleton.dart';
 import 'package:mobile/layouts/user.dart';
+import 'package:mobile/libs/constant.dart';
 import 'package:mobile/libs/format_date.dart';
 import 'package:mobile/libs/notif.dart';
 import 'package:mobile/models/barang_hilang.dart';
@@ -201,10 +202,11 @@ class _BarangHilangPageState extends State<BarangHilangPage> {
         children: [
           FloatingActionButton(
             heroTag: 'btn1',
-            backgroundColor: Colors.red,
+            backgroundColor: Colors.white,
             onPressed: showFilterModal,
             child: Icon(
               Icons.filter_alt,
+              color: colorPrimary,
             ),
           ),
           SizedBox(height: 10),

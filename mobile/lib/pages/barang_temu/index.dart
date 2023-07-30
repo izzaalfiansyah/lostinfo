@@ -12,6 +12,7 @@ import 'package:mobile/libs/notif.dart';
 import 'package:mobile/models/barang_temu.dart';
 import 'package:mobile/pages/akun/index.dart';
 import 'package:mobile/pages/barang_temu/detail.dart';
+import 'package:mobile/pages/barang_temu/save.dart';
 import 'package:mobile/services/auth_service.dart';
 import 'package:mobile/services/barang_temu_service.dart';
 
@@ -171,7 +172,9 @@ class _BarangTemuPageState extends State<BarangTemuPage> {
           SizedBox(height: 10),
           FloatingActionButton(
             heroTag: 'btn2',
-            onPressed: () {},
+            onPressed: () {
+              Get.to(() => BarangTemuSavePage());
+            },
             child: Icon(
               Icons.add,
             ),
