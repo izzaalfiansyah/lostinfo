@@ -52,6 +52,31 @@ class _UserLayoutState extends State<UserLayout> {
     }
   }
 
+  logout() async {
+    Get.bottomSheet(Container(
+      color: Colors.white,
+      width: double.infinity,
+      padding: EdgeInsets.all(20),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text('Anda yakin akan logout? Sesi anda akan terhapus permanen'),
+          SizedBox(height: 20),
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
+            onPressed: () async {
+              await AuthService.logout();
+              Get.offAll(() => LoginPage());
+            },
+            child: Center(
+              child: Text('Logout'),
+            ),
+          ),
+        ],
+      ),
+    ));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -178,9 +203,7 @@ class _UserLayoutState extends State<UserLayout> {
                     'Keluar',
                     style: TextStyle(fontSize: 17),
                   ),
-                  onTap: () {
-                    // Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => LoginPage(),));
-                  },
+                  onTap: logout,
                 ),
               ],
             ))

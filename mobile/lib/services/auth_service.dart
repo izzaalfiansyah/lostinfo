@@ -50,4 +50,10 @@ class AuthService {
     // return sharedPreferences.getString('status');
     return '1';
   }
+
+  static Future logout() async {
+    // SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    // await sharedPreferences.remove('id');
+    // await sharedPreferences.remove('role');
+  }
 }
