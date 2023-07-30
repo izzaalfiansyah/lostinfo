@@ -12,8 +12,8 @@ Base64Image(
   final bytesImage = const Base64Decoder().convert(b64);
   return Image.memory(
     bytesImage,
-    height: height ?? 300,
-    width: width ?? 300,
+    height: height ?? 200,
+    width: width,
     fit: BoxFit.cover,
   );
 }

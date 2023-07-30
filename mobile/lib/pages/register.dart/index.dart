@@ -1,9 +1,12 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:mobile/components/file_picker.dart';
 import 'package:mobile/libs/notif.dart';
 import 'package:mobile/models/user.dart';
 import 'package:mobile/pages/login/index.dart';
+import 'package:mobile/services/auth_service.dart';
 import 'package:mobile/services/privacy_service.dart';
 
 class RegisterPage extends StatefulWidget {
@@ -17,6 +20,7 @@ class _DaftarPageState extends State<RegisterPage> {
   bool _isChekced = false;
   User user = User();
   List<String> privacy = [];
+  bool isLoading = false;
 
   @override
   initState() {
@@ -35,23 +39,39 @@ class _DaftarPageState extends State<RegisterPage> {
     }
   }
 
-  showPrivacy(context) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text(
-            'Syarat, Ketentuan, dan Kebijakan',
-            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-          ),
-          content: Column(
+  register() async {
+    setState(() {
+      isLoading = true;
+    });
+    try {
+      await AuthService.register(params: user);
+      notif(
+          'Akun berhasil terdafar. Periksa email anda untuk verifikasi akun!');
+      Get.offAll(() => LoginPage());
+    } on DioException catch (e) {
+      notif(e.response!.data['message'], success: false);
+    } catch (e) {
+      notif(e.toString(), success: false);
+    }
+    setState(() {
+      isLoading = false;
+    });
+  }
+
+  showPrivacy() {
+    final test = Get.to(
+      () => Scaffold(
+        body: SingleChildScrollView(
+          padding: EdgeInsets.all(20),
+          child: Column(
             children: [
               Column(
                 children: List.generate(privacy.length, (index) {
                   return Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      Icon(Icons.minimize),
+                      Text('-'),
                       SizedBox(width: 5),
                       Expanded(
                         child: Text(
@@ -64,23 +84,28 @@ class _DaftarPageState extends State<RegisterPage> {
                     ],
                   );
                 }),
+              ),
+              SizedBox(height: 20),
+              ElevatedButton(
+                onPressed: () {
+                  setState(() {
+                    _isChekced = true;
+                  });
+                  Get.back();
+                },
+                child: Center(
+                  child: Text('Saya Setuju'),
+                ),
               )
             ],
           ),
-          actions: [
-            ElevatedButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: Text('OK'),
-            ),
-          ],
-        );
-      },
+        ),
+      ),
+      fullscreenDialog: true,
     );
-  }
 
-  register() {}
+    return test;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -93,7 +118,7 @@ class _DaftarPageState extends State<RegisterPage> {
           ),
           centerTitle: true,
         ),
-        backgroundColor: Colors.grey[100],
+        backgroundColor: Colors.white,
         body: SafeArea(
           child: Padding(
             padding: const EdgeInsets.only(right: 30, left: 30),
@@ -103,6 +128,7 @@ class _DaftarPageState extends State<RegisterPage> {
                 children: [
                   SizedBox(height: 90),
                   TextFormField(
+                    enabled: !isLoading,
                     cursorColor: Colors.black,
                     decoration: InputDecoration(
                         contentPadding: EdgeInsets.all(10),
@@ -130,6 +156,7 @@ class _DaftarPageState extends State<RegisterPage> {
                   ),
                   SizedBox(height: 20),
                   TextFormField(
+                    enabled: !isLoading,
                     maxLines: null,
                     cursorColor: Colors.black,
                     decoration: InputDecoration(
@@ -159,6 +186,7 @@ class _DaftarPageState extends State<RegisterPage> {
                     height: 20,
                   ),
                   TextFormField(
+                    enabled: !isLoading,
                     maxLength: 13,
                     cursorColor: Colors.black,
                     keyboardType: TextInputType.phone,
@@ -187,7 +215,24 @@ class _DaftarPageState extends State<RegisterPage> {
                     },
                   ),
                   SizedBox(height: 20),
+                  FilePicker(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(Icons.file_upload_outlined),
+                        SizedBox(width: 5),
+                        Text('Upload KTP'),
+                      ],
+                    ),
+                    onChange: (val) {
+                      setState(() {
+                        user.ktp = val;
+                      });
+                    },
+                  ),
+                  SizedBox(height: 20),
                   TextFormField(
+                    enabled: !isLoading,
                     cursorColor: Colors.black,
                     keyboardType: TextInputType.emailAddress,
                     decoration: InputDecoration(
@@ -211,23 +256,18 @@ class _DaftarPageState extends State<RegisterPage> {
                     onChanged: (val) {
                       setState(() {
                         user.email = val;
+                        user.username = val;
                       });
                     },
                   ),
                   SizedBox(height: 20),
                   TextFormField(
+                    enabled: !isLoading,
                     cursorColor: Colors.black,
                     obscureText: true,
                     obscuringCharacter: '*',
                     decoration: InputDecoration(
                         contentPadding: EdgeInsets.all(10),
-                        suffixIcon: IconButton(
-                          onPressed: () {},
-                          icon: Icon(
-                            Icons.remove_red_eye_outlined,
-                            color: Colors.black,
-                          ),
-                        ),
                         prefixIcon: Icon(
                           Icons.lock_outline,
                           size: 30,
@@ -252,18 +292,12 @@ class _DaftarPageState extends State<RegisterPage> {
                   ),
                   SizedBox(height: 20),
                   TextFormField(
+                    enabled: !isLoading,
                     cursorColor: Colors.black,
                     obscureText: true,
                     obscuringCharacter: '*',
                     decoration: InputDecoration(
                         contentPadding: EdgeInsets.all(10),
-                        suffixIcon: IconButton(
-                          onPressed: () {},
-                          icon: Icon(
-                            Icons.remove_red_eye_outlined,
-                            color: Colors.black,
-                          ),
-                        ),
                         prefixIcon: Icon(
                           Icons.lock_open_outlined,
                           size: 30,
@@ -307,30 +341,16 @@ class _DaftarPageState extends State<RegisterPage> {
                             ),
                             InkWell(
                               child: Text(
-                                'Syarat & Ketentuan',
+                                'Syarat, Ketentuan & Kebijakan',
                                 style: TextStyle(
                                     color: Colors.blue,
                                     fontWeight: FontWeight.bold,
                                     fontSize: 17),
                               ),
-                              onTap: () => showPrivacy(context),
+                              onTap: () => showPrivacy(),
                             ),
                             Text(
-                              'dan',
-                              style: TextStyle(fontSize: 17),
-                            ),
-                            InkWell(
-                              child: Text(
-                                'Kebijakan Privasi',
-                                style: TextStyle(
-                                    color: Colors.blue,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 17),
-                              ),
-                              onTap: () => showPrivacy(context),
-                            ),
-                            Text(
-                              'yang berlaku',
+                              ' yang berlaku',
                               style: TextStyle(fontSize: 17),
                             )
                           ],
@@ -342,34 +362,15 @@ class _DaftarPageState extends State<RegisterPage> {
                     height: 10,
                   ),
                   ElevatedButton(
-                    onPressed: () {
-                      if (_isChekced) {
-                        register();
-                      } else {
-                        showDialog(
-                          context: context,
-                          builder: (BuildContext context) {
-                            return AlertDialog(
-                              title: Text(
-                                'Pendaftaran Gagal!',
-                                style: TextStyle(
-                                    fontSize: 20, fontWeight: FontWeight.bold),
-                              ),
-                              content: Text(
-                                  'Anda harus menyetujui Syarat & Ketentuan serta Kebijakan Privasi untuk melanjutkan.'),
-                              actions: [
-                                ElevatedButton(
-                                  onPressed: () {
-                                    Navigator.of(context).pop();
-                                  },
-                                  child: Text('OK'),
-                                ),
-                              ],
-                            );
+                    onPressed: isLoading
+                        ? null
+                        : () {
+                            if (_isChekced) {
+                              register();
+                            } else {
+                              showPrivacy();
+                            }
                           },
-                        );
-                      }
-                    },
                     style: ElevatedButton.styleFrom(
                         shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(30),
@@ -378,7 +379,7 @@ class _DaftarPageState extends State<RegisterPage> {
                       alignment: Alignment.center,
                       width: double.infinity,
                       height: 50,
-                      child: Text('Daftar',
+                      child: Text(isLoading ? 'Memuat...' : 'Daftar',
                           style: TextStyle(
                             fontWeight: FontWeight.w500,
                             fontSize: 20,
