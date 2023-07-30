@@ -46,6 +46,7 @@ class _BarangTemuPageState extends State<BarangTemuPage> {
   Future getUser() async {
     if (widget.userId != null) {
       setState(() {
+        filter['dikembalikan'] = '';
         filter['user_id'] = widget.userId;
       });
     }
@@ -204,25 +205,31 @@ class _BarangTemuPageState extends State<BarangTemuPage> {
                                   userId: item.user_id.toString(),
                                 ));
                           },
-                          child: RichText(
-                            text: TextSpan(
-                              style: TextStyle(fontSize: 12),
-                              children: [
-                                TextSpan(
-                                  text: 'Oleh ',
-                                  style: TextStyle(
-                                    color: Colors.grey,
+                          child: widget.userId != null
+                              ? Text(
+                                  widget.userId != null
+                                      ? "${item.dikembalikan_detail} Dikembalikan"
+                                      : "@${item.user!.username}",
+                                )
+                              : RichText(
+                                  text: TextSpan(
+                                    style: TextStyle(fontSize: 12),
+                                    children: [
+                                      TextSpan(
+                                        text: 'Oleh ',
+                                        style: TextStyle(
+                                          color: Colors.grey,
+                                        ),
+                                      ),
+                                      TextSpan(
+                                        text: "@${item.user!.username}",
+                                        style: TextStyle(
+                                          color: Colors.blue,
+                                        ),
+                                      )
+                                    ],
                                   ),
                                 ),
-                                TextSpan(
-                                  text: "@${item.user!.username}",
-                                  style: TextStyle(
-                                    color: Colors.blue,
-                                  ),
-                                )
-                              ],
-                            ),
-                          ),
                         ),
                         Text(
                           'Ditemukan ${formatDate(item.created_at.toString(), short: true)}',

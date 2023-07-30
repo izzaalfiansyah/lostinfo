@@ -5,11 +5,14 @@ import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_map_location_marker/flutter_map_location_marker.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:get/get.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:mobile/components/skeleton.dart';
 import 'package:mobile/libs/notif.dart';
 import 'package:mobile/models/barang_hilang.dart';
 import 'package:mobile/models/barang_temu.dart';
+import 'package:mobile/pages/barang_hilang/detail.dart';
+import 'package:mobile/pages/barang_temu/detail.dart';
 
 class MapsComponent extends StatefulWidget {
   const MapsComponent({
@@ -185,6 +188,7 @@ class _MapsComponentState extends State<MapsComponent> {
                       return Marker(
                         width: 50,
                         height: 20,
+                        rotate: true,
                         point: LatLng(
                             item.maps_lat as double, item.maps_lng as double),
                         builder: (_) {
@@ -201,7 +205,8 @@ class _MapsComponentState extends State<MapsComponent> {
                                 color: Colors.transparent,
                                 child: InkWell(
                                   onTap: () {
-                                    // change page
+                                    Get.to(() =>
+                                        BarangHilangDetailPage(id: item.id));
                                   },
                                   child: Container(
                                     alignment: Alignment.center,
@@ -235,6 +240,7 @@ class _MapsComponentState extends State<MapsComponent> {
                       return Marker(
                         width: 50,
                         height: 20,
+                        rotate: true,
                         point: LatLng(
                             item.maps_lat as double, item.maps_lng as double),
                         builder: (_) {
@@ -251,7 +257,8 @@ class _MapsComponentState extends State<MapsComponent> {
                                 color: Colors.transparent,
                                 child: InkWell(
                                   onTap: () {
-                                    // change page
+                                    Get.to(() =>
+                                        BarangTemuDetailPage(id: item.id));
                                   },
                                   child: Container(
                                     alignment: Alignment.center,

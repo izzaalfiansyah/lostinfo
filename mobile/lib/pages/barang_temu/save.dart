@@ -184,9 +184,10 @@ class _BarangTemuSavePageState extends State<BarangTemuSavePage> {
                                   padding: EdgeInsets.all(20),
                                   child: MapsComponent(
                                     alamat: barang.tempat_temu,
-                                    initialValue: LatLng(
-                                        barang.maps_lat!.toDouble(),
-                                        barang.maps_lng!.toDouble()),
+                                    initialValue: barang.maps_lat != null
+                                        ? LatLng(barang.maps_lat!.toDouble(),
+                                            barang.maps_lng!.toDouble())
+                                        : null,
                                     onChange: (val) {
                                       setState(() {
                                         barang.maps_lat = val.latitude;

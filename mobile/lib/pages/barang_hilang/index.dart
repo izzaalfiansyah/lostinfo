@@ -46,6 +46,7 @@ class _BarangHilangPageState extends State<BarangHilangPage> {
   Future getUser() async {
     if (widget.userId != null) {
       setState(() {
+        filter['ditemukan'] = '';
         filter['user_id'] = widget.userId;
       });
     }
@@ -246,7 +247,9 @@ class _BarangHilangPageState extends State<BarangHilangPage> {
                                 ));
                           },
                           child: Text(
-                            "@${item.user!.username}",
+                            widget.userId != null
+                                ? "${item.ditemukan_detail} Ditemukan"
+                                : "@${item.user!.username}",
                             style: TextStyle(
                               color: Colors.blue,
                               fontSize: 12,

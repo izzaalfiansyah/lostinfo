@@ -1,6 +1,7 @@
-// ignore_for_file: prefer_const_constructors
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:mobile/components/card.dart';
 import 'package:mobile/components/maps.dart';
@@ -40,16 +41,52 @@ class _BerandaPageState extends State<BerandaPage> {
     return UserLayout(
       title: 'Beranda',
       child: SingleChildScrollView(
-        child: CardComponent(
-          title: 'Barang Terdekat',
-          child: MapsComponent(
-            barangHilang: barangHilang,
-            barangTemu: barangTemu,
-            onLocationFound: (val) async {
-              print(val);
-              await getBarangTerdekat(val);
-            },
-          ),
+        child: Column(
+          children: [
+            CardComponent(
+              title: 'Barang Terdekat',
+              child: MapsComponent(
+                height: Get.height / 1.5,
+                barangHilang: barangHilang,
+                barangTemu: barangTemu,
+                onLocationFound: (val) async {
+                  await getBarangTerdekat(val);
+                },
+              ),
+            ),
+            CardComponent(
+                child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                RichText(
+                  text: TextSpan(
+                    children: [
+                      TextSpan(
+                        text: 'Warna merah',
+                        style: TextStyle(
+                            color: Colors.red, fontWeight: FontWeight.bold),
+                      ),
+                      TextSpan(text: ': lokasi barang hilang di sekitarmu')
+                    ],
+                    style: TextStyle(color: Colors.grey),
+                  ),
+                ),
+                RichText(
+                  text: TextSpan(
+                    children: [
+                      TextSpan(
+                        text: 'Warna hijau',
+                        style: TextStyle(
+                            color: Colors.green, fontWeight: FontWeight.bold),
+                      ),
+                      TextSpan(text: ': lokasi barang hilang di sekitarmu')
+                    ],
+                    style: TextStyle(color: Colors.grey),
+                  ),
+                ),
+              ],
+            )),
+          ],
         ),
       ),
     );

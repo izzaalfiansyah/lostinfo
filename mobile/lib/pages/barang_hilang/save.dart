@@ -185,9 +185,10 @@ class _BarangHilangSavePageState extends State<BarangHilangSavePage> {
                                 padding: EdgeInsets.all(20),
                                 child: MapsComponent(
                                   alamat: barang.tempat_hilang,
-                                  initialValue: LatLng(
-                                      barang.maps_lat!.toDouble(),
-                                      barang.maps_lng!.toDouble()),
+                                  initialValue: barang.maps_lat != null
+                                      ? LatLng(barang.maps_lat!.toDouble(),
+                                          barang.maps_lng!.toDouble())
+                                      : null,
                                   onChange: (val) {
                                     setState(() {
                                       barang.maps_lat = val.latitude;
