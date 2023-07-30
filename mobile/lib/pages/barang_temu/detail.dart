@@ -10,10 +10,12 @@ import 'package:mobile/components/skeleton.dart';
 import 'package:mobile/libs/constant.dart';
 import 'package:mobile/libs/format_date.dart';
 import 'package:mobile/libs/go_url.dart';
+import 'package:mobile/models/barang_hilang.dart';
 import 'package:mobile/models/barang_temu.dart';
 import 'package:mobile/pages/akun/index.dart';
 import 'package:mobile/pages/barang_temu/save.dart';
 import 'package:mobile/services/auth_service.dart';
+import 'package:mobile/services/barang_hilang_service.dart';
 import 'package:mobile/services/barang_temu_service.dart';
 
 class BarangTemuDetailPage extends StatefulWidget {
@@ -29,15 +31,17 @@ class _BarangTemuDetailPageState extends State<BarangTemuDetailPage> {
   String authId = '';
   BarangTemu barang = BarangTemu();
   bool isLoading = true;
+  List<BarangHilang> barangHilang = [];
 
   @override
   initState() {
     super.initState();
-    AuthService.get().then((value) {
+    AuthService.get().then((value) async {
       setState(() {
         authId = value.toString();
       });
-      getBarangTemuDetail();
+      await getBarangTemuDetail();
+      await getBarangHilangSerupa();
     });
   }
 
@@ -57,6 +61,14 @@ class _BarangTemuDetailPageState extends State<BarangTemuDetailPage> {
 
     setState(() {
       isLoading = false;
+    });
+  }
+
+  Future getBarangHilangSerupa() async {
+    final res = await BarangHilangService.get(
+        filter: {'barang_hilang_id': barang.id.toString()});
+    setState(() {
+      barangHilang = res;
     });
   }
 
@@ -196,6 +208,54 @@ class _BarangTemuDetailPageState extends State<BarangTemuDetailPage> {
                           barang.deskripsi.toString(),
                         ),
                       ),
+                      barang.user_id.toString() == authId
+                          ? CardComponent(
+                              title: 'Barang Temuan yang Serupa',
+                              child: barangHilang.isNotEmpty
+                                  ? GridView(
+                                      gridDelegate:
+                                          SliverGridDelegateWithFixedCrossAxisCount(
+                                        crossAxisCount: 2,
+                                        mainAxisSpacing: 5,
+                                        crossAxisSpacing: 5,
+                                      ),
+                                      shrinkWrap: true,
+                                      physics: NeverScrollableScrollPhysics(),
+                                      children: List.generate(
+                                          barangHilang.length, (index) {
+                                        final item = barangHilang[index];
+                                        return Card(
+                                          child: InkWell(
+                                            onTap: () {
+                                              Get.to(() => BarangTemuDetailPage(
+                                                  id: item.id));
+                                            },
+                                            child: Column(
+                                              children: [
+                                                SizedBox(height: 4),
+                                                Image.network(
+                                                  item.foto_url.toString(),
+                                                  height: 100,
+                                                  width: 100,
+                                                  fit: BoxFit.cover,
+                                                ),
+                                                Text(
+                                                  item.nama.toString(),
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        );
+                                      }),
+                                    )
+                                  : Center(
+                                      child: Text(
+                                          'barang temuan serupa tidak tersedia'),
+                                    ),
+                            )
+                          : SizedBox(),
                       CardComponent(
                         title: 'Tempat Hilang',
                         child: Column(

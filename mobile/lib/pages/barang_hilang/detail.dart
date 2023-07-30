@@ -12,10 +12,13 @@ import 'package:mobile/libs/format_date.dart';
 import 'package:mobile/libs/format_money.dart';
 import 'package:mobile/libs/go_url.dart';
 import 'package:mobile/models/barang_hilang.dart';
+import 'package:mobile/models/barang_temu.dart';
 import 'package:mobile/pages/akun/index.dart';
 import 'package:mobile/pages/barang_hilang/save.dart';
+import 'package:mobile/pages/barang_temu/detail.dart';
 import 'package:mobile/services/auth_service.dart';
 import 'package:mobile/services/barang_hilang_service.dart';
+import 'package:mobile/services/barang_temu_service.dart';
 
 class BarangHilangDetailPage extends StatefulWidget {
   const BarangHilangDetailPage({super.key, required this.id});
@@ -30,15 +33,17 @@ class _BarangHilangDetailPageState extends State<BarangHilangDetailPage> {
   String authId = '';
   BarangHilang barang = BarangHilang();
   bool isLoading = true;
+  List<BarangTemu> barangTemu = [];
 
   @override
   initState() {
     super.initState();
-    AuthService.get().then((value) {
+    AuthService.get().then((value) async {
       setState(() {
         authId = value.toString();
       });
-      getBarangHilangDetail();
+      await getBarangHilangDetail();
+      await getBarangTemuSerupa();
     });
   }
 
@@ -61,13 +66,21 @@ class _BarangHilangDetailPageState extends State<BarangHilangDetailPage> {
     });
   }
 
+  Future getBarangTemuSerupa() async {
+    final res = await BarangTemuService.get(
+        filter: {'barang_hilang_id': barang.id.toString()});
+    setState(() {
+      barangTemu = res;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: colorPrimary,
         title: Text(
-            'Detail Barang ${barang.user_id.toString() == authId ? 'Saya' : ''}'),
+            'Detail Barang Hilang ${barang.user_id.toString() == authId ? 'Saya' : ''}'),
       ),
       body: !isLoading
           ? Stack(
@@ -211,6 +224,54 @@ class _BarangHilangDetailPageState extends State<BarangHilangDetailPage> {
                           barang.deskripsi.toString(),
                         ),
                       ),
+                      barang.user_id.toString() == authId
+                          ? CardComponent(
+                              title: 'Barang Temuan yang Serupa',
+                              child: barangTemu.isNotEmpty
+                                  ? GridView(
+                                      gridDelegate:
+                                          SliverGridDelegateWithFixedCrossAxisCount(
+                                        crossAxisCount: 2,
+                                        mainAxisSpacing: 5,
+                                        crossAxisSpacing: 5,
+                                      ),
+                                      shrinkWrap: true,
+                                      physics: NeverScrollableScrollPhysics(),
+                                      children: List.generate(barangTemu.length,
+                                          (index) {
+                                        final item = barangTemu[index];
+                                        return Card(
+                                          child: InkWell(
+                                            onTap: () {
+                                              Get.to(() => BarangTemuDetailPage(
+                                                  id: item.id));
+                                            },
+                                            child: Column(
+                                              children: [
+                                                SizedBox(height: 4),
+                                                Image.network(
+                                                  item.foto_url.toString(),
+                                                  height: 100,
+                                                  width: 100,
+                                                  fit: BoxFit.cover,
+                                                ),
+                                                Text(
+                                                  item.nama.toString(),
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        );
+                                      }),
+                                    )
+                                  : Center(
+                                      child: Text(
+                                          'barang temuan serupa tidak tersedia'),
+                                    ),
+                            )
+                          : SizedBox(),
                       CardComponent(
                         title: 'Tempat Hilang',
                         child: Column(
