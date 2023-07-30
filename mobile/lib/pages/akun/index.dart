@@ -6,6 +6,7 @@ import 'package:mobile/contexts/auth_context.dart';
 import 'package:mobile/layouts/user.dart';
 import 'package:mobile/libs/base64_image.dart';
 import 'package:mobile/libs/format_date.dart';
+import 'package:mobile/libs/go_url.dart';
 import 'package:mobile/libs/notif.dart';
 import 'package:mobile/models/user.dart';
 import 'package:mobile/models/user_lapor.dart';
@@ -115,6 +116,15 @@ class _AkunPageState extends State<AkunPage> {
       title: isMe ? 'Akun' : 'Detail User',
       bottomNavBar: !isMe
           ? BottomNavigationBar(
+              onTap: (index) async {
+                if (index == 0) {
+                  goUrl('tel:${user.telepon}');
+                } else if (index == 1) {
+                  goUrl('mailto:${user.email}');
+                } else if (index == 2) {
+                  goUrl('https://wa.me/${user.whatsapp}');
+                }
+              },
               items: [
                 BottomNavigationBarItem(
                     icon: Icon(
