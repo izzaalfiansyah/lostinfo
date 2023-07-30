@@ -3,8 +3,17 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 
-Base64Image(String base64) {
+Base64Image(
+  String base64, {
+  double? height,
+  double? width,
+}) {
   String b64 = base64.split(';base64,')[1];
   final bytesImage = const Base64Decoder().convert(b64);
-  return Image.memory(bytesImage);
+  return Image.memory(
+    bytesImage,
+    height: height ?? 300,
+    width: width ?? 300,
+    fit: BoxFit.cover,
+  );
 }

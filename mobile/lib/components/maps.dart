@@ -45,39 +45,36 @@ class _MapsComponentState extends State<MapsComponent> {
   @override
   initState() {
     super.initState();
-    _determinePosition();
-    if (widget.alamat != null) {
-      getKordinatByAlamat();
-    }
-    if (widget.initialValue != null) {
-      setState(() {
-        isLoading = true;
-      });
+    _determinePosition().then((value) async {
+      if (widget.alamat != null) {
+        await getKordinatByAlamat();
+      }
 
-      final latlng =
-          LatLng(widget.initialValue!.latitude, widget.initialValue!.longitude);
+      if (widget.initialValue != null) {
+        final latlng = LatLng(
+            widget.initialValue!.latitude, widget.initialValue!.longitude);
 
-      setState(() {
-        center = latlng;
-        markers.add({
-          'point': latlng,
+        setState(() {
+          markers.add({
+            'point': latlng,
+          });
         });
-        isLoading = false;
-      });
-    }
+      }
+    });
   }
 
   getKordinatByAlamat() async {
     List<Location> locations =
         await locationFromAddress(widget.alamat.toString());
     final location = locations[0];
+    center = LatLng(location.latitude, location.longitude);
 
     setState(() {
-      center = LatLng(location.latitude, location.longitude);
+      mapController.move(center, 15);
     });
   }
 
-  _determinePosition() async {
+  Future _determinePosition() async {
     setState(() {
       isLoading = true;
     });
@@ -114,6 +111,7 @@ class _MapsComponentState extends State<MapsComponent> {
 
       setState(() {
         pos = position;
+        center = LatLng(position.latitude, position.longitude);
       });
     }
 

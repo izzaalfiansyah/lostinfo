@@ -9,6 +9,8 @@ import 'package:mobile/libs/go_url.dart';
 import 'package:mobile/libs/notif.dart';
 import 'package:mobile/models/user.dart';
 import 'package:mobile/models/user_lapor.dart';
+import 'package:mobile/pages/barang_hilang/index.dart';
+import 'package:mobile/pages/barang_temu/index.dart';
 import 'package:mobile/services/auth_service.dart';
 import 'package:mobile/pages/akun/edit.dart';
 import 'package:mobile/services/user_lapor_service.dart';
@@ -29,22 +31,17 @@ class _AkunPageState extends State<AkunPage> {
   List tabs = [
     {
       'title': 'Barang Hilang',
-      'component': Center(
-        child: Text('Data Barang Hilang'),
-      ),
+      'component': (userId) => BarangHilangPage(userId: userId),
     },
     {
       'title': 'Barang Temu',
-      'component': Center(
-        child: Text('Data Barang Temu'),
-      ),
+      'component': (userId) => BarangTemuPage(userId: userId),
     }
   ];
 
   UserLapor userLapor = UserLapor();
   User user = User();
-  RxInt selectedTab = 0.obs;
-
+  int selectedTab = 0;
   bool isLoading = true;
   bool isMe = false;
 
@@ -88,7 +85,9 @@ class _AkunPageState extends State<AkunPage> {
   }
 
   changeTab(int index) {
-    selectedTab.value = index;
+    setState(() {
+      selectedTab = index;
+    });
   }
 
   handleLaporkan() async {
@@ -235,8 +234,8 @@ class _AkunPageState extends State<AkunPage> {
                                         child: Column(
                                           mainAxisSize: MainAxisSize.min,
                                           children: [
-                                            Base64Image(
-                                                user.ktp_url.toString()),
+                                            Base64Image(user.ktp_url.toString(),
+                                                height: 200),
                                             SizedBox(height: 20),
                                             ElevatedButton(
                                               onPressed: () => Get.back(),
@@ -423,21 +422,22 @@ class _AkunPageState extends State<AkunPage> {
                 ),
                 children: List.generate(
                   tabs.length,
-                  (index) => Obx(
-                    () => ElevatedButton(
-                      onPressed: index != selectedTab.value
-                          ? () {
-                              changeTab(index);
-                            }
-                          : null,
-                      child: Text(tabs[index]['title']),
-                    ),
+                  (index) => ElevatedButton(
+                    onPressed: index != selectedTab
+                        ? () {
+                            changeTab(index);
+                          }
+                        : null,
+                    child: Text(tabs[index]['title']),
                   ),
                 ),
               ),
             ),
-            Obx(() =>
-                CardComponent(child: tabs[selectedTab.value]['component'])),
+            Container(
+              child: !isLoading
+                  ? tabs[selectedTab]['component'](user.id.toString())
+                  : SizedBox(),
+            ),
           ],
         ),
       ),

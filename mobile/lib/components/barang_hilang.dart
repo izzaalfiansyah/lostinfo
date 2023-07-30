@@ -5,51 +5,42 @@ import 'package:get/get.dart';
 import 'package:mobile/components/card.dart';
 import 'package:mobile/components/form_group.dart';
 import 'package:mobile/components/skeleton.dart';
-import 'package:mobile/layouts/user.dart';
-import 'package:mobile/libs/constant.dart';
 import 'package:mobile/libs/format_date.dart';
 import 'package:mobile/libs/notif.dart';
-import 'package:mobile/models/barang_temu.dart';
+import 'package:mobile/models/barang_hilang.dart';
 import 'package:mobile/pages/akun/index.dart';
-import 'package:mobile/pages/barang_temu/detail.dart';
-import 'package:mobile/pages/barang_temu/save.dart';
+import 'package:mobile/pages/barang_hilang/detail.dart';
 import 'package:mobile/services/auth_service.dart';
-import 'package:mobile/services/barang_temu_service.dart';
+import 'package:mobile/services/barang_hilang_service.dart';
 
-class BarangTemuPage extends StatefulWidget {
-  const BarangTemuPage({super.key, this.userId});
+class BarangHilangPage extends StatefulWidget {
+  const BarangHilangPage({super.key, this.userId});
+
   final String? userId;
 
   @override
-  State<BarangTemuPage> createState() => _BarangTemuPageState();
+  State<BarangHilangPage> createState() => _BarangHilangPageState();
 }
 
-class _BarangTemuPageState extends State<BarangTemuPage> {
+class _BarangHilangPageState extends State<BarangHilangPage> {
   Map<String, dynamic> filter = {
     'limit': 10,
-    'dikembalikan': '0',
+    'ditemukan': '0',
     'page': 1,
   };
-  List<BarangTemu> barangTemu = [];
+  List<BarangHilang> barangHilang = [];
   bool isLoading = true;
   String authId = '';
 
   @override
   void initState() {
     super.initState();
-
     getUser().then((value) {
-      getBarangTemu();
+      getBarangHilang();
     });
   }
 
   Future getUser() async {
-    if (widget.userId != null) {
-      setState(() {
-        filter['user_id'] = widget.userId;
-      });
-    }
-
     final auth = await AuthService.get();
     setState(() {
       authId = auth;
@@ -57,7 +48,7 @@ class _BarangTemuPageState extends State<BarangTemuPage> {
     return auth;
   }
 
-  Future getBarangTemu() async {
+  Future getBarangHilang() async {
     setState(() {
       isLoading = true;
     });
@@ -65,17 +56,17 @@ class _BarangTemuPageState extends State<BarangTemuPage> {
     try {
       if (filter['page'] == 1) {
         setState(() {
-          barangTemu.clear();
+          barangHilang.clear();
         });
       }
 
-      final res = await BarangTemuService.get(filter: filter);
-      final oldBarangTemuLength = barangTemu.length;
+      final res = await BarangHilangService.get(filter: filter);
+      final oldBarangHilangLength = barangHilang.length;
       setState(() {
-        barangTemu.addAll(res);
+        barangHilang.addAll(res);
       });
 
-      if (barangTemu.length == oldBarangTemuLength && barangTemu.isNotEmpty) {
+      if (barangHilang.length == oldBarangHilangLength) {
         notif('semua data telah ditampilkan');
       }
     } catch (e) {
@@ -109,13 +100,54 @@ class _BarangTemuPageState extends State<BarangTemuPage> {
               },
             ),
           ),
+          Row(
+            children: [
+              Expanded(
+                child: FormGroup(
+                  child: TextFormField(
+                    initialValue: filter['hadiah_min'],
+                    keyboardType: TextInputType.number,
+                    decoration: InputDecoration(
+                      prefixText: 'Rp ',
+                      hintText: '0',
+                      labelText: 'Hadiah Min',
+                    ),
+                    onChanged: (val) {
+                      setState(() {
+                        filter['hadiah_min'] = val;
+                      });
+                    },
+                  ),
+                ),
+              ),
+              SizedBox(width: 10),
+              Expanded(
+                child: FormGroup(
+                  child: TextFormField(
+                    initialValue: filter['hadiah_max'],
+                    keyboardType: TextInputType.number,
+                    decoration: InputDecoration(
+                      prefixText: 'Rp ',
+                      hintText: '0',
+                      labelText: 'Hadiah Max',
+                    ),
+                    onChanged: (val) {
+                      setState(() {
+                        filter['hadiah_max'] = val;
+                      });
+                    },
+                  ),
+                ),
+              ),
+            ],
+          ),
           SizedBox(height: 20),
           ElevatedButton(
             onPressed: () {
               setState(() {
                 filter['page'] = 1;
               });
-              getBarangTemu();
+              getBarangHilang();
               Get.back();
             },
             child: Center(
@@ -127,7 +159,7 @@ class _BarangTemuPageState extends State<BarangTemuPage> {
     ));
   }
 
-  handleDelete(BarangTemu item) {
+  handleDelete(BarangHilang item) {
     Get.bottomSheet(Container(
       color: Colors.white,
       padding: EdgeInsets.all(20),
@@ -143,10 +175,10 @@ class _BarangTemuPageState extends State<BarangTemuPage> {
             ),
             onPressed: () async {
               try {
-                await BarangTemuService.destroy(id: item.id);
+                await BarangHilangService.destroy(id: item.id);
                 Get.back();
                 notif('barang berhasil dihapus');
-                getBarangTemu();
+                getBarangHilang();
               } catch (e) {
                 notif(e.toString(), success: false);
               }
@@ -160,11 +192,11 @@ class _BarangTemuPageState extends State<BarangTemuPage> {
     ));
   }
 
-  dataBarang() {
+  @override
+  Widget build(BuildContext context) {
     return Column(
-      mainAxisSize: MainAxisSize.min,
       children: [
-        !isLoading && barangTemu.isEmpty
+        !isLoading && barangHilang.isEmpty
             ? CardComponent(
                 child: Center(
                   child: Text('data barang tidak tersedia'),
@@ -173,8 +205,8 @@ class _BarangTemuPageState extends State<BarangTemuPage> {
             : SizedBox(),
         Column(
           mainAxisSize: MainAxisSize.min,
-          children: List.generate(barangTemu.length, (index) {
-            final item = barangTemu[index];
+          children: List.generate(barangHilang.length, (index) {
+            final item = barangHilang[index];
 
             return CardComponent(
               child: Row(
@@ -204,28 +236,16 @@ class _BarangTemuPageState extends State<BarangTemuPage> {
                                   userId: item.user_id.toString(),
                                 ));
                           },
-                          child: RichText(
-                            text: TextSpan(
-                              style: TextStyle(fontSize: 12),
-                              children: [
-                                TextSpan(
-                                  text: 'Oleh ',
-                                  style: TextStyle(
-                                    color: Colors.grey,
-                                  ),
-                                ),
-                                TextSpan(
-                                  text: "@${item.user!.username}",
-                                  style: TextStyle(
-                                    color: Colors.blue,
-                                  ),
-                                )
-                              ],
+                          child: Text(
+                            "@${item.user!.username}",
+                            style: TextStyle(
+                              color: Colors.blue,
+                              fontSize: 12,
                             ),
                           ),
                         ),
                         Text(
-                          'Ditemukan ${formatDate(item.created_at.toString(), short: true)}',
+                          'Hilang ${formatDate(item.created_at.toString(), short: true)}',
                           style: TextStyle(
                             color: Colors.grey,
                             fontSize: 12,
@@ -235,7 +255,8 @@ class _BarangTemuPageState extends State<BarangTemuPage> {
                           children: [
                             TextButton(
                               onPressed: () {
-                                Get.to(() => BarangTemuDetailPage(id: item.id));
+                                Get.to(
+                                    () => BarangHilangDetailPage(id: item.id));
                               },
                               style: TextButton.styleFrom(
                                 padding: EdgeInsets.zero,
@@ -292,55 +313,19 @@ class _BarangTemuPageState extends State<BarangTemuPage> {
                 }),
               )
             : SizedBox(),
-        // SizedBox(height: 5),
-        barangTemu.isEmpty
+        // SizedBox(height: 10),
+        barangHilang.isEmpty
             ? SizedBox()
             : ElevatedButton(
                 onPressed: () {
                   setState(() {
                     filter['page'] = filter['page'] + 1;
-                    getBarangTemu();
+                    getBarangHilang();
                   });
                 },
                 child: Text('Tampilkan Lainnya'),
               ),
       ],
     );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return widget.userId != null
-        ? dataBarang()
-        : UserLayout(
-            title: 'Barang Temu',
-            floatingActionButton: Column(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                FloatingActionButton(
-                  heroTag: 'btn1',
-                  backgroundColor: Colors.white,
-                  onPressed: showFilterModal,
-                  child: Icon(
-                    Icons.filter_alt,
-                    color: colorPrimary,
-                  ),
-                ),
-                SizedBox(height: 10),
-                FloatingActionButton(
-                  heroTag: 'btn2',
-                  onPressed: () {
-                    Get.to(() => BarangTemuSavePage());
-                  },
-                  child: Icon(
-                    Icons.add,
-                  ),
-                ),
-              ],
-            ),
-            child: SingleChildScrollView(
-              child: dataBarang(),
-            ),
-          );
   }
 }

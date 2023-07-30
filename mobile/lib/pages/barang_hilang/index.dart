@@ -17,7 +17,9 @@ import 'package:mobile/services/auth_service.dart';
 import 'package:mobile/services/barang_hilang_service.dart';
 
 class BarangHilangPage extends StatefulWidget {
-  const BarangHilangPage({super.key});
+  const BarangHilangPage({super.key, this.userId});
+
+  final String? userId;
 
   @override
   State<BarangHilangPage> createState() => _BarangHilangPageState();
@@ -42,6 +44,12 @@ class _BarangHilangPageState extends State<BarangHilangPage> {
   }
 
   Future getUser() async {
+    if (widget.userId != null) {
+      setState(() {
+        filter['user_id'] = widget.userId;
+      });
+    }
+
     final auth = await AuthService.get();
     setState(() {
       authId = auth;
@@ -67,7 +75,8 @@ class _BarangHilangPageState extends State<BarangHilangPage> {
         barangHilang.addAll(res);
       });
 
-      if (barangHilang.length == oldBarangHilangLength) {
+      if (barangHilang.length == oldBarangHilangLength &&
+          barangHilang.isNotEmpty) {
         notif('semua data telah ditampilkan');
       }
     } catch (e) {
@@ -193,170 +202,175 @@ class _BarangHilangPageState extends State<BarangHilangPage> {
     ));
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return UserLayout(
-      title: 'Barang Hilang',
-      floatingActionButton: Column(
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: [
-          FloatingActionButton(
-            heroTag: 'btn1',
-            backgroundColor: Colors.white,
-            onPressed: showFilterModal,
-            child: Icon(
-              Icons.filter_alt,
-              color: colorPrimary,
-            ),
-          ),
-          SizedBox(height: 10),
-          FloatingActionButton(
-            heroTag: 'btn2',
-            onPressed: () {
-              Get.to(() => BarangHilangSavePage());
-            },
-            child: Icon(
-              Icons.add,
-            ),
-          ),
-        ],
-      ),
-      child: SingleChildScrollView(
-        child: Column(
-          children: [
-            !isLoading && barangHilang.isEmpty
-                ? CardComponent(
-                    child: Center(
-                      child: Text('data barang tidak tersedia'),
-                    ),
-                  )
-                : SizedBox(),
-            Column(
-              mainAxisSize: MainAxisSize.min,
-              children: List.generate(barangHilang.length, (index) {
-                final item = barangHilang[index];
+  dataBarang() {
+    return Column(
+      children: [
+        !isLoading && barangHilang.isEmpty
+            ? CardComponent(
+                child: Center(
+                  child: Text('data barang tidak tersedia'),
+                ),
+              )
+            : SizedBox(),
+        Column(
+          mainAxisSize: MainAxisSize.min,
+          children: List.generate(barangHilang.length, (index) {
+            final item = barangHilang[index];
 
-                return CardComponent(
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Image.network(
-                        item.foto_url.toString(),
-                        width: 90,
-                        height: 90,
-                        fit: BoxFit.cover,
-                      ),
-                      SizedBox(width: 20),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              item.nama.toString(),
-                              style: TextStyle(
-                                fontWeight: FontWeight.w600,
-                              ),
+            return CardComponent(
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Image.network(
+                    item.foto_url.toString(),
+                    width: 90,
+                    height: 90,
+                    fit: BoxFit.cover,
+                  ),
+                  SizedBox(width: 20),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          item.nama.toString(),
+                          style: TextStyle(
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                        GestureDetector(
+                          onTap: () {
+                            Get.to(() => AkunPage(
+                                  userId: item.user_id.toString(),
+                                ));
+                          },
+                          child: Text(
+                            "@${item.user!.username}",
+                            style: TextStyle(
+                              color: Colors.blue,
+                              fontSize: 12,
                             ),
-                            GestureDetector(
-                              onTap: () {
-                                Get.to(() => AkunPage(
-                                      userId: item.user_id.toString(),
-                                    ));
+                          ),
+                        ),
+                        Text(
+                          'Hilang ${formatDate(item.created_at.toString(), short: true)}',
+                          style: TextStyle(
+                            color: Colors.grey,
+                            fontSize: 12,
+                          ),
+                        ),
+                        Row(
+                          children: [
+                            TextButton(
+                              onPressed: () {
+                                Get.to(
+                                    () => BarangHilangDetailPage(id: item.id));
                               },
+                              style: TextButton.styleFrom(
+                                padding: EdgeInsets.zero,
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(50)),
+                                minimumSize: Size(60, 24),
+                                backgroundColor: Colors.blue,
+                              ),
                               child: Text(
-                                "@${item.user!.username}",
+                                'Detail',
                                 style: TextStyle(
-                                  color: Colors.blue,
+                                  color: Colors.white,
                                   fontSize: 12,
                                 ),
                               ),
                             ),
-                            Text(
-                              'Hilang ${formatDate(item.created_at.toString(), short: true)}',
-                              style: TextStyle(
-                                color: Colors.grey,
-                                fontSize: 12,
-                              ),
-                            ),
-                            Row(
-                              children: [
-                                TextButton(
-                                  onPressed: () {
-                                    Get.to(() =>
-                                        BarangHilangDetailPage(id: item.id));
-                                  },
-                                  style: TextButton.styleFrom(
-                                    padding: EdgeInsets.zero,
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(50)),
-                                    minimumSize: Size(60, 24),
-                                    backgroundColor: Colors.blue,
-                                  ),
-                                  child: Text(
-                                    'Detail',
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 12,
+                            authId == item.user_id.toString()
+                                ? TextButton(
+                                    onPressed: () => handleDelete(item),
+                                    style: TextButton.styleFrom(
+                                      padding: EdgeInsets.zero,
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(50)),
+                                      minimumSize: Size(30, 24),
+                                      backgroundColor: Colors.red,
                                     ),
-                                  ),
-                                ),
-                                authId == item.user_id.toString()
-                                    ? TextButton(
-                                        onPressed: () => handleDelete(item),
-                                        style: TextButton.styleFrom(
-                                          padding: EdgeInsets.zero,
-                                          shape: RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(50)),
-                                          minimumSize: Size(30, 24),
-                                          backgroundColor: Colors.red,
-                                        ),
-                                        child: Icon(
-                                          Icons.delete,
-                                          color: Colors.white,
-                                          size: 12,
-                                        ),
-                                      )
-                                    : SizedBox(),
-                              ],
-                            ),
+                                    child: Icon(
+                                      Icons.delete,
+                                      color: Colors.white,
+                                      size: 12,
+                                    ),
+                                  )
+                                : SizedBox(),
                           ],
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                );
-              }).toList(),
-            ),
-            isLoading
-                ? Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: List.generate(5, (index) {
-                      return CardComponent(
-                        child: SkeletonComponent(
-                          child: Container(color: Colors.white, height: 90),
-                        ),
-                      );
-                    }),
-                  )
-                : SizedBox(),
-            // SizedBox(height: 10),
-            barangHilang.isEmpty
-                ? SizedBox()
-                : ElevatedButton(
-                    onPressed: () {
-                      setState(() {
-                        filter['page'] = filter['page'] + 1;
-                        getBarangHilang();
-                      });
-                    },
-                    child: Text('Tampilkan Lainnya'),
-                  ),
-          ],
+                ],
+              ),
+            );
+          }).toList(),
         ),
-      ),
+        isLoading
+            ? Column(
+                mainAxisSize: MainAxisSize.min,
+                children: List.generate(5, (index) {
+                  return CardComponent(
+                    child: SkeletonComponent(
+                      child: Container(color: Colors.white, height: 90),
+                    ),
+                  );
+                }),
+              )
+            : SizedBox(),
+        // SizedBox(height: 10),
+        barangHilang.isEmpty
+            ? SizedBox()
+            : ElevatedButton(
+                onPressed: () {
+                  setState(() {
+                    filter['page'] = filter['page'] + 1;
+                    getBarangHilang();
+                  });
+                },
+                child: Text('Tampilkan Lainnya'),
+              ),
+      ],
     );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return widget.userId != null
+        ? dataBarang()
+        : UserLayout(
+            title: 'Barang Hilang',
+            floatingActionButton: Column(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                FloatingActionButton(
+                  heroTag: 'btn1',
+                  backgroundColor: Colors.white,
+                  onPressed: showFilterModal,
+                  child: Icon(
+                    Icons.filter_alt,
+                    color: colorPrimary,
+                  ),
+                ),
+                SizedBox(height: 10),
+                FloatingActionButton(
+                  heroTag: 'btn2',
+                  onPressed: () {
+                    Get.to(() => BarangHilangSavePage());
+                  },
+                  child: Icon(
+                    Icons.add,
+                  ),
+                ),
+              ],
+            ),
+            child: SingleChildScrollView(
+              child: dataBarang(),
+            ),
+          );
   }
 }

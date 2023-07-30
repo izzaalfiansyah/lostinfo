@@ -45,8 +45,8 @@ class _BerandaPageState extends State<BerandaPage> {
           child: MapsComponent(
             barangHilang: barangHilang,
             barangTemu: barangTemu,
-            alamat: 'Gumukmas',
             onLocationFound: (val) async {
+              print(val);
               await getBarangTerdekat(val);
             },
           ),

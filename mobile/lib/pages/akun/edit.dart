@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:mobile/components/card.dart';
 import 'package:mobile/components/file_picker.dart';
 import 'package:mobile/components/form_group.dart';
-import 'package:mobile/layouts/user.dart';
 import 'package:mobile/libs/constant.dart';
 import 'package:mobile/libs/notif.dart';
 import 'package:mobile/models/user.dart';
@@ -91,9 +90,12 @@ class _AkunEditPageState extends State<AkunEditPage> {
 
   @override
   Widget build(BuildContext context) {
-    return UserLayout(
-      title: 'Edit Akun',
-      child: SingleChildScrollView(
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: colorPrimary,
+        title: Text('Edit Akun'),
+      ),
+      body: SingleChildScrollView(
         padding: EdgeInsets.all(5),
         child: Column(
           children: [

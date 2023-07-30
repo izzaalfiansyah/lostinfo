@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:latlong2/latlong.dart';
 import 'package:mobile/components/card.dart';
 import 'package:mobile/components/file_picker.dart';
 import 'package:mobile/components/maps.dart';
@@ -183,6 +184,9 @@ class _BarangTemuSavePageState extends State<BarangTemuSavePage> {
                                   padding: EdgeInsets.all(20),
                                   child: MapsComponent(
                                     alamat: barang.tempat_temu,
+                                    initialValue: LatLng(
+                                        barang.maps_lat!.toDouble(),
+                                        barang.maps_lng!.toDouble()),
                                     onChange: (val) {
                                       setState(() {
                                         barang.maps_lat = val.latitude;
