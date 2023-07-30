@@ -23,14 +23,25 @@ class AuthService {
     return await UserService.create(params: params);
   }
 
-  static Future<void> set(dynamic id) async {
-    // SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    // sharedPreferences.setString('id', id);
+  static Future sendVerify({required dynamic userId}) async {
+    return await http.post('/user/verifikasi/$userId');
   }
 
-  static Future<String> get() async {
+  static Future<void> set({required dynamic id, required String status}) async {
     // SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    // return sharedPreferences.getString('id').toString();
+    // sharedPreferences.setString('id', id);
+    // sharedPreferences.setString('status', status);
+  }
+
+  static Future<String?> get() async {
+    // SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    // return sharedPreferences.getString('id');
     return '5';
+  }
+
+  static Future<String?> getStatus() async {
+    // SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    // return sharedPreferences.getString('status');
+    return '1';
   }
 }

@@ -36,7 +36,7 @@ class _BarangHilangDetailPageState extends State<BarangHilangDetailPage> {
     super.initState();
     AuthService.get().then((value) {
       setState(() {
-        authId = value;
+        authId = value.toString();
       });
       getBarangHilangDetail();
     });

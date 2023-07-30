@@ -35,7 +35,7 @@ class _BarangTemuDetailPageState extends State<BarangTemuDetailPage> {
     super.initState();
     AuthService.get().then((value) {
       setState(() {
-        authId = value;
+        authId = value.toString();
       });
       getBarangTemuDetail();
     });

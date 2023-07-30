@@ -54,7 +54,7 @@ class _BarangHilangPageState extends State<BarangHilangPage> {
 
     final auth = await AuthService.get();
     setState(() {
-      authId = auth;
+      authId = auth.toString();
     });
     return auth;
   }

@@ -54,7 +54,7 @@ class _BarangTemuPageState extends State<BarangTemuPage> {
 
     final auth = await AuthService.get();
     setState(() {
-      authId = auth;
+      authId = auth.toString();
     });
     return auth;
   }

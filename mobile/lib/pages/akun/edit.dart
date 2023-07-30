@@ -53,7 +53,7 @@ class _AkunEditPageState extends State<AkunEditPage> {
     username.text = res.username.toString();
 
     setState(() {
-      id = userId;
+      id = userId.toString();
       status = res.status.toString();
       role = res.status.toString();
       isLoading = false;

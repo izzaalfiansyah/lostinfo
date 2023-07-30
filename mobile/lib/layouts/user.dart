@@ -7,6 +7,7 @@ import 'package:mobile/pages/akun/index.dart';
 import 'package:mobile/pages/barang_hilang/index.dart';
 import 'package:mobile/pages/barang_temu/index.dart';
 import 'package:mobile/pages/beranda/index.dart';
+import 'package:mobile/pages/login/index.dart';
 import 'package:mobile/services/auth_service.dart';
 
 class UserLayout extends StatefulWidget {
@@ -39,10 +40,16 @@ class _UserLayoutState extends State<UserLayout> {
     setState(() {
       isLoading = true;
     });
-    await AuthService.set('5');
+
+    final id = await AuthService.get();
+
     setState(() {
       isLoading = false;
     });
+
+    if (id == null) {
+      Get.offAll(() => LoginPage());
+    }
   }
 
   @override
