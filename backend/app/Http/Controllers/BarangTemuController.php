@@ -100,6 +100,8 @@ class BarangTemuController extends Controller
             });
         }
 
+        $builder = $builder->orderBy('created_at', 'desc');
+
         $items = $builder->paginate($req->limit ?: 10);
 
         return BarangTemuResource::collection($items);
