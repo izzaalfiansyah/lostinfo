@@ -6,11 +6,11 @@ import 'package:mobile/components/card.dart';
 import 'package:mobile/components/form_group.dart';
 import 'package:mobile/components/skeleton.dart';
 import 'package:mobile/layouts/user.dart';
-import 'package:mobile/libs/constant.dart';
 import 'package:mobile/libs/format_date.dart';
 import 'package:mobile/libs/notif.dart';
 import 'package:mobile/models/barang_hilang.dart';
 import 'package:mobile/pages/akun/index.dart';
+import 'package:mobile/pages/barang_hilang/detail.dart';
 import 'package:mobile/services/auth_service.dart';
 import 'package:mobile/services/barang_hilang_service.dart';
 
@@ -34,7 +34,9 @@ class _BarangHilangPageState extends State<BarangHilangPage> {
   @override
   void initState() {
     super.initState();
-    getBarangHilang();
+    getUser().then((value) {
+      getBarangHilang();
+    });
   }
 
   Future getUser() async {
@@ -197,15 +199,16 @@ class _BarangHilangPageState extends State<BarangHilangPage> {
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
           FloatingActionButton(
-            backgroundColor: Colors.white,
+            heroTag: 'btn1',
+            backgroundColor: Colors.red,
             onPressed: showFilterModal,
             child: Icon(
               Icons.filter_alt,
-              color: colorPrimary,
             ),
           ),
           SizedBox(height: 10),
           FloatingActionButton(
+            heroTag: 'btn2',
             onPressed: () {},
             child: Icon(
               Icons.add,
@@ -257,7 +260,7 @@ class _BarangHilangPageState extends State<BarangHilangPage> {
                                     ));
                               },
                               child: Text(
-                                "@${item.user!.nama}",
+                                "@${item.user!.username}",
                                 style: TextStyle(
                                   color: Colors.blue,
                                   fontSize: 12,
@@ -275,7 +278,8 @@ class _BarangHilangPageState extends State<BarangHilangPage> {
                               children: [
                                 TextButton(
                                   onPressed: () {
-                                    //
+                                    Get.to(() =>
+                                        BarangHilangDetailPage(id: item.id));
                                   },
                                   style: TextButton.styleFrom(
                                     padding: EdgeInsets.zero,
@@ -283,12 +287,12 @@ class _BarangHilangPageState extends State<BarangHilangPage> {
                                         borderRadius:
                                             BorderRadius.circular(50)),
                                     minimumSize: Size(60, 24),
-                                    backgroundColor: Colors.green.shade100,
+                                    backgroundColor: Colors.blue,
                                   ),
                                   child: Text(
                                     'Detail',
                                     style: TextStyle(
-                                      color: Colors.green,
+                                      color: Colors.white,
                                       fontSize: 12,
                                     ),
                                   ),
@@ -302,11 +306,11 @@ class _BarangHilangPageState extends State<BarangHilangPage> {
                                               borderRadius:
                                                   BorderRadius.circular(50)),
                                           minimumSize: Size(30, 24),
-                                          backgroundColor: Colors.red.shade100,
+                                          backgroundColor: Colors.red,
                                         ),
                                         child: Icon(
                                           Icons.delete,
-                                          color: Colors.red,
+                                          color: Colors.white,
                                           size: 12,
                                         ),
                                       )

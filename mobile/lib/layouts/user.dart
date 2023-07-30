@@ -1,9 +1,12 @@
-// ignore_for_file: prefer_const_constructors
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mobile/libs/constant.dart';
 import 'package:mobile/pages/akun/index.dart';
+import 'package:mobile/pages/barang_hilang/index.dart';
+import 'package:mobile/pages/barang_temu/index.dart';
+import 'package:mobile/pages/beranda/index.dart';
 import 'package:mobile/services/auth_service.dart';
 
 class UserLayout extends StatefulWidget {
@@ -61,7 +64,122 @@ class _UserLayoutState extends State<UserLayout> {
           )
         ],
       ),
-      drawer: Drawer(),
+      drawer: Drawer(
+        child: Column(
+          children: [
+            Container(
+              width: double.infinity,
+              height: 180,
+              color: colorPrimary,
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      mainAxisSize: MainAxisSize.max,
+                      children: [
+                        Image.network(
+                          'https://polije.ac.id/wp-content/uploads/elementor/thumbs/LOGO-POLITEKNIK-NEGERI-JEMBER-200x200-p501e8qsx93hro564g7wmlj5f1d6bn1idluqt46f2o.png',
+                          height: 80,
+                          width: 80,
+                        ),
+                        SizedBox(
+                          width: 10,
+                        ),
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Lost Info',
+                              style: TextStyle(
+                                  fontSize: 22,
+                                  fontWeight: FontWeight.w600,
+                                  color: Colors.white),
+                            ),
+                            Text(
+                              'Platform Informasi \nBarang Hilang',
+                              style: TextStyle(
+                                fontSize: 13,
+                                color: Colors.white,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            Expanded(
+                child: ListView(
+              padding: EdgeInsets.only(top: 10),
+              children: [
+                ListTile(
+                  dense: true,
+                  leading: Icon(Icons.home),
+                  title: Text(
+                    'Beranda',
+                    style: TextStyle(fontSize: 17),
+                  ),
+                  onTap: () {
+                    Get.to(() => BerandaPage());
+                  },
+                ),
+                ListTile(
+                  dense: true,
+                  leading: Icon(Icons.do_not_disturb_alt),
+                  title: Text(
+                    'Barang Hilang',
+                    style: TextStyle(fontSize: 17),
+                  ),
+                  onTap: () {
+                    Get.to(() => BarangHilangPage());
+                  },
+                ),
+                ListTile(
+                  dense: true,
+                  leading: Icon(Icons.archive_outlined),
+                  title: Text(
+                    'Barang Temuan',
+                    style: TextStyle(fontSize: 17),
+                  ),
+                  onTap: () {
+                    Get.to(() => BarangTemuPage());
+                  },
+                ),
+                ListTile(
+                  dense: true,
+                  leading: Icon(Icons.person_outline),
+                  title: Text(
+                    'Pengaturan Akun',
+                    style: TextStyle(fontSize: 17),
+                  ),
+                  onTap: () {
+                    Get.to(() => AkunPage());
+                  },
+                ),
+                ListTile(
+                  dense: true,
+                  leading: Icon(Icons.logout),
+                  title: Text(
+                    'Keluar',
+                    style: TextStyle(fontSize: 17),
+                  ),
+                  onTap: () {
+                    // Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => LoginPage(),));
+                  },
+                ),
+              ],
+            ))
+          ],
+        ),
+      ),
       body: widget.child,
       bottomNavigationBar: widget.bottomNavBar,
       floatingActionButton: widget.floatingActionButton,

@@ -11,6 +11,7 @@ import 'package:mobile/libs/format_date.dart';
 import 'package:mobile/libs/notif.dart';
 import 'package:mobile/models/barang_temu.dart';
 import 'package:mobile/pages/akun/index.dart';
+import 'package:mobile/pages/barang_temu/detail.dart';
 import 'package:mobile/services/auth_service.dart';
 import 'package:mobile/services/barang_temu_service.dart';
 
@@ -159,6 +160,7 @@ class _BarangTemuPageState extends State<BarangTemuPage> {
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
           FloatingActionButton(
+            heroTag: 'btn1',
             backgroundColor: Colors.white,
             onPressed: showFilterModal,
             child: Icon(
@@ -168,6 +170,7 @@ class _BarangTemuPageState extends State<BarangTemuPage> {
           ),
           SizedBox(height: 10),
           FloatingActionButton(
+            heroTag: 'btn2',
             onPressed: () {},
             child: Icon(
               Icons.add,
@@ -229,7 +232,7 @@ class _BarangTemuPageState extends State<BarangTemuPage> {
                                       ),
                                     ),
                                     TextSpan(
-                                      text: "@${item.user!.nama}",
+                                      text: "@${item.user!.username}",
                                       style: TextStyle(
                                         color: Colors.blue,
                                       ),
@@ -249,7 +252,8 @@ class _BarangTemuPageState extends State<BarangTemuPage> {
                               children: [
                                 TextButton(
                                   onPressed: () {
-                                    //
+                                    Get.to(() =>
+                                        BarangTemuDetailPage(id: item.id));
                                   },
                                   style: TextButton.styleFrom(
                                     padding: EdgeInsets.zero,
@@ -257,12 +261,12 @@ class _BarangTemuPageState extends State<BarangTemuPage> {
                                         borderRadius:
                                             BorderRadius.circular(50)),
                                     minimumSize: Size(60, 24),
-                                    backgroundColor: Colors.green.shade100,
+                                    backgroundColor: Colors.blue,
                                   ),
                                   child: Text(
                                     'Detail',
                                     style: TextStyle(
-                                      color: Colors.green,
+                                      color: Colors.white,
                                       fontSize: 12,
                                     ),
                                   ),
@@ -276,11 +280,11 @@ class _BarangTemuPageState extends State<BarangTemuPage> {
                                               borderRadius:
                                                   BorderRadius.circular(50)),
                                           minimumSize: Size(30, 24),
-                                          backgroundColor: Colors.red.shade100,
+                                          backgroundColor: Colors.red,
                                         ),
                                         child: Icon(
                                           Icons.delete,
-                                          color: Colors.red,
+                                          color: Colors.white,
                                           size: 12,
                                         ),
                                       )

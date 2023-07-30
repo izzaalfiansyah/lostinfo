@@ -12,19 +12,22 @@ import 'package:mobile/models/barang_hilang.dart';
 import 'package:mobile/models/barang_temu.dart';
 
 class MapsComponent extends StatefulWidget {
-  const MapsComponent(
-      {super.key,
-      this.onChange,
-      this.onLocationFound,
-      this.barangHilang,
-      this.barangTemu,
-      this.alamat});
+  const MapsComponent({
+    super.key,
+    this.onChange,
+    this.onLocationFound,
+    this.barangHilang,
+    this.barangTemu,
+    this.alamat,
+    this.initialValue,
+  });
 
   final Function(LatLng)? onChange;
   final Function(LatLng)? onLocationFound;
   final String? alamat;
   final List<BarangHilang>? barangHilang;
   final List<BarangTemu>? barangTemu;
+  final LatLng? initialValue;
 
   @override
   State<MapsComponent> createState() => _MapsComponentState();
@@ -43,6 +46,22 @@ class _MapsComponentState extends State<MapsComponent> {
     _determinePosition();
     if (widget.alamat != null) {
       getKordinatByAlamat();
+    }
+    if (widget.initialValue != null) {
+      setState(() {
+        isLoading = true;
+      });
+
+      final latlng =
+          LatLng(widget.initialValue!.latitude, widget.initialValue!.longitude);
+
+      setState(() {
+        center = latlng;
+        markers.add({
+          'point': latlng,
+        });
+        isLoading = false;
+      });
     }
   }
 
