@@ -29,18 +29,18 @@ class _LoginPageState extends State<LoginPage> {
     try {
       final res =
           await AuthService.login(username: username, password: password);
-      // if (res.role.toString() == '2') {
-      AuthService.set(id: res.id.toString(), status: res.status.toString());
-      if (res.status.toString() == '1') {
-        notif('berhasil login', success: true);
-        Get.to(() => BerandaPage());
-      } else if (res.status.toString() == '9') {
-        notif('Upss.. akun anda ter-banned, Silahkan hubungi admin',
-            success: false);
-      } else {
-        Get.to(() => VerifikasiPage());
+      if (res.role.toString() == '2') {
+        AuthService.set(id: res.id.toString(), status: res.status.toString());
+        if (res.status.toString() == '1') {
+          notif('berhasil login', success: true);
+          Get.to(() => BerandaPage());
+        } else if (res.status.toString() == '9') {
+          notif('Upss.. akun anda ter-banned, Silahkan hubungi admin',
+              success: false);
+        } else {
+          Get.to(() => VerifikasiPage());
+        }
       }
-      // }
     } on DioException catch (e) {
       notif(e.response!.data['message'], success: false);
     } catch (e) {
@@ -57,7 +57,7 @@ class _LoginPageState extends State<LoginPage> {
         backgroundColor: Colors.blue[500],
         body: SingleChildScrollView(
           child: Container(
-            // height: Get.height,
+            height: Get.height,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [

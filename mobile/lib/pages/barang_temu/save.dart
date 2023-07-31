@@ -13,6 +13,8 @@ import 'package:mobile/libs/format_date.dart';
 import 'package:mobile/libs/notif.dart';
 import 'package:mobile/models/barang_temu.dart';
 import 'package:mobile/pages/barang_temu/detail.dart';
+import 'package:mobile/pages/barang_temu/index.dart';
+import 'package:mobile/pages/beranda/index.dart';
 import 'package:mobile/services/auth_service.dart';
 import 'package:mobile/services/barang_temu_service.dart';
 
@@ -75,7 +77,9 @@ class _BarangTemuSavePageState extends State<BarangTemuSavePage> {
         final b = await BarangTemuService.create(params: barang);
         barangId = b.id;
       }
-      Get.off(() => BarangTemuDetailPage(id: barangId));
+      Get.offAll(() => BerandaPage());
+      Get.to(() => BarangTemuPage());
+      Get.to(() => BarangTemuDetailPage(id: barangId));
     } on DioException catch (e) {
       notif(e.response!.data['message'], success: false);
     } catch (e) {

@@ -66,7 +66,7 @@ class _BarangTemuDetailPageState extends State<BarangTemuDetailPage> {
 
   Future getBarangHilangSerupa() async {
     final res = await BarangHilangService.get(
-        filter: {'barang_hilang_id': barang.id.toString()});
+        filter: {'barang_temu_id': barang.id.toString()});
     setState(() {
       barangHilang = res;
     });
@@ -185,7 +185,7 @@ class _BarangTemuDetailPageState extends State<BarangTemuDetailPage> {
                             ),
                             Row(
                               children: [
-                                Expanded(child: Text('Tanggal Hilang')),
+                                Expanded(child: Text('Tanggal Temu')),
                                 Text(':'),
                                 SizedBox(
                                   width: 10,
@@ -210,7 +210,7 @@ class _BarangTemuDetailPageState extends State<BarangTemuDetailPage> {
                       ),
                       barang.user_id.toString() == authId
                           ? CardComponent(
-                              title: 'Barang Temuan yang Serupa',
+                              title: 'Barang Hilang yang Serupa',
                               child: barangHilang.isNotEmpty
                                   ? GridView(
                                       gridDelegate:

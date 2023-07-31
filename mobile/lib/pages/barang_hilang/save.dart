@@ -13,6 +13,8 @@ import 'package:mobile/libs/format_date.dart';
 import 'package:mobile/libs/notif.dart';
 import 'package:mobile/models/barang_hilang.dart';
 import 'package:mobile/pages/barang_hilang/detail.dart';
+import 'package:mobile/pages/barang_hilang/index.dart';
+import 'package:mobile/pages/beranda/index.dart';
 import 'package:mobile/services/auth_service.dart';
 import 'package:mobile/services/barang_hilang_service.dart';
 
@@ -76,6 +78,8 @@ class _BarangHilangSavePageState extends State<BarangHilangSavePage> {
         final b = await BarangHilangService.create(params: barang);
         barangId = b.id;
       }
+      Get.offAll(() => BerandaPage());
+      Get.to(() => BarangHilangPage());
       Get.off(() => BarangHilangDetailPage(id: barangId));
       notif('data barang hilang berhasil disimpan');
     } on DioException catch (e) {

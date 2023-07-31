@@ -3,7 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mobile/libs/constant.dart';
-import 'package:mobile/pages/login/index.dart';
+import 'package:mobile/pages/beranda/index.dart';
 
 void main() {
   runApp(const MyApp());
@@ -54,7 +54,7 @@ class _MyAppState extends State<MyApp> {
           ),
         ),
       ),
-      home: LoginPage(),
+      home: BerandaPage(),
     );
   }
 }
