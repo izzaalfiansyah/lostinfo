@@ -13,6 +13,7 @@ import 'package:mobile/libs/go_url.dart';
 import 'package:mobile/models/barang_hilang.dart';
 import 'package:mobile/models/barang_temu.dart';
 import 'package:mobile/pages/akun/index.dart';
+import 'package:mobile/pages/barang_hilang/detail.dart';
 import 'package:mobile/pages/barang_temu/save.dart';
 import 'package:mobile/services/auth_service.dart';
 import 'package:mobile/services/barang_hilang_service.dart';
@@ -78,7 +79,7 @@ class _BarangTemuDetailPageState extends State<BarangTemuDetailPage> {
       appBar: AppBar(
         backgroundColor: colorPrimary,
         title: Text(
-            'Detail Barang ${barang.user_id.toString() == authId ? 'Saya' : ''}'),
+            'Detail Barang Temu ${barang.user_id.toString() == authId ? 'Saya' : ''}'),
       ),
       body: !isLoading
           ? Stack(
@@ -227,8 +228,9 @@ class _BarangTemuDetailPageState extends State<BarangTemuDetailPage> {
                                         return Card(
                                           child: InkWell(
                                             onTap: () {
-                                              Get.to(() => BarangTemuDetailPage(
-                                                  id: item.id));
+                                              Get.to(() =>
+                                                  BarangHilangDetailPage(
+                                                      id: item.id));
                                             },
                                             child: Column(
                                               children: [

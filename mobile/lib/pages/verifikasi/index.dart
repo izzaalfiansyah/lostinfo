@@ -3,7 +3,9 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mobile/libs/notif.dart';
+import 'package:mobile/pages/beranda/index.dart';
 import 'package:mobile/services/auth_service.dart';
+import 'package:mobile/services/user_service.dart';
 
 class VerifikasiPage extends StatefulWidget {
   const VerifikasiPage({super.key});
@@ -19,7 +21,9 @@ class _VerifikasiPageState extends State<VerifikasiPage> {
   @override
   initState() {
     super.initState();
-    getAuth();
+    getAuth().then((value) {
+      getUser();
+    });
   }
 
   Future getAuth() async {
@@ -31,6 +35,30 @@ class _VerifikasiPageState extends State<VerifikasiPage> {
 
     setState(() {
       userId = id.toString();
+      isLoading = false;
+    });
+  }
+
+  Future getUser() async {
+    setState(() {
+      isLoading = true;
+    });
+    try {
+      final res = await UserService.find(id: userId);
+      AuthService.set(id: res.id.toString(), status: res.status.toString());
+      if (res.status.toString() == '1') {
+        notif('akun telah terverifikasi, Mengalihkan', success: true);
+        Get.to(() => BerandaPage());
+      } else if (res.status.toString() == '9') {
+        notif('Upss.. akun anda ter-banned, Silahkan hubungi admin',
+            success: false);
+      }
+    } on DioException catch (e) {
+      notif(e.response!.data['message'], success: false);
+    } catch (e) {
+      notif(e.toString(), success: false);
+    }
+    setState(() {
       isLoading = false;
     });
   }
@@ -119,6 +147,25 @@ class _VerifikasiPageState extends State<VerifikasiPage> {
                       Text(
                           'Kami telah mengirimkan link verifikasi akun. Periksa email anda! Klik tombol di bawah untuk kirim ulang verifikasi apabila tidak ada email terbaru dari kami.'),
                       SizedBox(height: 20),
+                      ElevatedButton(
+                          onPressed: isLoading ? null : getUser,
+                          style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.white,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(30),
+                              )),
+                          child: Container(
+                            alignment: Alignment.center,
+                            width: double.infinity,
+                            height: 50,
+                            child: Text(isLoading ? 'Memuat...' : 'Refresh',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: 20,
+                                  color: Colors.black,
+                                )),
+                          )),
+                      SizedBox(height: 10),
                       ElevatedButton(
                           onPressed: isLoading ? null : sendVerification,
                           style: ElevatedButton.styleFrom(

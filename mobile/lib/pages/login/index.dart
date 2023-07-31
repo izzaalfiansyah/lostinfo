@@ -22,6 +22,33 @@ class _LoginPageState extends State<LoginPage> {
   bool showPassword = false;
   bool isLoading = false;
 
+  @override
+  void initState() {
+    super.initState();
+    getAuthUser();
+  }
+
+  getAuthUser() async {
+    setState(() {
+      isLoading = true;
+    });
+
+    final id = await AuthService.get();
+
+    setState(() {
+      isLoading = false;
+    });
+
+    if (id != null) {
+      final status = await AuthService.getStatus();
+      if (status == '0') {
+        Get.offAll(() => VerifikasiPage());
+      } else {
+        Get.offAll(() => BerandaPage());
+      }
+    }
+  }
+
   login() async {
     setState(() {
       isLoading = true;
@@ -29,18 +56,18 @@ class _LoginPageState extends State<LoginPage> {
     try {
       final res =
           await AuthService.login(username: username, password: password);
-      if (res.role.toString() == '2') {
-        AuthService.set(id: res.id.toString(), status: res.status.toString());
-        if (res.status.toString() == '1') {
-          notif('berhasil login', success: true);
-          Get.to(() => BerandaPage());
-        } else if (res.status.toString() == '9') {
-          notif('Upss.. akun anda ter-banned, Silahkan hubungi admin',
-              success: false);
-        } else {
-          Get.to(() => VerifikasiPage());
-        }
+      // if (res.role.toString() == '2') {
+      AuthService.set(id: res.id.toString(), status: res.status.toString());
+      if (res.status.toString() == '1') {
+        notif('berhasil login', success: true);
+        Get.to(() => BerandaPage());
+      } else if (res.status.toString() == '9') {
+        notif('Upss.. akun anda ter-banned, Silahkan hubungi admin',
+            success: false);
+      } else {
+        Get.to(() => VerifikasiPage());
       }
+      // }
     } on DioException catch (e) {
       notif(e.response!.data['message'], success: false);
     } catch (e) {
