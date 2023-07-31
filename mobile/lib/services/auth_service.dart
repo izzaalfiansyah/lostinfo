@@ -42,8 +42,8 @@ class AuthService {
     final fileId = File("$path/authid.txt");
     final fileStatus = File("$path/authstatus.txt");
 
-    fileId.writeAsString(id);
-    fileStatus.writeAsString(status);
+    await fileId.writeAsString(id);
+    await fileStatus.writeAsString(status);
   }
 
   static Future<String?> get() async {

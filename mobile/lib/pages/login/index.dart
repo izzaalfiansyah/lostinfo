@@ -56,8 +56,10 @@ class _LoginPageState extends State<LoginPage> {
     try {
       final res =
           await AuthService.login(username: username, password: password);
+      print(res);
       // if (res.role.toString() == '2') {
-      AuthService.set(id: res.id.toString(), status: res.status.toString());
+      await AuthService.set(
+          id: res.id.toString(), status: res.status.toString());
       if (res.status.toString() == '1') {
         notif('berhasil login', success: true);
         Get.to(() => BerandaPage());
