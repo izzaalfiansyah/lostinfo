@@ -1,19 +1,20 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:mobile/components/card.dart';
-import 'package:mobile/components/img.dart';
 import 'package:mobile/components/maps.dart';
 import 'package:mobile/components/skeleton.dart';
-import 'package:mobile/libs/constant.dart';
 import 'package:mobile/libs/format_date.dart';
 import 'package:mobile/libs/format_money.dart';
 import 'package:mobile/libs/go_url.dart';
+import 'package:mobile/libs/notif.dart';
 import 'package:mobile/models/barang_hilang.dart';
 import 'package:mobile/models/barang_temu.dart';
 import 'package:mobile/pages/akun/index.dart';
+import 'package:mobile/pages/barang_hilang/index.dart';
 import 'package:mobile/pages/barang_hilang/save.dart';
 import 'package:mobile/pages/barang_temu/detail.dart';
 import 'package:mobile/services/auth_service.dart';
@@ -74,192 +75,264 @@ class _BarangHilangDetailPageState extends State<BarangHilangDetailPage> {
     });
   }
 
+  handleDelete() {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text('Hapus Barang'),
+          content: Text('Anda yakin untuk menghapus ${barang.nama}?'),
+          actions: [
+            TextButton(
+                onPressed: () async {
+                  Get.back();
+                },
+                child: Text('Batal')),
+            TextButton(
+                onPressed: () async {
+                  try {
+                    await BarangHilangService.destroy(id: barang.id);
+                    Get.back();
+                    Get.off(BarangHilangPage());
+                    notif('barang berhasil dihapus');
+                  } on DioException catch (e) {
+                    notif(e.response!.data['message'], success: false);
+                  } catch (e) {
+                    notif(e.toString(), success: false);
+                  }
+                },
+                child: Text('Hapus')),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.grey.shade100,
       appBar: AppBar(
-        backgroundColor: colorPrimary,
+        centerTitle: true,
         title: Text(
-            'Detail Barang Hilang ${barang.user_id.toString() == authId ? 'Saya' : ''}'),
+          isLoading ? 'Memuat...' : barang.nama.toString(),
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
       ),
       body: !isLoading
-          ? Stack(
-              fit: StackFit.expand,
-              children: [
-                SingleChildScrollView(
-                  padding: EdgeInsets.all(10),
-                  scrollDirection: Axis.vertical,
-                  child: Column(
-                    children: [
-                      CardComponent(
-                        child: Column(
+          ? SingleChildScrollView(
+              child: Column(
+                children: [
+                  GestureDetector(
+                    child: Image.network(
+                      barang.foto_url.toString(),
+                      width: Get.width,
+                      height: Get.width,
+                      fit: BoxFit.cover,
+                    ),
+                    onTap: () {
+                      Get.bottomSheet(
+                        Container(
+                          padding: EdgeInsets.all(20),
+                          width: double.infinity,
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Image.network(
+                                barang.foto_url.toString(),
+                                height: 200,
+                              ),
+                              SizedBox(height: 20),
+                              ElevatedButton(
+                                onPressed: () => Get.back(),
+                                child: Center(child: Text('Tutup')),
+                              )
+                            ],
+                          ),
+                        ),
+                        backgroundColor: Colors.white,
+                      );
+                    },
+                  ),
+                  SizedBox(height: 10),
+                  Container(
+                    width: double.infinity,
+                    padding: EdgeInsets.all(20),
+                    color: Colors.white,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
                           children: [
-                            Row(
-                              children: [
-                                Expanded(child: Text('Nama Barang')),
-                                Text(':'),
-                                SizedBox(
-                                  width: 10,
-                                ),
-                                Expanded(child: Text(barang.nama.toString()))
-                              ],
+                            GestureDetector(
+                              onTap: () {
+                                Get.to(() => AkunPage(
+                                    userId: barang.user_id.toString()));
+                              },
+                              child: CircleAvatar(
+                                backgroundImage: NetworkImage(
+                                    barang.user!.foto_url.toString()),
+                              ),
                             ),
-                            SizedBox(height: 10),
-                            Row(
-                              children: [
-                                Expanded(child: Text('Nama Pemilik')),
-                                Text(':'),
-                                SizedBox(
-                                  width: 10,
-                                ),
-                                Expanded(
-                                  child: GestureDetector(
+                            SizedBox(width: 10),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    barang.nama.toString(),
+                                    style: TextStyle(
+                                        fontSize: 22,
+                                        fontWeight: FontWeight.bold,
+                                        overflow: TextOverflow.ellipsis),
+                                  ),
+                                  GestureDetector(
                                     child: Text(
-                                      '@${barang.user!.username}',
+                                      barang.user!.nama.toString(),
                                       style: TextStyle(
-                                          color: Colors.blue,
-                                          fontWeight: FontWeight.bold),
+                                        color: Colors.blue,
+                                      ),
                                     ),
                                     onTap: () {
                                       Get.to(() => AkunPage(
                                           userId: barang.user_id.toString()));
                                     },
                                   ),
-                                )
-                              ],
+                                ],
+                              ),
                             ),
-                            SizedBox(height: 10),
-                            Row(
-                              children: [
-                                Expanded(
-                                  child: Text('Foto Pendukung'),
-                                ),
-                                Text(':'),
-                                SizedBox(
-                                  width: 10,
-                                ),
-                                Expanded(
-                                  child: Img(
-                                      src: barang.foto_url.toString(),
-                                      width: 100,
-                                      height: 100),
-                                )
-                              ],
-                            ),
-                            SizedBox(
-                              height: 10,
-                            ),
-                            Row(
-                              children: [
-                                Expanded(child: Text('Hadiah')),
-                                Text(':'),
-                                SizedBox(
-                                  width: 10,
-                                ),
-                                Expanded(
-                                    child: Text(formatMoney(barang.hadiah)))
-                              ],
-                            ),
-                            SizedBox(
-                              height: 10,
-                            ),
-                            Row(
-                              children: [
-                                Expanded(child: Text('Status')),
-                                Text(':'),
-                                SizedBox(
-                                  width: 10,
-                                ),
-                                Expanded(
-                                  child: Text(
-                                    "${barang.ditemukan_detail} ditemukan",
-                                    style: TextStyle(
-                                      color: barang.ditemukan == '1'
-                                          ? Colors.green
-                                          : Colors.red,
+                            barang.user_id.toString() == authId
+                                ? GestureDetector(
+                                    onTap: handleDelete,
+                                    child: Icon(
+                                      Icons.delete,
+                                      color: Colors.red,
                                     ),
-                                  ),
-                                )
-                              ],
-                            ),
-                            SizedBox(
-                              height: 10,
-                            ),
-                            Row(
-                              children: [
-                                Expanded(child: Text('Tempat Hilang')),
-                                Text(':'),
-                                SizedBox(
-                                  width: 10,
-                                ),
-                                Expanded(
-                                  child: Text(
-                                    barang.tempat_hilang.toString(),
-                                  ),
-                                )
-                              ],
-                            ),
-                            Row(
-                              children: [
-                                Expanded(child: Text('Tanggal Hilang')),
-                                Text(':'),
-                                SizedBox(
-                                  width: 10,
-                                ),
-                                Expanded(
-                                  child: Text(
-                                    formatDate(
-                                      barang.created_at.toString(),
-                                    ),
-                                  ),
-                                )
-                              ],
-                            ),
+                                  )
+                                : SizedBox(),
                           ],
                         ),
-                      ),
-                      CardComponent(
-                        title: 'Deskripsi Barang',
-                        child: Text(
-                          barang.deskripsi.toString(),
+                        SizedBox(
+                          height: 20,
                         ),
-                      ),
-                      barang.user_id.toString() == authId
-                          ? CardComponent(
-                              title: 'Barang Temuan yang Serupa',
-                              child: barangTemu.isNotEmpty
-                                  ? GridView(
-                                      gridDelegate:
-                                          SliverGridDelegateWithFixedCrossAxisCount(
-                                        crossAxisCount: 2,
-                                        mainAxisSpacing: 5,
-                                        crossAxisSpacing: 5,
-                                      ),
-                                      shrinkWrap: true,
-                                      physics: NeverScrollableScrollPhysics(),
+                        Container(
+                          decoration: BoxDecoration(
+                              color: barang.ditemukan.toString() == '1'
+                                  ? Colors.green
+                                  : Colors.red,
+                              borderRadius: BorderRadius.circular(50)),
+                          padding: EdgeInsets.symmetric(horizontal: 10),
+                          child: Text(
+                            '${barang.ditemukan_detail} ditemukan',
+                            style: TextStyle(
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                        SizedBox(height: 10),
+                        Divider(color: Colors.grey.shade100),
+                        SizedBox(height: 10),
+                        Text(
+                            'Hilang di ${barang.tempat_hilang} pada ${formatDate(barang.created_at.toString())}'),
+                        SizedBox(height: 10),
+                        Divider(color: Colors.grey.shade100),
+                        SizedBox(height: 10),
+                        Text(
+                          'Deskripsi',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 15,
+                          ),
+                        ),
+                        SizedBox(height: 10),
+                        Text(barang.deskripsi.toString()),
+                        SizedBox(height: 20),
+                        Divider(color: Colors.grey.shade100),
+                        SizedBox(height: 10),
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              'Reward',
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 15,
+                              ),
+                            ),
+                            Text(
+                              formatMoney(barang.hadiah),
+                              style: TextStyle(
+                                  color: Colors.blue,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 15),
+                            ),
+                          ],
+                        )
+                      ],
+                    ),
+                  ),
+                  SizedBox(height: 10),
+                  barang.user_id.toString() == authId
+                      ? Container(
+                          padding: EdgeInsets.all(20),
+                          color: Colors.white,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Barang Temuan Serupa',
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold, fontSize: 17),
+                              ),
+                              SizedBox(height: 20),
+                              barangTemu.isNotEmpty
+                                  ? Column(
                                       children: List.generate(barangTemu.length,
                                           (index) {
                                         final item = barangTemu[index];
-                                        return Card(
-                                          child: InkWell(
-                                            onTap: () {
-                                              Get.to(() => BarangTemuDetailPage(
-                                                  id: item.id));
-                                            },
+                                        return InkWell(
+                                          onTap: () {
+                                            Get.to(BarangTemuDetailPage(
+                                                id: item.id));
+                                          },
+                                          child: Container(
+                                            color: Colors.white,
                                             child: Column(
                                               children: [
-                                                SizedBox(height: 4),
+                                                ListTile(
+                                                  leading: GestureDetector(
+                                                    onTap: () {
+                                                      Get.to(() => AkunPage(
+                                                          userId: barang.user_id
+                                                              .toString()));
+                                                    },
+                                                    child: CircleAvatar(
+                                                      backgroundImage:
+                                                          NetworkImage(barang
+                                                              .user!.foto_url
+                                                              .toString()),
+                                                    ),
+                                                  ),
+                                                  title: Text(
+                                                      item.nama.toString()),
+                                                  subtitle: GestureDetector(
+                                                    child: Text(
+                                                        '@${item.user!.username.toString()}'),
+                                                    onTap: () {
+                                                      Get.to(() => AkunPage(
+                                                            userId: item.user_id
+                                                                .toString(),
+                                                          ));
+                                                    },
+                                                  ),
+                                                ),
                                                 Image.network(
-                                                  item.foto_url.toString(),
-                                                  height: 100,
-                                                  width: 100,
-                                                  fit: BoxFit.cover,
-                                                ),
-                                                Text(
-                                                  item.nama.toString(),
-                                                  overflow:
-                                                      TextOverflow.ellipsis,
-                                                ),
+                                                    item.foto_url.toString(),
+                                                    width: double.infinity),
+                                                Divider(
+                                                  color: Colors.grey.shade100,
+                                                )
                                               ],
                                             ),
                                           ),
@@ -270,40 +343,42 @@ class _BarangHilangDetailPageState extends State<BarangHilangDetailPage> {
                                       child: Text(
                                           'barang temuan serupa tidak tersedia'),
                                     ),
-                            )
-                          : SizedBox(),
-                      CardComponent(
-                        title: 'Tempat Hilang',
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            MapsComponent(
-                              initialValue: barang.maps_lat != null
-                                  ? LatLng(barang.maps_lat!.toDouble(),
-                                      barang.maps_lng!.toDouble())
-                                  : null,
-                            ),
-                            SizedBox(height: 20),
-                            Row(
-                              crossAxisAlignment: CrossAxisAlignment.end,
-                              children: [
-                                ElevatedButton(
-                                  onPressed: () {
-                                    goUrl(barang.maps_lat != null
-                                        ? 'http://www.google.com/maps/dir/My+Location/${barang.maps_lat},${barang.maps_lng}'
-                                        : 'http://www.google.com/maps/dir/My+Location/${barang.tempat_hilang}');
-                                  },
-                                  child: Text('Pergi ke lokasi'),
-                                )
-                              ],
-                            )
-                          ],
+                            ],
+                          ))
+                      : Container(
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                          ),
+                          padding: EdgeInsets.all(20),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              MapsComponent(
+                                initialValue: barang.maps_lat != null
+                                    ? LatLng(barang.maps_lat!.toDouble(),
+                                        barang.maps_lng!.toDouble())
+                                    : null,
+                              ),
+                              SizedBox(height: 20),
+                              Row(
+                                crossAxisAlignment: CrossAxisAlignment.end,
+                                children: [
+                                  ElevatedButton(
+                                    onPressed: () {
+                                      goUrl(barang.maps_lat != null
+                                          ? 'http://www.google.com/maps/dir/My+Location/${barang.maps_lat},${barang.maps_lng}'
+                                          : 'http://www.google.com/maps/dir/My+Location/${barang.tempat_hilang}');
+                                    },
+                                    child: Center(child: Text('Bantu Mencari')),
+                                  )
+                                ],
+                              ),
+                            ],
+                          ),
                         ),
-                      )
-                    ],
-                  ),
-                ),
-              ],
+                  SizedBox(height: 10),
+                ],
+              ),
             )
           : SkeletonComponent(
               child: CardComponent(
@@ -319,7 +394,6 @@ class _BarangHilangDetailPageState extends State<BarangHilangDetailPage> {
               },
               child: Icon(
                 Icons.edit,
-                color: Colors.white,
               ),
             )
           : null,

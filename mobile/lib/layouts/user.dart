@@ -16,12 +16,14 @@ class UserLayout extends StatefulWidget {
       required this.child,
       required this.title,
       this.bottomNavBar,
-      this.floatingActionButton});
+      this.floatingActionButton,
+      this.backgroundColor});
 
   final Widget child;
   final String title;
   final Widget? bottomNavBar;
   final Widget? floatingActionButton;
+  final Color? backgroundColor;
 
   @override
   State<UserLayout> createState() => _UserLayoutState();
@@ -80,13 +82,13 @@ class _UserLayoutState extends State<UserLayout> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: widget.backgroundColor,
       appBar: AppBar(
-        backgroundColor: colorPrimary,
         // foregroundColor: Colors.white,
         title: Text(widget.title),
         actions: [
           TextButton(
-            style: TextButton.styleFrom(iconColor: Colors.white),
+            // style: TextButton.styleFrom(iconColor: Colors.white),
             onPressed: () {
               Get.to(() => AkunPage());
             },

@@ -51,10 +51,9 @@ class _BerandaPageState extends State<BerandaPage> {
       child: SingleChildScrollView(
         child: Column(
           children: [
-            CardComponent(
-              title: 'Barang Terdekat',
+            Card(
               child: MapsComponent(
-                height: Get.height / 1.5,
+                height: Get.height / 1.3,
                 barangHilang: barangHilang,
                 barangTemu: barangTemu,
                 onLocationFound: (val) async {

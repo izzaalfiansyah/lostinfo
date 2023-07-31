@@ -1,5 +1,4 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
-
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -8,7 +7,6 @@ import 'package:mobile/components/form_group.dart';
 import 'package:mobile/components/skeleton.dart';
 import 'package:mobile/layouts/user.dart';
 import 'package:mobile/libs/constant.dart';
-import 'package:mobile/libs/format_date.dart';
 import 'package:mobile/libs/notif.dart';
 import 'package:mobile/models/barang_hilang.dart';
 import 'package:mobile/pages/akun/index.dart';
@@ -173,41 +171,6 @@ class _BarangHilangPageState extends State<BarangHilangPage> {
     ));
   }
 
-  handleDelete(BarangHilang item) {
-    Get.bottomSheet(Container(
-      color: Colors.white,
-      padding: EdgeInsets.all(20),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text('Anda yakin untuk menghapus ${item.nama}?'),
-          SizedBox(height: 10),
-          ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.red,
-            ),
-            onPressed: () async {
-              try {
-                await BarangHilangService.destroy(id: item.id);
-                Get.back();
-                notif('barang berhasil dihapus');
-                getBarangHilang();
-              } on DioException catch (e) {
-                notif(e.response!.data['message'], success: false);
-              } catch (e) {
-                notif(e.toString(), success: false);
-              }
-            },
-            child: Center(
-              child: Text('Hapus'),
-            ),
-          ),
-        ],
-      ),
-    ));
-  }
-
   dataBarang() {
     return Column(
       children: [
@@ -218,129 +181,153 @@ class _BarangHilangPageState extends State<BarangHilangPage> {
                 ),
               )
             : SizedBox(),
-        Column(
-          mainAxisSize: MainAxisSize.min,
+        GridView.count(
+          padding: EdgeInsets.all(5),
+          crossAxisCount: 2,
+          shrinkWrap: true,
+          physics: NeverScrollableScrollPhysics(),
+          mainAxisSpacing: 5,
+          crossAxisSpacing: 5,
+          childAspectRatio: (Get.width / (520)),
           children: List.generate(barangHilang.length, (index) {
             final item = barangHilang[index];
 
-            return CardComponent(
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Image.network(
-                    item.foto_url.toString(),
-                    width: 90,
-                    height: 90,
-                    fit: BoxFit.cover,
-                  ),
-                  SizedBox(width: 20),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          item.nama.toString(),
-                          style: TextStyle(
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                        GestureDetector(
-                          onTap: () {
-                            Get.to(() => AkunPage(
-                                  userId: item.user_id.toString(),
-                                ));
-                          },
-                          child: Text(
-                            widget.userId != null
-                                ? "${item.ditemukan_detail} Ditemukan"
-                                : "@${item.user!.username}",
-                            style: TextStyle(
-                              color: Colors.blue,
-                              fontSize: 12,
-                            ),
-                          ),
-                        ),
-                        Text(
-                          'Hilang ${formatDate(item.created_at.toString(), short: true)}',
-                          style: TextStyle(
-                            color: Colors.grey,
-                            fontSize: 12,
-                          ),
-                        ),
-                        Row(
+            return Container(
+              decoration: BoxDecoration(
+                color: Colors.white,
+              ),
+              child: InkWell(
+                onTap: () {
+                  Get.to(() => BarangHilangDetailPage(id: item.id.toString()));
+                },
+                child: Column(
+                  children: [
+                    Image.network(
+                      item.foto_url.toString(),
+                      width: Get.width / 2 - 10,
+                      height: Get.width / 2 - 10,
+                      fit: BoxFit.cover,
+                    ),
+                    Expanded(
+                      child: Center(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-                            TextButton(
-                              onPressed: () {
-                                Get.to(
-                                    () => BarangHilangDetailPage(id: item.id));
+                            SizedBox(width: 10),
+                            GestureDetector(
+                              onTap: () {
+                                Get.to(() =>
+                                    AkunPage(userId: item.user_id.toString()));
                               },
-                              style: TextButton.styleFrom(
-                                padding: EdgeInsets.zero,
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(50)),
-                                minimumSize: Size(60, 24),
-                                backgroundColor: Colors.blue,
-                              ),
-                              child: Text(
-                                'Detail',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 12,
-                                ),
+                              child: CircleAvatar(
+                                backgroundImage: NetworkImage(
+                                    item.user!.foto_url.toString()),
                               ),
                             ),
-                            authId == item.user_id.toString()
-                                ? TextButton(
-                                    onPressed: () => handleDelete(item),
-                                    style: TextButton.styleFrom(
-                                      padding: EdgeInsets.zero,
-                                      shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(50)),
-                                      minimumSize: Size(30, 24),
-                                      backgroundColor: Colors.red,
+                            SizedBox(width: 10),
+                            Expanded(
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    item.nama.toString(),
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      overflow: TextOverflow.ellipsis,
+                                      fontSize: 15,
                                     ),
-                                    child: Icon(
-                                      Icons.delete,
-                                      color: Colors.white,
-                                      size: 12,
+                                  ),
+                                  Text(
+                                    '@${item.user!.username}',
+                                    style: TextStyle(
+                                      fontSize: 13,
+                                      color: Colors.grey,
                                     ),
                                   )
-                                : SizedBox(),
+                                ],
+                              ),
+                            ),
+                            SizedBox(width: 10),
                           ],
                         ),
-                      ],
-                    ),
-                  ),
-                ],
+                      ),
+                    )
+                  ],
+                ),
               ),
             );
           }).toList(),
         ),
         isLoading
-            ? Column(
-                mainAxisSize: MainAxisSize.min,
-                children: List.generate(5, (index) {
-                  return CardComponent(
-                    child: SkeletonComponent(
-                      child: Container(color: Colors.white, height: 90),
+            ? GridView.count(
+                padding: EdgeInsets.all(5),
+                crossAxisCount: 2,
+                shrinkWrap: true,
+                physics: NeverScrollableScrollPhysics(),
+                mainAxisSpacing: 5,
+                crossAxisSpacing: 5,
+                childAspectRatio: (Get.width / (520)),
+                children: List.generate(6, (index) {
+                  return Container(
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                    ),
+                    child: Column(
+                      children: [
+                        SkeletonComponent(
+                          child: Container(
+                            width: Get.width / 2 - 10,
+                            height: Get.width / 2 - 10,
+                            color: Colors.white,
+                          ),
+                        ),
+                        Expanded(
+                          child: Center(
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Expanded(
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      SkeletonComponent(
+                                          child: Container(height: 10)),
+                                      SizedBox(height: 3),
+                                      SkeletonComponent(
+                                          child: Container(height: 5)),
+                                    ],
+                                  ),
+                                ),
+                                SizedBox(width: 10),
+                              ],
+                            ),
+                          ),
+                        )
+                      ],
                     ),
                   );
-                }),
+                }).toList(),
               )
             : SizedBox(),
         // SizedBox(height: 10),
         barangHilang.isEmpty
             ? SizedBox()
-            : ElevatedButton(
-                onPressed: () {
-                  setState(() {
-                    filter['page'] = filter['page'] + 1;
-                    getBarangHilang();
-                  });
-                },
-                child: Text('Tampilkan Lainnya'),
+            : Container(
+                margin: EdgeInsets.symmetric(vertical: 10),
+                child: ElevatedButton(
+                  onPressed: () {
+                    setState(() {
+                      filter['page'] = filter['page'] + 1;
+                      getBarangHilang();
+                    });
+                  },
+                  child: Text('Tampilkan Lainnya'),
+                ),
               ),
       ],
     );
@@ -351,6 +338,7 @@ class _BarangHilangPageState extends State<BarangHilangPage> {
     return widget.userId != null
         ? dataBarang()
         : UserLayout(
+            backgroundColor: Colors.grey.shade100,
             title: 'Barang Hilang',
             floatingActionButton: Column(
               mainAxisAlignment: MainAxisAlignment.end,

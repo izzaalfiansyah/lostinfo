@@ -3,6 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mobile/libs/constant.dart';
+import 'package:mobile/pages/beranda/index.dart';
 import 'package:mobile/pages/login/index.dart';
 
 void main() {
@@ -24,9 +25,9 @@ class _MyAppState extends State<MyApp> {
       title: 'Flutter Demo',
       theme: ThemeData(
         textTheme: GoogleFonts.poppinsTextTheme(),
-        // useMaterial3: true,
-        // colorScheme: ColorScheme.fromSeed(seedColor: colorPrimary),
-        primarySwatch: Colors.blue,
+        useMaterial3: true,
+        colorScheme: ColorScheme.fromSeed(seedColor: colorPrimary),
+        // primarySwatch: Colors.blue,
         inputDecorationTheme: InputDecorationTheme(
           floatingLabelBehavior: FloatingLabelBehavior.always,
           isDense: true,
@@ -54,7 +55,7 @@ class _MyAppState extends State<MyApp> {
           ),
         ),
       ),
-      home: LoginPage(),
+      home: BerandaPage(),
     );
   }
 }

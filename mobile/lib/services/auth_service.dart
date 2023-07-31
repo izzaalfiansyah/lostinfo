@@ -47,6 +47,7 @@ class AuthService {
   }
 
   static Future<String?> get() async {
+    // return '5';
     final dir = await getApplicationDocumentsDirectory();
     final path = dir.path;
     try {
@@ -60,6 +61,7 @@ class AuthService {
   }
 
   static Future<String?> getStatus() async {
+    // return '1';
     final dir = await getApplicationDocumentsDirectory();
     final path = dir.path;
     try {

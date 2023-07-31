@@ -58,6 +58,7 @@ class _MapsComponentState extends State<MapsComponent> {
             widget.initialValue!.latitude, widget.initialValue!.longitude);
 
         setState(() {
+          center = latlng;
           markers.add({
             'point': latlng,
           });
@@ -70,9 +71,9 @@ class _MapsComponentState extends State<MapsComponent> {
     List<Location> locations =
         await locationFromAddress(widget.alamat.toString());
     final location = locations[0];
-    center = LatLng(location.latitude, location.longitude);
 
     setState(() {
+      center = LatLng(location.latitude, location.longitude);
       mapController.move(center, 15);
     });
   }
