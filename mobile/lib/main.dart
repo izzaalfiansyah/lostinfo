@@ -4,9 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mobile/libs/constant.dart';
 import 'package:mobile/pages/beranda/index.dart';
-import 'package:mobile/pages/login/index.dart';
+import 'package:midtrans_sdk/midtrans_sdk.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
   runApp(const MyApp());
 }
 
@@ -56,6 +57,45 @@ class _MyAppState extends State<MyApp> {
         ),
       ),
       home: BerandaPage(),
+    );
+  }
+}
+
+class TesMidtrans extends StatefulWidget {
+  const TesMidtrans({super.key});
+
+  @override
+  State<TesMidtrans> createState() => _TesMidtransState();
+}
+
+class _TesMidtransState extends State<TesMidtrans> {
+  dynamic config = MidtransConfig(
+    clientKey: "SB-Mid-client-R55gV11PW3-iDDAx",
+    merchantBaseUrl: "https://app.sandbox.midtrans.com/",
+    colorTheme: ColorTheme(
+      colorPrimary: Colors.blue,
+      colorPrimaryDark: Colors.blue,
+      colorSecondary: Colors.blue,
+    ),
+  );
+
+  dynamic bayar() async {
+    final midtrans = await MidtransSDK.init(
+      config: config,
+    );
+
+    midtrans.startPaymentUiFlow(token: '56b1fafe-e52a-4101-8aaa-b46202a313cd');
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Center(
+        child: ElevatedButton(
+          onPressed: bayar,
+          child: Text('TEST'),
+        ),
+      ),
     );
   }
 }

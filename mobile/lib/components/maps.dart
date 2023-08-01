@@ -63,6 +63,8 @@ class _MapsComponentState extends State<MapsComponent> {
             'point': latlng,
           });
         });
+
+        mapController.move(center, 15);
       }
     });
   }

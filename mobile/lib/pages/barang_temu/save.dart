@@ -2,6 +2,7 @@
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:geocoding/geocoding.dart';
 import 'package:get/get.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:mobile/components/card.dart';
@@ -28,6 +29,7 @@ class BarangTemuSavePage extends StatefulWidget {
 }
 
 class _BarangTemuSavePageState extends State<BarangTemuSavePage> {
+  final tempat_temu = TextEditingController();
   BarangTemu barang = BarangTemu();
   bool isLoading = true;
 
@@ -54,6 +56,7 @@ class _BarangTemuSavePageState extends State<BarangTemuSavePage> {
         barang = res;
         barang.foto = '';
       });
+      tempat_temu.text = barang.tempat_temu.toString();
     } catch (e) {
       Get.back();
     }
@@ -64,6 +67,9 @@ class _BarangTemuSavePageState extends State<BarangTemuSavePage> {
   }
 
   save() async {
+    setState(() {
+      isLoading = true;
+    });
     try {
       final authId = await AuthService.get();
       barang.user_id = authId;
@@ -80,11 +86,33 @@ class _BarangTemuSavePageState extends State<BarangTemuSavePage> {
       Get.offAll(() => BerandaPage());
       Get.to(() => BarangTemuPage());
       Get.to(() => BarangTemuDetailPage(id: barangId));
+      notif('data barang berhasil disimpan');
     } on DioException catch (e) {
       notif(e.response!.data['message'], success: false);
     } catch (e) {
       notif(e.toString(), success: false);
     }
+    setState(() {
+      isLoading = false;
+    });
+  }
+
+  sesuaikanAlamat() async {
+    setState(() {
+      isLoading = true;
+    });
+    final places = await placemarkFromCoordinates(
+        barang.maps_lat!.toDouble(), barang.maps_lng!.toDouble());
+    final place = places[0];
+
+    setState(() {
+      barang.tempat_temu =
+          "${place.subLocality}, ${place.locality}, ${place.subAdministrativeArea}";
+      tempat_temu.text = barang.tempat_temu.toString();
+      isLoading = false;
+    });
+
+    Get.back();
   }
 
   @override
@@ -92,6 +120,7 @@ class _BarangTemuSavePageState extends State<BarangTemuSavePage> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: colorPrimary,
+        foregroundColor: Colors.white,
         title: Text('${widget.id == null ? 'Tambah' : 'Edit'} Barang Temu'),
       ),
       body: SingleChildScrollView(
@@ -141,6 +170,7 @@ class _BarangTemuSavePageState extends State<BarangTemuSavePage> {
                         ),
                         SizedBox(height: 5),
                         TextFormField(
+                          enabled: !isLoading,
                           initialValue: barang.deskripsi,
                           onChanged: (val) {
                             setState(() {
@@ -165,7 +195,9 @@ class _BarangTemuSavePageState extends State<BarangTemuSavePage> {
                         ),
                         SizedBox(height: 5),
                         TextFormField(
-                          initialValue: barang.tempat_temu,
+                          enabled: !isLoading,
+                          maxLines: 3,
+                          controller: tempat_temu,
                           onChanged: (val) {
                             setState(() {
                               barang.tempat_temu = val;
@@ -189,18 +221,34 @@ class _BarangTemuSavePageState extends State<BarangTemuSavePage> {
                               SafeArea(
                                 child: Container(
                                   padding: EdgeInsets.all(20),
-                                  child: MapsComponent(
-                                    alamat: barang.tempat_temu,
-                                    initialValue: barang.maps_lat != null
-                                        ? LatLng(barang.maps_lat!.toDouble(),
-                                            barang.maps_lng!.toDouble())
-                                        : null,
-                                    onChange: (val) {
-                                      setState(() {
-                                        barang.maps_lat = val.latitude;
-                                        barang.maps_lng = val.longitude;
-                                      });
-                                    },
+                                  child: Container(
+                                    padding: EdgeInsets.all(20),
+                                    child: Column(
+                                      children: [
+                                        MapsComponent(
+                                          height: 330,
+                                          alamat: barang.tempat_temu,
+                                          initialValue: barang.maps_lat != null
+                                              ? LatLng(
+                                                  barang.maps_lat!.toDouble(),
+                                                  barang.maps_lng!.toDouble())
+                                              : null,
+                                          onChange: (val) {
+                                            setState(() {
+                                              barang.maps_lat = val.latitude;
+                                              barang.maps_lng = val.longitude;
+                                            });
+                                          },
+                                        ),
+                                        SizedBox(height: 20),
+                                        ElevatedButton(
+                                          onPressed: sesuaikanAlamat,
+                                          child: Center(
+                                            child: Text('Sesuaikan Alamat'),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
                                   ),
                                 ),
                               ),
@@ -307,9 +355,10 @@ class _BarangTemuSavePageState extends State<BarangTemuSavePage> {
                             : SizedBox(),
                         SizedBox(height: 20),
                         ElevatedButton(
-                          onPressed: save,
+                          onPressed: isLoading ? null : save,
                           child: Center(
-                            child: Text('Simpan Data'),
+                            child:
+                                Text(isLoading ? 'Memuat...' : 'Simpan Data'),
                           ),
                         )
                       ],
@@ -317,7 +366,7 @@ class _BarangTemuSavePageState extends State<BarangTemuSavePage> {
                   : SkeletonComponent(
                       child: CardComponent(
                         child: Container(
-                          height: 400,
+                          height: Get.height / 1.4,
                         ),
                       ),
                     ),

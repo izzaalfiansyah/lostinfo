@@ -96,6 +96,7 @@ class _AkunEditPageState extends State<AkunEditPage> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: colorPrimary,
+        foregroundColor: Colors.white,
         title: Text('Edit Akun'),
       ),
       body: SingleChildScrollView(

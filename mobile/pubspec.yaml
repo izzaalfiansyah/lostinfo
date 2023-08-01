@@ -48,6 +48,7 @@ dependencies:
   intl: ^0.18.1
   android_intent_plus: ^4.0.1
   path_provider: ^2.0.15
+  midtrans_sdk: ^0.4.0
 
 dev_dependencies:
   flutter_test:

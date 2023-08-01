@@ -117,6 +117,7 @@ class _AkunPageState extends State<AkunPage> {
   Widget build(BuildContext context) {
     return UserLayout(
       title: isMe ? 'Akun Saya' : 'Detail User',
+      backgroundColor: Colors.grey.shade50,
       bottomNavBar: !isMe
           ? BottomNavigationBar(
               onTap: (index) async {

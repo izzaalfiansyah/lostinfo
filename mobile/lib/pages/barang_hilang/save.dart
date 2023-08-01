@@ -2,6 +2,7 @@
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:geocoding/geocoding.dart';
 import 'package:get/get.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:mobile/components/card.dart';
@@ -28,6 +29,7 @@ class BarangHilangSavePage extends StatefulWidget {
 }
 
 class _BarangHilangSavePageState extends State<BarangHilangSavePage> {
+  TextEditingController tempat_hilang = TextEditingController();
   BarangHilang barang = BarangHilang(hadiah: 0);
   bool isLoading = true;
 
@@ -54,6 +56,7 @@ class _BarangHilangSavePageState extends State<BarangHilangSavePage> {
         barang = res;
         barang.foto = '';
       });
+      tempat_hilang.text = barang.tempat_hilang.toString();
     } catch (e) {
       Get.back();
     }
@@ -64,11 +67,13 @@ class _BarangHilangSavePageState extends State<BarangHilangSavePage> {
   }
 
   save() async {
+    setState(() {
+      isLoading = true;
+    });
     try {
       final authId = await AuthService.get();
       barang.user_id = authId;
       dynamic barangId = '';
-
       if (widget.id != null) {
         final b =
             await BarangHilangService.update(params: barang, id: widget.id);
@@ -87,6 +92,27 @@ class _BarangHilangSavePageState extends State<BarangHilangSavePage> {
     } catch (e) {
       notif(e.toString(), success: false);
     }
+    setState(() {
+      isLoading = false;
+    });
+  }
+
+  sesuaikanAlamat() async {
+    setState(() {
+      isLoading = true;
+    });
+    final places = await placemarkFromCoordinates(
+        barang.maps_lat!.toDouble(), barang.maps_lng!.toDouble());
+    final place = places[0];
+
+    setState(() {
+      barang.tempat_hilang =
+          "${place.subLocality}, ${place.locality}, ${place.subAdministrativeArea}";
+      tempat_hilang.text = barang.tempat_hilang.toString();
+      isLoading = false;
+    });
+
+    Get.back();
   }
 
   @override
@@ -94,7 +120,10 @@ class _BarangHilangSavePageState extends State<BarangHilangSavePage> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: colorPrimary,
-        title: Text('${widget.id == null ? 'Tambah' : 'Edit'} Barang Hilang'),
+        foregroundColor: Colors.white,
+        title: Text(
+          '${widget.id == null ? 'Tambah' : 'Edit'} Barang Hilang',
+        ),
       ),
       body: SingleChildScrollView(
         padding: EdgeInsets.all(10),
@@ -143,6 +172,7 @@ class _BarangHilangSavePageState extends State<BarangHilangSavePage> {
                         ),
                         SizedBox(height: 5),
                         TextFormField(
+                          enabled: !isLoading,
                           initialValue: barang.deskripsi,
                           onChanged: (val) {
                             setState(() {
@@ -167,7 +197,10 @@ class _BarangHilangSavePageState extends State<BarangHilangSavePage> {
                         ),
                         SizedBox(height: 5),
                         TextFormField(
-                          initialValue: barang.tempat_hilang,
+                          enabled: !isLoading,
+                          maxLines: 3,
+                          controller: tempat_hilang,
+                          // initialValue: barang.tempat_hilang,
                           onChanged: (val) {
                             setState(() {
                               barang.tempat_hilang = val;
@@ -190,18 +223,30 @@ class _BarangHilangSavePageState extends State<BarangHilangSavePage> {
                             Get.bottomSheet(
                               Container(
                                 padding: EdgeInsets.all(20),
-                                child: MapsComponent(
-                                  alamat: barang.tempat_hilang,
-                                  initialValue: barang.maps_lat != null
-                                      ? LatLng(barang.maps_lat!.toDouble(),
-                                          barang.maps_lng!.toDouble())
-                                      : null,
-                                  onChange: (val) {
-                                    setState(() {
-                                      barang.maps_lat = val.latitude;
-                                      barang.maps_lng = val.longitude;
-                                    });
-                                  },
+                                child: Column(
+                                  children: [
+                                    MapsComponent(
+                                      height: 350,
+                                      alamat: barang.tempat_hilang,
+                                      initialValue: barang.maps_lat != null
+                                          ? LatLng(barang.maps_lat!.toDouble(),
+                                              barang.maps_lng!.toDouble())
+                                          : null,
+                                      onChange: (val) {
+                                        setState(() {
+                                          barang.maps_lat = val.latitude;
+                                          barang.maps_lng = val.longitude;
+                                        });
+                                      },
+                                    ),
+                                    SizedBox(height: 20),
+                                    ElevatedButton(
+                                      onPressed: sesuaikanAlamat,
+                                      child: Center(
+                                        child: Text('Sesuaikan Alamat'),
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ),
                               backgroundColor: Colors.white,
@@ -254,6 +299,7 @@ class _BarangHilangSavePageState extends State<BarangHilangSavePage> {
                         ),
                         SizedBox(height: 10),
                         TextFormField(
+                          enabled: !isLoading,
                           initialValue: barang.hadiah.toString(),
                           onChanged: (val) {
                             setState(() {
@@ -316,11 +362,11 @@ class _BarangHilangSavePageState extends State<BarangHilangSavePage> {
                                   ),
                                   SizedBox(height: 5),
                                   TextFormField(
+                                    enabled: !isLoading,
                                     initialValue: barang.created_at != null
                                         ? formatDate(
                                             barang.created_at.toString())
                                         : null,
-                                    enabled: false,
                                     decoration: InputDecoration(
                                         hintText: 'Tanggal Hilang'),
                                   ),
@@ -329,9 +375,10 @@ class _BarangHilangSavePageState extends State<BarangHilangSavePage> {
                             : SizedBox(),
                         SizedBox(height: 20),
                         ElevatedButton(
-                          onPressed: save,
+                          onPressed: isLoading ? null : save,
                           child: Center(
-                            child: Text('Simpan Data'),
+                            child:
+                                Text(isLoading ? 'Memuat...' : 'Simpan Data'),
                           ),
                         )
                       ],
@@ -339,7 +386,7 @@ class _BarangHilangSavePageState extends State<BarangHilangSavePage> {
                   : SkeletonComponent(
                       child: CardComponent(
                         child: Container(
-                          height: 400,
+                          height: Get.height / 1.4,
                         ),
                       ),
                     ),
