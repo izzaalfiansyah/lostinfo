@@ -88,7 +88,7 @@ class _BarangTemuDetailPageState extends State<BarangTemuDetailPage> {
             TextButton(
                 onPressed: () async {
                   try {
-                    await BarangHilangService.destroy(id: barang.id);
+                    await BarangTemuService.destroy(id: barang.id);
                     Get.back();
                     Get.off(BarangTemuPage());
                     notif('barang berhasil dihapus');

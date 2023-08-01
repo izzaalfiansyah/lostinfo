@@ -362,7 +362,7 @@ class _BarangHilangSavePageState extends State<BarangHilangSavePage> {
                                   ),
                                   SizedBox(height: 5),
                                   TextFormField(
-                                    enabled: !isLoading,
+                                    enabled: false,
                                     initialValue: barang.created_at != null
                                         ? formatDate(
                                             barang.created_at.toString())

@@ -242,6 +242,7 @@ class _BarangHilangPageState extends State<BarangHilangPage> {
                                     style: TextStyle(
                                       fontSize: 13,
                                       color: Colors.grey,
+                                      overflow: TextOverflow.ellipsis,
                                     ),
                                   )
                                 ],

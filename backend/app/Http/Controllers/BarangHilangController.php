@@ -36,7 +36,6 @@ class BarangHilangController extends Controller
 
             if ($barang_temu) {
                 $list_nama = explode(' ', $barang_temu->nama);
-                $list_deskripsi = explode(' ', $barang_temu->deskripsi);
                 $list_tempat_temu = explode(' ', $barang_temu->tempat_temu);
 
                 $builder = $builder->where(function ($query) use ($list_nama) {
@@ -49,10 +48,10 @@ class BarangHilangController extends Controller
                     return $query;
                 });
 
-                $builder = $builder->orWhere(function ($query) use ($list_deskripsi) {
-                    foreach ($list_deskripsi as $deskripsi) {
-                        if (strlen($deskripsi) > 2) {
-                            $query = $query->orWhere('deskripsi', 'like', "%$deskripsi%");
+                $builder = $builder->orWhere(function ($query) use ($list_nama) {
+                    foreach ($list_nama as $nama) {
+                        if (strlen($nama) > 2) {
+                            $query = $query->orWhere('deskripsi', 'like', "%$nama%");
                         }
                     }
 
