@@ -85,7 +85,7 @@ class _BarangHilangSavePageState extends State<BarangHilangSavePage> {
       }
       Get.offAll(() => BerandaPage());
       Get.to(() => BarangHilangPage());
-      Get.off(() => BarangHilangDetailPage(id: barangId));
+      Get.to(() => BarangHilangDetailPage(id: barangId));
       notif('data barang hilang berhasil disimpan');
     } on DioException catch (e) {
       notif(e.response!.data['message'], success: false);

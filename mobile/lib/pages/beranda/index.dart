@@ -39,8 +39,6 @@ class _BerandaPageState extends State<BerandaPage> {
       });
     } on DioException catch (e) {
       notif(e.response!.data['message'], success: false);
-    } catch (e) {
-      notif(e.toString(), success: false);
     }
   }
 

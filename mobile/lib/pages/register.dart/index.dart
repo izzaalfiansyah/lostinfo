@@ -61,43 +61,51 @@ class _DaftarPageState extends State<RegisterPage> {
   showPrivacy() {
     final test = Get.to(
       () => Scaffold(
-        body: SingleChildScrollView(
-          padding: EdgeInsets.all(20),
-          child: Column(
-            children: [
-              Column(
-                children: List.generate(privacy.length, (index) {
-                  return Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Text('-'),
-                      SizedBox(width: 5),
-                      Expanded(
-                        child: Text(
-                          privacy[index],
-                          style: TextStyle(
-                            color: Colors.black,
+        body: SafeArea(
+          child: SingleChildScrollView(
+            padding: EdgeInsets.all(20),
+            child: Column(
+              children: [
+                SizedBox(height: 10),
+                Text(
+                  'Syarat, Ketentuan, dan Kebijakan',
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+                SizedBox(height: 10),
+                Column(
+                  children: List.generate(privacy.length, (index) {
+                    return Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Text('-'),
+                        SizedBox(width: 5),
+                        Expanded(
+                          child: Text(
+                            privacy[index],
+                            style: TextStyle(
+                              color: Colors.black,
+                            ),
                           ),
                         ),
-                      ),
-                    ],
-                  );
-                }),
-              ),
-              SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: () {
-                  setState(() {
-                    _isChekced = true;
-                  });
-                  Get.back();
-                },
-                child: Center(
-                  child: Text('Saya Setuju'),
+                      ],
+                    );
+                  }),
                 ),
-              )
-            ],
+                SizedBox(height: 20),
+                ElevatedButton(
+                  onPressed: () {
+                    setState(() {
+                      _isChekced = true;
+                    });
+                    Get.back();
+                  },
+                  child: Center(
+                    child: Text('Saya Setuju'),
+                  ),
+                )
+              ],
+            ),
           ),
         ),
       ),

@@ -81,8 +81,6 @@ class _BarangHilangPageState extends State<BarangHilangPage> {
       }
     } on DioException catch (e) {
       notif(e.response!.data['message'], success: false);
-    } catch (e) {
-      notif(e.toString(), success: false);
     }
 
     setState(() {
