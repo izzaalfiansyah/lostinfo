@@ -84,7 +84,7 @@ class _BerandaPageState extends State<BerandaPage> {
                         style: TextStyle(
                             color: Colors.green, fontWeight: FontWeight.bold),
                       ),
-                      TextSpan(text: ': lokasi barang hilang di sekitarmu')
+                      TextSpan(text: ': lokasi barang temuan di sekitarmu')
                     ],
                     style: TextStyle(color: Colors.grey),
                   ),

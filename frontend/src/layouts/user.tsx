@@ -1,4 +1,4 @@
-import { For, JSX, createSignal } from "solid-js";
+import { For, JSX, createSignal, onMount } from "solid-js";
 import { A, useLocation, useNavigate } from "solid-start";
 import Autocomplete from "~/components/autocomplete";
 import Button from "~/components/button";
@@ -72,6 +72,18 @@ export default function (props: Props) {
     nav("/login");
     e.preventDefault();
   };
+
+  onMount(() => {
+    const snapSrcUrl = "https://app.sandbox.midtrans.com/snap/snap.js";
+    const myMidtransClientKey = "your-client-key-goes-here"; //change this according to your client-key
+
+    const script = document.createElement("script");
+    script.src = snapSrcUrl;
+    script.setAttribute("data-client-key", myMidtransClientKey);
+    script.async = true;
+
+    document.body.appendChild(script);
+  });
 
   return (
     <>

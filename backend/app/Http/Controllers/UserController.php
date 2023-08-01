@@ -45,6 +45,19 @@ class UserController extends Controller
     {
         $item = User::find($id);
 
+        if ($item->premium == '1') {
+            if ($item->premium_date != null) {
+                $now = new \DateTime('now');
+                $prem_date = new \DateTime($item->premium_date);
+
+                $diff = $prem_date->diff($now);
+
+                if ($diff->days > 30) {
+                    $item->update(['premium' => '0', 'premium_date' => null]);
+                }
+            }
+        }
+
         return new UserResource($item);
     }
 
@@ -113,6 +126,54 @@ class UserController extends Controller
         $item?->delete();
 
         return new UserResource($item);
+    }
+
+    function premium($id)
+    {
+        $user = User::find($id);
+
+        \Midtrans\Config::$serverKey = "SB-Mid-server-k5U_220NsEfM2vIFOJpjFgV3";
+        \Midtrans\Config::$isProduction = false;
+        \Midtrans\Config::$isSanitized = true;
+
+        $data = [
+            'transaction_details' => [
+                'order_id' => date('YmdHis'),
+                'gross_amount' => 5000
+            ],
+            "item_details" => [[
+                "id" => $user->id,
+                "price" => 25000,
+                "quantity" => 1,
+                "name" => "LostInfo Premium Akun",
+            ]],
+            'customer_details' => [
+                'first_name' => $user->nama,
+                'email' => $user->email,
+                'phone' => $user->telepon,
+            ],
+            "callbacks" => [
+                "finish" => "http://localhost:3000",
+            ],
+        ];
+
+        $snapToken = \Midtrans\Snap::getSnapToken($data);
+
+        return $snapToken;
+    }
+
+    function makePremium($id)
+    {
+        $user = User::find($id);
+        $user->update([
+            'premium' => '1',
+            'premium_date' => date('Y-m-d'),
+        ]);
+
+        return [
+            'data' => $user,
+            'message' => 'akun sekarang premium'
+        ];
     }
 
     public function login(Request $req)

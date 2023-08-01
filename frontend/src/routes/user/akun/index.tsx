@@ -17,6 +17,7 @@ import Accordion from "~/components/accordion";
 import { Dynamic } from "solid-js/web";
 import BarangHilang from "../barang-hilang";
 import BarangTemu from "../barang-temu";
+import Modal from "~/components/modal";
 
 export default function () {
   const [req, setReq] = createStore<User>();

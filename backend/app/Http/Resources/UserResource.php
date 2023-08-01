@@ -36,6 +36,8 @@ class UserResource extends JsonResource
             'role' => $this->role,
             'role_detail' => [1 => 'Admin', 2 => 'User'][(int) $this->role],
             'status' => $this->status,
+            'premium' => $this->premium,
+            'premium_date' => $this->premium_date,
             'status_detail' => [0 => 'Nonaktif', 1 => 'Aktif', 9 => 'Banned'][(int) $this->status],
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,

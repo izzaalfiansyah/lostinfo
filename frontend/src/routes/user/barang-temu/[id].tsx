@@ -17,6 +17,7 @@ import Button from "~/components/button";
 import openWindow from "~/libs/open-window";
 import { EnvelopeIcon, PhoneIcon } from "~/components/icons";
 import FloatingComponent from "~/components/floating-component";
+import BarangHilang from "../barang-hilang";
 
 export default function () {
   const [req, setReq] = createStore<BarangTemu>({});
@@ -143,11 +144,8 @@ export default function () {
 
             <Show when={req.user_id == auth().id}>
               <div class="mt-3"></div>
-
               <Card title="Barang Hilang yang Serupa">
-                <div class="text-red-500 text-lg bg-gray-50 p-5">
-                  Maaf... Fitur hanya tersedia pada versi mobile.
-                </div>
+                <BarangHilang barang_temu_id={req.id} />
               </Card>
             </Show>
 

@@ -22,6 +22,7 @@ import http from "~/libs/http";
 
 interface Props {
   user_id?: any;
+  barang_temu_id?: any;
 }
 
 export default function (props: Props) {
@@ -37,6 +38,7 @@ export default function (props: Props) {
     limit: 9,
     search: "",
     user_id: props.user_id || "",
+    barang_temu_id: props.barang_temu_id || "",
     ditemukan: "0",
     hadiah_min: "",
     hadiah_max: "",
@@ -87,67 +89,69 @@ export default function (props: Props) {
 
   return (
     <>
-      <Show when={!props.user_id}>
+      <Show when={!props.user_id && !props.barang_temu_id}>
         <Title title="Barang Hilang"></Title>
       </Show>
 
-      <Accordion title="Filter" class="mb-4">
-        <form
-          onSubmit={(e) => {
-            e.preventDefault();
-            get();
-          }}
-        >
-          <Input
-            placeholder="Cari..."
-            value={filter.search}
-            onChange={(e) => setFilter("search", e.currentTarget.value)}
-          />
-          <Show when={props.user_id == auth().id}>
-            <Autocomplete
-              label="Status"
-              value={filter.ditemukan}
-              onChange={(val) => setFilter("ditemukan", val)}
-              placeholder="Pilih Status"
-              options={[
-                {
-                  text: "Semua",
-                  value: "",
-                },
-                {
-                  text: "Sudah Ditemukan",
-                  value: "1",
-                },
-                {
-                  text: "Belum Ditemukan",
-                  value: "0",
-                },
-              ]}
-            />
-          </Show>
-          <div class="grid grid-cols-2 items-end gap-x-3">
+      <Show when={!props.barang_temu_id}>
+        <Accordion title="Filter" class="mb-4">
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              get();
+            }}
+          >
             <Input
-              type="number"
-              label="Rentang Hadiah"
-              value={filter.hadiah_min}
-              onChange={(e) => setFilter("hadiah_min", e.currentTarget.value)}
-              placeholder="Minimum"
+              placeholder="Cari..."
+              value={filter.search}
+              onChange={(e) => setFilter("search", e.currentTarget.value)}
             />
-            <Input
-              type="number"
-              placeholder="Maksimal"
-              value={filter.hadiah_max}
-              onChange={(e) => setFilter("hadiah_max", e.currentTarget.value)}
-            />
-          </div>
-          {/* <div class="mt-5">
+            <Show when={props.user_id == auth().id}>
+              <Autocomplete
+                label="Status"
+                value={filter.ditemukan}
+                onChange={(val) => setFilter("ditemukan", val)}
+                placeholder="Pilih Status"
+                options={[
+                  {
+                    text: "Semua",
+                    value: "",
+                  },
+                  {
+                    text: "Sudah Ditemukan",
+                    value: "1",
+                  },
+                  {
+                    text: "Belum Ditemukan",
+                    value: "0",
+                  },
+                ]}
+              />
+            </Show>
+            <div class="grid grid-cols-2 items-end gap-x-3">
+              <Input
+                type="number"
+                label="Rentang Hadiah"
+                value={filter.hadiah_min}
+                onChange={(e) => setFilter("hadiah_min", e.currentTarget.value)}
+                placeholder="Minimum"
+              />
+              <Input
+                type="number"
+                placeholder="Maksimal"
+                value={filter.hadiah_max}
+                onChange={(e) => setFilter("hadiah_max", e.currentTarget.value)}
+              />
+            </div>
+            {/* <div class="mt-5">
             <Button type="submit" variant="primary" class="flex items-center">
               <SearchIcon class="w-4 h-4 mr-2" />
               Terapkan
             </Button>
           </div> */}
-        </form>
-      </Accordion>
+          </form>
+        </Accordion>
+      </Show>
 
       <div class="mb-2"></div>
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
@@ -234,17 +238,19 @@ export default function (props: Props) {
         </Show>
       </div>
 
-      <Card class="mt-4">
-        <Pagination
-          record={items().length}
-          recordTotal={total.record}
-          page={filter.page}
-          pageTotal={total.page}
-          onChange={(val) => {
-            setFilter("page", val);
-          }}
-        />
-      </Card>
+      <Show when={!props.barang_temu_id}>
+        <Card class="mt-4">
+          <Pagination
+            record={items().length}
+            recordTotal={total.record}
+            page={filter.page}
+            pageTotal={total.page}
+            onChange={(val) => {
+              setFilter("page", val);
+            }}
+          />
+        </Card>
+      </Show>
 
       <ModalDelete
         show={modal.delete}
@@ -253,7 +259,7 @@ export default function (props: Props) {
         req={[req, setReq]}
       />
 
-      <Show when={!props.user_id}>
+      <Show when={!props.user_id || !props.barang_temu_id}>
         <FloatingComponent>
           <A
             href="/user/barang-hilang/create"

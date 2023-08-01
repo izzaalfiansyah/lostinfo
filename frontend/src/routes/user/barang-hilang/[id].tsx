@@ -23,6 +23,8 @@ import Button from "~/components/button";
 import openWindow from "~/libs/open-window";
 import { EnvelopeIcon, PhoneIcon } from "~/components/icons";
 import FloatingComponent from "~/components/floating-component";
+import PremiumButton from "~/components/premium-button";
+import BarangTemu from "../barang-temu";
 
 export default function () {
   const [req, setReq] = createStore<BarangHilang>({});
@@ -154,12 +156,25 @@ export default function () {
 
             <Show when={req.user_id == auth().id}>
               <div class="mt-3"></div>
-
-              <Card title="Barang Temuan yang Serupa">
-                <div class="text-red-500 text-lg bg-gray-50 p-5">
-                  Maaf... Fitur hanya tersedia pada versi mobile.
-                </div>
-              </Card>
+              <Show
+                when={auth().premium == "1"}
+                fallback={
+                  <Card title="Barang Temuan yang Serupa">
+                    <div class="bg-gray-50 p-5 text-center">
+                      <div class="text-red-500 text-lg ">
+                        Fitur tersedia hanya pada akun premium {auth().premium}
+                      </div>
+                      <div class="mt-3">
+                        <PremiumButton text="Coba Premium" />
+                      </div>
+                    </div>
+                  </Card>
+                }
+              >
+                <Card title="Barang Temuan yang Serupa">
+                  <BarangTemu barang_hilang_id={req.id} />
+                </Card>
+              </Show>
             </Show>
 
             <div class="mt-3"></div>

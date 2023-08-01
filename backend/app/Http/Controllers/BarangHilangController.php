@@ -6,6 +6,7 @@ use App\Http\Requests\BarangHilangRequest;
 use App\Http\Resources\BarangHilangResource;
 use App\Models\BarangHilang;
 use App\Models\BarangTemu;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
 

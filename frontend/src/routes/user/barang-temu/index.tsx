@@ -22,6 +22,7 @@ import http from "~/libs/http";
 
 interface Props {
   user_id?: any;
+  barang_hilang_id?: any;
 }
 
 export default function (props: Props) {
@@ -37,6 +38,7 @@ export default function (props: Props) {
     limit: 9,
     search: "",
     user_id: props.user_id || "",
+    barang_hilang_id: props.barang_hilang_id || "",
     dikembalikan: "0",
   });
   const [total, setTotal] = createStore({
@@ -85,52 +87,54 @@ export default function (props: Props) {
 
   return (
     <>
-      <Show when={!props.user_id}>
+      <Show when={!props.user_id && !props.barang_hilang_id}>
         <Title title="Barang Temu"></Title>
       </Show>
 
-      <Accordion title="Filter" class="mb-4">
-        <form
-          onSubmit={(e) => {
-            e.preventDefault();
-            get();
-          }}
-        >
-          <Input
-            placeholder="Cari..."
-            value={filter.search}
-            onChange={(e) => setFilter("search", e.currentTarget.value)}
-          />
-          <Show when={props.user_id == auth().id}>
-            <Autocomplete
-              label="Status"
-              value={filter.dikembalikan}
-              onChange={(val) => setFilter("dikembalikan", val)}
-              placeholder="Pilih Status"
-              options={[
-                {
-                  text: "Semua",
-                  value: "",
-                },
-                {
-                  text: "Sudah Dikembalikan",
-                  value: "1",
-                },
-                {
-                  text: "Belum Dikembalikan",
-                  value: "0",
-                },
-              ]}
+      <Show when={!props.barang_hilang_id}>
+        <Accordion title="Filter" class="mb-4">
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              get();
+            }}
+          >
+            <Input
+              placeholder="Cari..."
+              value={filter.search}
+              onChange={(e) => setFilter("search", e.currentTarget.value)}
             />
-          </Show>
-          {/* <div class="mt-5">
-            <Button type="submit" variant="primary" class="flex items-center">
-              <SearchIcon class="w-4 h-4 mr-2" />
-              Terapkan
-            </Button>
-          </div> */}
-        </form>
-      </Accordion>
+            <Show when={props.user_id == auth().id}>
+              <Autocomplete
+                label="Status"
+                value={filter.dikembalikan}
+                onChange={(val) => setFilter("dikembalikan", val)}
+                placeholder="Pilih Status"
+                options={[
+                  {
+                    text: "Semua",
+                    value: "",
+                  },
+                  {
+                    text: "Sudah Dikembalikan",
+                    value: "1",
+                  },
+                  {
+                    text: "Belum Dikembalikan",
+                    value: "0",
+                  },
+                ]}
+              />
+            </Show>
+            {/* <div class="mt-5">
+              <Button type="submit" variant="primary" class="flex items-center">
+                <SearchIcon class="w-4 h-4 mr-2" />
+                Terapkan
+              </Button>
+            </div> */}
+          </form>
+        </Accordion>
+      </Show>
 
       <div class="mb-2"></div>
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
@@ -218,17 +222,19 @@ export default function (props: Props) {
         </Show>
       </div>
 
-      <Card class="mt-4">
-        <Pagination
-          record={items().length}
-          recordTotal={total.record}
-          page={filter.page}
-          pageTotal={total.page}
-          onChange={(val) => {
-            setFilter("page", val);
-          }}
-        />
-      </Card>
+      <Show when={!props.barang_hilang_id}>
+        <Card class="mt-4">
+          <Pagination
+            record={items().length}
+            recordTotal={total.record}
+            page={filter.page}
+            pageTotal={total.page}
+            onChange={(val) => {
+              setFilter("page", val);
+            }}
+          />
+        </Card>
+      </Show>
 
       <ModalDelete
         show={modal.delete}
@@ -237,7 +243,7 @@ export default function (props: Props) {
         req={[req, setReq]}
       />
 
-      <Show when={!props.user_id}>
+      <Show when={!props.user_id && !props.barang_hilang_id}>
         <FloatingComponent>
           <A
             href="/user/barang-temu/create"

@@ -31,6 +31,8 @@ class User extends Authenticatable
         'role',
         'status',
         'remember_token',
+        'premium',
+        'premium_date',
     ];
 
     /**

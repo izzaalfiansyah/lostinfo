@@ -17,6 +17,8 @@ interface User {
   status_detail?: string;
   created_at?: string;
   updated_at?: string;
+  premium?: string;
+  premium_date?: string;
 }
 
 export default User;
