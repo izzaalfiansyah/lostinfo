@@ -403,9 +403,11 @@ class _BarangHilangDetailPageState extends State<BarangHilangDetailPage> {
                 if (index == 0) {
                   goUrl('tel:${barang.user!.telepon}');
                 } else if (index == 1) {
-                  goUrl('mailto:${barang.user!.email}');
+                  goUrl(
+                      'mailto:${barang.user!.email}?text=Saya menemukan ${barang.nama} milik anda!');
                 } else if (index == 2) {
-                  goUrl('https://wa.me/${barang.user!.whatsapp}');
+                  goUrl(
+                      'https://wa.me/${barang.user!.whatsapp}?text=Saya menemukan ${barang.nama} milik anda!');
                 }
               },
               items: [

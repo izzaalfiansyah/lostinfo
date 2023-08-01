@@ -347,9 +347,11 @@ class _BarangTemuDetailPageState extends State<BarangTemuDetailPage> {
                 if (index == 0) {
                   goUrl('tel:${barang.user!.telepon}');
                 } else if (index == 1) {
-                  goUrl('mailto:${barang.user!.email}');
+                  goUrl(
+                      'mailto:${barang.user!.email}?body=${barang.nama} yang anda temukan adalah milik saya');
                 } else if (index == 2) {
-                  goUrl('https://wa.me/${barang.user!.whatsapp}');
+                  goUrl(
+                      'https://wa.me/${barang.user!.whatsapp}?text=${barang.nama} yang anda temukan adalah milik saya');
                 }
               },
               items: [
